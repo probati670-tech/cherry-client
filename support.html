@@ -16,7 +16,6 @@
         h1 { color: #ff2a75; font-size: 36px; margin-bottom: 10px; text-align: center; }
         .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 16px; }
 
-        /* Стили формы */
         .ticket-form { background: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; }
@@ -28,16 +27,13 @@
         .btn-submit:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
         .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        /* Сообщение об успехе */
         .success-message { display: none; text-align: center; padding: 40px; background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 15px; }
         .success-message h2 { color: #4CAF50; margin-top: 0; }
         .success-message p { color: #ccc; }
         .ticket-number { display: inline-block; background: #4CAF50; color: white; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 18px; font-weight: bold; margin: 15px 0; }
 
-        /* Альтернативный контакт */
         .alt-contact { text-align: center; margin-top: 30px; color: #888; font-size: 14px; }
         .alt-contact a { color: #ff2a75; text-decoration: none; font-weight: 600; }
-        .alt-contact a:hover { text-decoration: underline; }
 
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -66,19 +62,16 @@
         <h1>Поддержка</h1>
         <p class="subtitle">Возникли проблемы? Опишите ситуацию ниже, и мы обязательно ответим.</p>
 
-        <!-- Форма подачи тикета -->
         <div class="ticket-form" id="form-container">
             <form id="support-form" onsubmit="submitTicket(event)">
                 <div class="form-group">
                     <label>Ваш ник в игре (DDNet)</label>
                     <input type="text" class="form-control" id="ticket-nick" placeholder="Введите ваш ник" required>
                 </div>
-                
                 <div class="form-group">
                     <label>Связь с вами (Telegram / Discord)</label>
                     <input type="text" class="form-control" id="ticket-contact" placeholder="@username" required>
                 </div>
-
                 <div class="form-group">
                     <label>Категория обращения</label>
                     <select class="form-control" id="ticket-type" required>
@@ -89,26 +82,22 @@
                         <option value="Другое">Другое</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Описание вопроса или жалобы</label>
-                    <textarea class="form-control" id="ticket-message" placeholder="Подробно опишите вашу проблему. Если это жалоба, прикрепите доказательства (ссылки на скриншоты/видео)." required></textarea>
+                    <textarea class="form-control" id="ticket-message" placeholder="Подробно опишите вашу проблему. Если это жалоба, прикрепите доказательства." required></textarea>
                 </div>
-
                 <button type="submit" class="btn-submit" id="submit-btn">Отправить тикет</button>
             </form>
         </div>
 
-        <!-- Сообщение об успехе (скрыто по умолчанию) -->
         <div class="success-message" id="success-container">
             <h2>Тикет успешно создан!</h2>
-            <p>Мы получили ваше обращение. Ожидайте ответа в указанном контакте.</p>
+            <p>Мы получили ваше обращение и уже обрабатываем его. Ожидайте ответа.</p>
             <div class="ticket-number" id="ticket-id">#0000</div>
-            <p style="font-size: 13px;">Если вы указали неверный контакт, создайте новый тикет или напишите нам в Telegram.</p>
         </div>
 
         <div class="alt-contact">
-            Или напишите нам напрямую в <a href="https://t.me/" target="_blank">Telegram</a>
+            Или напишите нам напрямую в <a href="https://t.me/">Telegram</a>
         </div>
     </div>
 
@@ -138,45 +127,41 @@
 
     <script>
         async function submitTicket(event) {
-            event.preventDefault(); // Останавливаем перезагрузку страницы
+            event.preventDefault();
 
-            // Получаем данные из формы
             const nick = document.getElementById('ticket-nick').value;
             const contact = document.getElementById('ticket-contact').value;
             const type = document.getElementById('ticket-type').value;
             const message = document.getElementById('ticket-message').value;
 
-            // Меняем кнопку на "Отправка..."
             const btn = document.getElementById('submit-btn');
             btn.innerText = "Отправка...";
             btn.disabled = true;
 
-            // Генерируем случайный номер тикета (от 1000 до 9999)
             const ticketId = Math.floor(Math.random() * 9000) + 1000;
 
-            // === ТУТ МОЖНО ПОДКЛЮЧИТЬ ОТПРАВКУ В ТЕЛЕГРАМ ИЛИ ДИСКОРД ===
-            // Пример для Discord Webhook (если захочешь, я расскажу как его получить):
-            /*
-            const webhookUrl = 'ТВОЯ_ССЫЛКА_НА_DISCORD_WEBHOOK';
-            const payload = {
-                content: `🚨 **Новый тикет #${ticketId}**\n**Ник:** ${nick}\n**Контакты:** ${contact}\n**Тема:** ${type}\n**Сообщение:** ${message}`
-            };
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(err => console.log(err));
-            */
-            // ================================================================
+            try {
+                // ТВОЯ ССЫЛКА ОТ CLOUDFLARE WORKER УЖЕ ВСТАВЛЕНА СЮДА:
+                const WORKER_URL = 'https://cherry-tg-bridge.probati670.workers.dev/'; 
 
-            // Имитация задержки сети (1.5 секунды)
-            setTimeout(() => {
-                // Скрываем форму, показываем успех
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nick, contact, type, message })
+                });
+
+                if (!response.ok) throw new Error('Ошибка сети');
+
                 document.getElementById('form-container').style.display = 'none';
                 const successContainer = document.getElementById('success-container');
                 successContainer.style.display = 'block';
                 document.getElementById('ticket-id').innerText = "#" + ticketId;
-            }, 1500);
+
+            } catch (error) {
+                alert('Не удалось отправить тикет. Попробуйте позже.');
+                btn.innerText = "Отправить тикет";
+                btn.disabled = false;
+            }
         }
     </script>
 </body>
