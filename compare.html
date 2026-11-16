@@ -7,8 +7,7 @@
     <style>
         body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
-        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
-        .logo span { color: #ff2a75; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; } .logo span { color: #ff2a75; }
         .menu { display: flex; gap: 30px; }
         .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
         .menu a:hover, .menu a.active { color: #ff7eb3; }
@@ -20,27 +19,39 @@
 
         .table-container { max-width: 900px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #2a1a22; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         table { width: 100%; border-collapse: collapse; }
-        
         thead tr { background-color: #110a0d; }
         th { padding: 25px 20px; text-align: center; font-size: 16px; font-weight: 700; border-bottom: 1px solid #2a1a22; }
         th:first-child { text-align: left; width: 50%; color: #fff; }
-        
         .th-free { color: #aaa; font-weight: 500; font-size: 14px; }
         .th-premium { color: #ff2a75; font-weight: 700; font-size: 16px; background: rgba(255,42,117,0.05); }
-        
         tbody tr { background-color: #0a0508; border-bottom: 1px solid #1a1014; transition: 0.3s; }
         tbody tr:hover { background-color: #150a10; }
         tbody tr:last-child { border-bottom: none; }
-        
         td { padding: 20px; font-size: 15px; text-align: center; border-left: 1px solid #1a1014; }
         td:first-child { text-align: left; color: #ddd; font-weight: 500; border-left: none; display: flex; align-items: center; gap: 10px; }
         td.col-premium { background: rgba(255,42,117,0.02); border-left: 1px solid rgba(255,42,117,0.2); }
-
         .icon-check { color: #fff; font-size: 18px; font-weight: bold; }
         .icon-check-red { color: #ff2a75; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(255,42,117,0.5); }
         .icon-cross { color: #444; font-size: 16px; font-weight: bold; }
         .text-percent { color: #ff2a75; font-family: monospace; font-size: 15px; }
         .func-icon { font-size: 16px; }
+
+        /* Блок CTA */
+        .cta-block { text-align: center; margin-top: 60px; margin-bottom: 20px; }
+        .cta-block h2 { font-size: 32px; margin-bottom: 10px; color: #fff; }
+        .cta-block p { color: #888; margin-bottom: 30px; }
+        .cta-btn { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(255,42,117,0.3); transition: 0.3s; }
+        .cta-btn:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
+
+        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
+        .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        .tg-buttons { display: flex; gap: 15px; }
+        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .tg-btn:hover { border-color: #ff2a75; color: #ff2a75; }
+        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-bottom a { color: #888; text-decoration: none; transition: 0.3s; } .footer-bottom a:hover { color: #ff2a75; }
     </style>
 </head>
 <body>
@@ -58,7 +69,6 @@
     <div class="compare-section">
         <h1 class="page-title">Сравнение версий</h1>
         <p class="page-subtitle">Выберите версию, которая лучше всего подходит для ваших нужд</p>
-
         <div class="table-container">
             <table>
                 <thead>
@@ -82,6 +92,36 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="cta-block">
+            <h2>Готовы начать?</h2>
+            <p>Выберите версию, которая подходит именно вам</p>
+            <a href="download.html" class="cta-btn">⬇ Перейти к скачиванию</a>
+        </div>
     </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>CHERRY CLIENT</h3>
+                <p>Продвинутый клиент для DDNet</p>
+            </div>
+            <div class="footer-contacts">
+                <h3>Контакты</h3>
+                <div class="tg-buttons">
+                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>
+                <a href="#">Политика конфиденциальности</a> • 
+                <a href="#">Пользовательское соглашение</a> • 
+                <a href="#">Поддержка</a>
+            </div>
+            <div>© 2026 Cherry Client. Все права защищены.</div>
+        </div>
+    </footer>
 </body>
 </html>
