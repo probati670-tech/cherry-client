@@ -4,61 +4,45 @@
     <meta charset="UTF-8">
     <title>Cherry Client - DDNet</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    
     <style>
-        body {
-            background-color: #0a0a0a; color: white; font-family: 'Montserrat', sans-serif;
-            margin: 0; height: 100vh; display: flex; flex-direction: column;
-        }
-        /* --- Меню --- */
+        body { background-color: #0a0a0a; color: white; font-family: 'Montserrat', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; }
-        .logo { font-size: 24px; font-weight: 900; }
-        .logo span { color: #ff0022; }
-        .menu a { color: #ccc; text-decoration: none; margin-left: 30px; font-size: 14px; font-weight: 700; transition: 0.3s; cursor: pointer; }
+        .logo { font-size: 24px; font-weight: 900; } .logo span { color: #ff0022; }
+        .menu a { color: #ccc; text-decoration: none; margin-left: 30px; font-weight: 700; transition: 0.3s; cursor: pointer; }
         .menu a:hover { color: #ff0022; }
-
-        /* --- Главный экран --- */
         .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-size: 64px; font-weight: 900; margin: 0 0 10px 0; }
-        .hero h1 span { color: #ff0022; }
+        .hero h1 { font-size: 64px; font-weight: 900; margin: 0 0 10px 0; } .hero h1 span { color: #ff0022; }
         .hero p { color: #aaa; font-size: 18px; max-width: 600px; margin-bottom: 40px; }
-        .buttons { display: flex; gap: 20px; }
-        
-        /* --- Кнопки --- */
-        .btn {
-            padding: 15px 35px; border-radius: 5px; text-decoration: none; font-weight: 700;
-            font-size: 16px; transition: 0.3s; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
-        }
+        .btn { padding: 15px 35px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 16px; transition: 0.3s; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; }
         .btn-primary { background-color: #ff0022; color: white; box-shadow: 0 0 15px rgba(255,0,34,0.3); }
-        .btn-primary:hover { background-color: #ff1a3c; box-shadow: 0 0 25px rgba(255,0,34,0.6); transform: translateY(-2px); }
+        .btn-primary:hover { background-color: #ff1a3c; box-shadow: 0 0 25px rgba(255,0,34,0.6); }
         .btn-secondary { background-color: #1a1a1a; color: white; border: 1px solid #333; }
-        .btn-secondary:hover { background-color: #2a2a2a; border-color: #555; transform: translateY(-2px); }
-
-        /* --- Счетчик --- */
-        .online-counter { margin-top: 50px; border: 1px solid rgba(255,0,34,0.5); padding: 12px 30px; border-radius: 5px; font-family: monospace; font-size: 18px; color: #ff0022; background-color: rgba(255,0,34,0.05); }
-
-        /* --- МОДАЛЬНОЕ ОКНО (ФОРМА ВХОДА) --- */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content {
-            background-color: #111; padding: 40px; border-radius: 10px; border: 1px solid #333;
-            width: 300px; text-align: center; box-shadow: 0 0 30px rgba(255,0,34,0.2);
-        }
-        .modal-content h2 { margin-top: 0; font-size: 24px; }
-        .modal-content input {
-            width: 90%; padding: 12px; margin: 10px 0; background-color: #222; border: 1px solid #444;
-            color: white; border-radius: 5px; font-family: 'Montserrat', sans-serif;
-        }
-        .modal-content input:focus { outline: none; border-color: #ff0022; }
-        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .close-btn { position: absolute; top: 10px; right: 15px; color: #aaa; cursor: pointer; font-size: 20px; }
+        
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background-color: #111; padding: 30px; border-radius: 10px; border: 1px solid #333; width: 350px; text-align: center; box-shadow: 0 0 30px rgba(255,0,34,0.2); position: relative; }
+        .close-btn { position: absolute; top: 10px; right: 15px; color: #aaa; cursor: pointer; font-size: 24px; }
+        
+        /* Вкладки */
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 10px; cursor: pointer; color: #777; font-weight: 700; transition: 0.3s; }
+        .tab.active { color: #ff0022; border-bottom: 2px solid #ff0022; }
+        
+        .form-group { display: none; text-align: left; } .form-group.active { display: block; }
+        .form-group label { font-size: 12px; color: #aaa; margin-bottom: 5px; display: block; }
+        .form-group input { width: 100%; padding: 12px; margin-bottom: 15px; background-color: #222; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        .form-group input:focus { outline: none; border-color: #ff0022; }
+        
+        /* Капча */
+        .captcha-box { background: #222; padding: 10px; border-radius: 5px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .captcha-text { font-family: monospace; font-size: 18px; color: #ff0022; letter-spacing: 2px; background: #111; padding: 5px 10px; border-radius: 3px; user-select: none; text-decoration: line-through; }
+        .captcha-input { width: 80px !important; margin-bottom: 0 !important; text-align: center; }
+        
+        .error-msg { color: #ff0022; font-size: 12px; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
 
-    <!-- Меню -->
     <div class="navbar">
         <div class="logo">CHERRY <span>CLIENT</span></div>
         <div class="menu">
@@ -67,104 +51,194 @@
         </div>
     </div>
 
-    <!-- Главная часть -->
     <div class="hero">
         <h1>CHERRY <span>CLIENT</span></h1>
-        <p>Продвинутый клиент для DDNet. Для скачивания необходимо войти в аккаунт.</p>
-        
-        <!-- Блок с кнопками -->
-        <div class="buttons" id="download-area" style="display: none;">
-            <a https://ddnet.org/downloads/ class="btn btn-primary">⬇ Скачать сейчас</a>
+        <p>Для скачивания необходимо авторизоваться.</p>
+        <div id="download-area" style="display: none;">
+            <a href="ССЫЛКА_НА_АРХИВ.zip" class="btn btn-primary">⬇ Скачать сейчас</a>
         </div>
-        
-        <!-- Заглушка, если не авторизован -->
-        <div class="buttons" id="locked-area">
-            <button class="btn btn-secondary" onclick="openModal()" style="opacity: 0.5; cursor: not-allowed;">🔒 Скачивание заблокировано</button>
+        <div id="locked-area">
+            <button class="btn btn-secondary" onclick="openModal()" style="opacity: 0.5;">🔒 Скачивание заблокировано</button>
         </div>
-
-        <div class="online-counter">Сейчас играют: 8 ||</div>
     </div>
 
-    <!-- Модальное окно входа -->
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="modal" id="auth-modal">
-        <div class="modal-content" style="position: relative;">
+        <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 id="modal-title">Вход</h2>
-            <input type="text" id="username" placeholder="Логин">
-            <input type="password" id="password" placeholder="Пароль">
+            <h2>Регистрация</h2>
             
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="login()" id="btn-action" style="justify-content: center;">Войти</button>
-                <button class="btn btn-secondary" onclick="toggleMode()" id="btn-toggle" style="justify-content: center; font-size: 12px; padding: 10px;">Нет аккаунта? Зарегистрироваться</button>
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('email')">Через Gmail</div>
+                <div class="tab" onclick="switchTab('login')">Свой логин</div>
+            </div>
+
+            <!-- ВКЛАДКА 1: GMAIL -->
+            <div id="tab-email" class="form-group active">
+                <label>Ваша почта Gmail</label>
+                <input type="email" id="reg-email" placeholder="example@gmail.com">
+                <div id="email-step-1">
+                    <button class="btn btn-primary" style="width: 100%;" onclick="sendEmailCode()">Получить код</button>
+                </div>
+                <div id="email-step-2" style="display: none;">
+                    <label style="color: #4CAF50;">Код отправлен! (Имитация: введите 1234)</label>
+                    <input type="text" id="email-code" placeholder="Введите 4-значный код">
+                    
+                    <!-- Капча -->
+                    <div class="captcha-box">
+                        <span class="captcha-text" id="captcha-q-email"></span>
+                        <input type="number" class="captcha-input" id="captcha-a-email" placeholder="?">
+                    </div>
+                    
+                    <div class="error-msg" id="err-email">Неверный код или капча!</div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="verifyEmailCode()">Подтвердить</button>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 2: СВОЙ ЛОГИН -->
+            <div id="tab-login" class="form-group">
+                <label>Логин (Имя_Фамилия)</label>
+                <input type="text" id="reg-login" placeholder="Иван_Иванов">
+                <label>Сложный пароль</label>
+                <input type="password" id="reg-pass" placeholder="Мин. 8 символов, A-z, 0-9">
+                
+                <!-- Капча -->
+                <div class="captcha-box">
+                    <span class="captcha-text" id="captcha-q-login"></span>
+                    <input type="number" class="captcha-input" id="captcha-a-login" placeholder="?">
+                </div>
+                
+                <div class="error-msg" id="err-login">Проверьте формат логина, пароль и капчу!</div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="registerCustom()">Зарегистрироваться</button>
             </div>
         </div>
     </div>
 
-    <!-- Логика на JavaScript -->
     <script>
-        let isLoginMode = true; // Режим: true = Вход, false = Регистрация
+        let currentCaptchaEmail = 0;
+        let currentCaptchaLogin = 0;
 
-        // Проверяем, залогинен ли пользователь при загрузке страницы
-        window.onload = function() {
-            if(localStorage.getItem('cherry_user')) {
-                unlockDownload();
-            }
-        };
-
-        // Открыть и закрыть окно
-        function openModal() { document.getElementById('auth-modal').style.display = 'flex'; }
+        // Открытие/закрытие
+        function openModal() { 
+            document.getElementById('auth-modal').style.display = 'flex'; 
+            generateCaptcha('email');
+            generateCaptcha('login');
+        }
         function closeModal() { document.getElementById('auth-modal').style.display = 'none'; }
 
-        // Переключение между Входом и Регистрацией
-        function toggleMode() {
-            isLoginMode = !isLoginMode;
-            document.getElementById('modal-title').innerText = isLoginMode ? "Вход" : "Регистрация";
-            document.getElementById('btn-action').innerText = isLoginMode ? "Войти" : "Создать аккаунт";
-            document.getElementById('btn-toggle').innerText = isLoginMode ? "Нет аккаунта? Зарегистрироваться" : "Уже есть аккаунт? Войти";
+        // Переключение вкладок
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-group').forEach(f => f.classList.remove('active'));
+            
+            if(tabName === 'email') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('tab-email').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('tab-login').classList.add('active');
+            }
         }
 
-        // Главная функция (Вход/Регистрация)
-        function login() {
-            let user = document.getElementById('username').value;
-            let pass = document.getElementById('password').value;
+        // Генерация простой математической капчи
+        function generateCaptcha(type) {
+            let a = Math.floor(Math.random() * 10) + 1;
+            let b = Math.floor(Math.random() * 10) + 1;
+            if(type === 'email') {
+                currentCaptchaEmail = a + b;
+                document.getElementById('captcha-q-email').innerText = `${a} + ${b} =`;
+            } else {
+                currentCaptchaLogin = a + b;
+                document.getElementById('captcha-q-login').innerText = `${a} + ${b} =`;
+            }
+        }
 
-            if(user === "" || pass === "") {
-                alert("Заполните все поля!");
+        // --- ЛОГИКА ДЛЯ GMAIL ---
+        function sendEmailCode() {
+            let email = document.getElementById('reg-email').value;
+            if(!email.includes('@gmail.com')) {
+                alert("Пожалуйста, введите почту Gmail (@gmail.com)");
+                return;
+            }
+            // Имитация отправки письма
+            alert("На почту " + email + " отправлен код: 1234");
+            document.getElementById('email-step-1').style.display = 'none';
+            document.getElementById('email-step-2').style.display = 'block';
+        }
+
+        function verifyEmailCode() {
+            let code = document.getElementById('email-code').value;
+            let captchaAns = parseInt(document.getElementById('captcha-a-email').value);
+            let error = document.getElementById('err-email');
+
+            if(code !== '1234' || captchaAns !== currentCaptchaEmail) {
+                error.style.display = 'block';
+                generateCaptcha('email'); // Обновляем капчу при ошибке
+                document.getElementById('captcha-a-email').value = '';
+                return;
+            }
+            finishRegistration(document.getElementById('reg-email').value);
+        }
+
+        // --- ЛОГИКА ДЛЯ СВОЕГО ЛОГИНА ---
+        function registerCustom() {
+            let login = document.getElementById('reg-login').value;
+            let pass = document.getElementById('reg-pass').value;
+            let captchaAns = parseInt(document.getElementById('captcha-a-login').value);
+            let error = document.getElementById('err-login');
+
+            // 1. Проверка логина (Имя_Фамилия)
+            let loginRegex = /^[A-ZА-Я][a-zа-я]+_[A-ZА-Я][a-zа-я]+$/;
+            if(!loginRegex.test(login)) {
+                alert("Логин должен быть в формате: Имя_Фамилия (с большой буквы, через подчеркивание). Пример: Ivan_Ivanov");
                 return;
             }
 
-            if(isLoginMode) {
-                // ЛОГИКА ВХОДА
-                let savedUser = localStorage.getItem('cherry_user');
-                if(savedUser === user) {
-                    alert("Успешный вход! Добро пожаловать, " + user);
-                    unlockDownload();
-                    closeModal();
-                } else {
-                    alert("Пользователь не найден. Зарегистрируйтесь!");
-                }
-            } else {
-                // ЛОГИКА РЕГИСТРАЦИИ
-                localStorage.setItem('cherry_user', user); // Сохраняем пользователя в браузере
-                alert("Аккаунт " + user + " успешно создан!");
-                unlockDownload();
-                closeModal();
+            // 2. Проверка сложности пароля (Мин 8 символов, есть буквы и цифры)
+            let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if(!passRegex.test(pass)) {
+                alert("Пароль слишком простой! Нужно минимум 8 символов, хотя бы одна буква и одна цифра.");
+                return;
             }
+
+            // 3. Проверка капчи
+            if(captchaAns !== currentCaptchaLogin) {
+                error.style.display = 'block';
+                generateCaptcha('login');
+                document.getElementById('captcha-a-login').value = '';
+                return;
+            }
+
+            finishRegistration(login);
         }
 
-        // Функция разблокировки кнопки скачивания
-        function unlockDownload() {
-            document.getElementById('locked-area').style.display = 'none';
-            document.getElementById('download-area').style.display = 'flex';
+        // --- ЗАВЕРШЕНИЕ РЕГИСТРАЦИИ ---
+        function finishRegistration(userName) {
+            localStorage.setItem('cherry_user', userName);
+            alert("Успешная регистрация! Добро пожаловать, " + userName);
             
-            // Меняем кнопку в меню на "Выйти"
+            // Разблокируем скачивание
+            document.getElementById('locked-area').style.display = 'none';
+            document.getElementById('download-area').style.display = 'block';
+            
             let loginLink = document.getElementById('login-link');
-            loginLink.innerText = "Выйти";
-            loginLink.onclick = function() {
-                localStorage.removeItem('cherry_user');
-                location.reload(); // Перезагружаем страницу
-            };
+            loginLink.innerText = "Выйти (" + userName + ")";
+            loginLink.onclick = function() { localStorage.removeItem('cherry_user'); location.reload(); };
+            
+            closeModal();
         }
+
+        // Проверка при загрузке страницы
+        window.onload = function() {
+            let savedUser = localStorage.getItem('cherry_user');
+            if(savedUser) {
+                document.getElementById('locked-area').style.display = 'none';
+                document.getElementById('download-area').style.display = 'block';
+                let loginLink = document.getElementById('login-link');
+                loginLink.innerText = "Выйти (" + savedUser + ")";
+                loginLink.onclick = function() { localStorage.removeItem('cherry_user'); location.reload(); };
+            }
+        };
     </script>
 </body>
 </html>
