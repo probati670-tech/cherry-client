@@ -5,72 +5,58 @@
     <title>Сравнение версий Cherry Client</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Навигация */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #1a1a1a; }
+        body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
         .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
-        .logo span { color: #ff0022; }
+        .logo span { color: #ff2a75; }
         .menu { display: flex; gap: 30px; }
         .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .menu a:hover, .menu a.active { color: #ff0022; }
-        .menu a.login-btn { border: 1px solid #ff0022; padding: 8px 20px; border-radius: 5px; color: #ff0022; }
+        .menu a:hover, .menu a.active { color: #ff7eb3; }
+        .menu a.login-btn { border: 1px solid #ff2a75; padding: 8px 20px; border-radius: 5px; color: #ff2a75; }
 
-        /* Контент */
         .compare-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; }
-        .page-title { font-size: 38px; font-weight: 900; color: #ff0022; margin-bottom: 10px; text-align: center; text-shadow: 0 0 20px rgba(255,0,34,0.3); }
+        .page-title { font-size: 38px; font-weight: 900; color: #ff2a75; margin-bottom: 10px; text-align: center; text-shadow: 0 0 20px rgba(255,42,117,0.3); }
         .page-subtitle { color: #888; font-size: 16px; margin-bottom: 50px; text-align: center; }
 
-        /* Таблица */
-        .table-container { max-width: 900px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #222; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        
+        .table-container { max-width: 900px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #2a1a22; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         table { width: 100%; border-collapse: collapse; }
         
-        /* Заголовок таблицы */
-        thead tr { background-color: #0d0d0d; }
-        th { padding: 25px 20px; text-align: center; font-size: 16px; font-weight: 700; border-bottom: 1px solid #222; }
+        thead tr { background-color: #110a0d; }
+        th { padding: 25px 20px; text-align: center; font-size: 16px; font-weight: 700; border-bottom: 1px solid #2a1a22; }
         th:first-child { text-align: left; width: 50%; color: #fff; }
         
-        /* Заголовки колонок */
         .th-free { color: #aaa; font-weight: 500; font-size: 14px; }
-        .th-premium { color: #ff0022; font-weight: 700; font-size: 16px; background: rgba(255,0,34,0.05); }
+        .th-premium { color: #ff2a75; font-weight: 700; font-size: 16px; background: rgba(255,42,117,0.05); }
         
-        /* Тело таблицы */
-        tbody tr { background-color: #0a0a0a; border-bottom: 1px solid #1a1a1a; transition: 0.3s; }
-        tbody tr:hover { background-color: #111; }
+        tbody tr { background-color: #0a0508; border-bottom: 1px solid #1a1014; transition: 0.3s; }
+        tbody tr:hover { background-color: #150a10; }
         tbody tr:last-child { border-bottom: none; }
         
-        td { padding: 20px; font-size: 15px; text-align: center; border-left: 1px solid #1a1a1a; }
+        td { padding: 20px; font-size: 15px; text-align: center; border-left: 1px solid #1a1014; }
         td:first-child { text-align: left; color: #ddd; font-weight: 500; border-left: none; display: flex; align-items: center; gap: 10px; }
-        
-        /* Колонка Premium (чуть темнее фон) */
-        td.col-premium { background: rgba(255,0,34,0.02); border-left: 1px solid rgba(255,0,34,0.2); }
+        td.col-premium { background: rgba(255,42,117,0.02); border-left: 1px solid rgba(255,42,117,0.2); }
 
-        /* Иконки и цвета */
-        .icon-check { color: #fff; font-size: 18px; font-weight: bold; } /* Белая галочка (как в Free) */
-        .icon-check-red { color: #ff0022; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(255,0,34,0.5); } /* Красная галочка (Premium) */
-        .icon-cross { color: #444; font-size: 16px; font-weight: bold; } /* Серый крестик */
-        .text-percent { color: #ff0022; font-family: monospace; font-size: 15px; }
-        
-        /* Иконки перед названием функции */
+        .icon-check { color: #fff; font-size: 18px; font-weight: bold; }
+        .icon-check-red { color: #ff2a75; font-size: 18px; font-weight: bold; text-shadow: 0 0 10px rgba(255,42,117,0.5); }
+        .icon-cross { color: #444; font-size: 16px; font-weight: bold; }
+        .text-percent { color: #ff2a75; font-family: monospace; font-size: 15px; }
         .func-icon { font-size: 16px; }
     </style>
 </head>
 <body>
-
     <div class="navbar">
         <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
         <div class="menu">
             <a href="index.html">Главная</a>
             <a href="download.html">Скачать</a>
-            <a href="compare.html" class="active">Сравнение версий</a>
             <a href="overview.html">Обзор функций</a>
             <a href="features.html">Документация</a>
+            <a href="compare.html" class="active">Сравнение</a>
         </div>
     </div>
 
     <div class="compare-section">
-        <h1 class="page-title">Сравнение версии</h1>
+        <h1 class="page-title">Сравнение версий</h1>
         <p class="page-subtitle">Выберите версию, которая лучше всего подходит для ваших нужд</p>
 
         <div class="table-container">
@@ -83,70 +69,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- AIMBOT -->
-                    <tr>
-                        <td><span class="func-icon">🎯</span> Aimbot</td>
-                        <td><span class="icon-check">✓</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- AVOID FREEZE -->
-                    <tr>
-                        <td><span class="func-icon">🛡️</span> Avoid Freeze</td>
-                        <td><span class="icon-check">✓</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- TAS -->
-                    <tr>
-                        <td><span class="func-icon">⏱️</span> TAS (Реплеи)</td>
-                        <td><span class="text-percent">25%</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- MISC -->
-                    <tr>
-                        <td><span class="func-icon">⚙️</span> Misc (Разное)</td>
-                        <td><span class="text-percent">50%</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- FLY HELPER -->
-                    <tr>
-                        <td><span class="func-icon">✈️</span> Fly Helper (Пилот)</td>
-                        <td><span class="text-percent">40%</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- BIND WHEEL -->
-                    <tr>
-                        <td><span class="func-icon">🎡</span> Bind Wheel</td>
-                        <td><span class="icon-check">✓</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- ПОДДЕРЖКА -->
-                    <tr>
-                        <td><span class="func-icon">🎧</span> Приоритетная техподдержка</td>
-                        <td><span class="icon-cross">✕</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- РЕКЛАМА -->
-                    <tr>
-                        <td><span class="func-icon">📢</span> Реклама в клиенте</td>
-                        <td><span class="icon-check">✓</span></td>
-                        <td class="col-premium"><span class="icon-cross">✕</span></td>
-                    </tr>
-                    <!-- РАСШИРЕННЫЕ НАСТРОЙКИ -->
-                    <tr>
-                        <td><span class="func-icon">🔧</span> Расширенные настройки</td>
-                        <td><span class="icon-cross">✕</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
-                    <!-- РАННИЙ ДОСТУП -->
-                    <tr>
-                        <td><span class="func-icon">⭐</span> Ранний доступ к Beta версиям</td>
-                        <td><span class="icon-cross">✕</span></td>
-                        <td class="col-premium"><span class="icon-check-red">✓</span></td>
-                    </tr>
+                    <tr><td><span class="func-icon">🎯</span> Aimbot</td><td><span class="icon-check">✓</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">🛡️</span> Avoid Freeze</td><td><span class="icon-check">✓</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">⏱️</span> TAS (Реплеи)</td><td><span class="text-percent">25%</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">⚙️</span> Misc (Разное)</td><td><span class="text-percent">50%</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">✈️</span> Fly Helper (Пилот)</td><td><span class="text-percent">40%</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">🎡</span> Bind Wheel</td><td><span class="icon-check">✓</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">🎧</span> Приоритетная техподдержка</td><td><span class="icon-cross">✕</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">📢</span> Реклама в клиенте</td><td><span class="icon-check">✓</span></td><td class="col-premium"><span class="icon-cross">✕</span></td></tr>
+                    <tr><td><span class="func-icon">🔧</span> Расширенные настройки</td><td><span class="icon-cross">✕</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
+                    <tr><td><span class="func-icon">⭐</span> Ранний доступ к Beta версиям</td><td><span class="icon-cross">✕</span></td><td class="col-premium"><span class="icon-check-red">✓</span></td></tr>
                 </tbody>
             </table>
         </div>
     </div>
-
 </body>
 </html>
