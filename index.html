@@ -1,19 +1,155 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мой Вишневый DDNet</title>
+    <title>Cherry Client - DDNet</title>
+    <!-- Подключаем красивый шрифт от Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #0a0a0a; color: white; font-family: Arial; text-align: center; padding-top: 100px; }
-        h1 { font-size: 50px; }
-        span { color: #e60026; } /* Тут вишневый цвет */
-        .btn { background-color: #e60026; color: white; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; }
+        body {
+            background-color: #0a0a0a; /* Темный фон */
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- ВЕРХНЕЕ МЕНЮ --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+        }
+        .logo span { color: #ff0022; } /* Красный акцент */
+        
+        .menu a {
+            color: #cccccc;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .menu a:hover {
+            color: #ff0022; /* При наведении становится красным */
+        }
+
+        /* --- ГЛАВНЫЙ ЭКРАН --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+            letter-spacing: 2px;
+        }
+        .hero h1 span { color: #ff0022; }
+
+        .hero p {
+            color: #aaaaaa;
+            font-size: 18px;
+            max-width: 600px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        /* --- КНОПКИ --- */
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+        .btn {
+            padding: 15px 35px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background-color: #ff0022;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 0, 34, 0.3); /* Легкое свечение */
+        }
+        .btn-primary:hover {
+            background-color: #ff1a3c;
+            box-shadow: 0 0 25px rgba(255, 0, 34, 0.6); /* Свечение усиливается */
+            transform: translateY(-2px); /* Кнопка чуть поднимается */
+        }
+
+        .btn-secondary {
+            background-color: #1a1a1a;
+            color: white;
+            border: 1px solid #333;
+        }
+        .btn-secondary:hover {
+            background-color: #2a2a2a;
+            border-color: #555;
+            transform: translateY(-2px);
+        }
+
+        /* --- СЧЕТЧИК ОНЛАЙНА --- */
+        .online-counter {
+            margin-top: 50px;
+            border: 1px solid rgba(255, 0, 34, 0.5);
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 18px;
+            color: #ff0022;
+            background-color: rgba(255, 0, 34, 0.05); /* Еле заметный красный фон */
+            box-shadow: 0 0 10px rgba(255, 0, 34, 0.2) inset;
+        }
     </style>
 </head>
 <body>
-    <h1>Мой <span>DDNet</span></h1>
-    <p>Добро пожаловать на лучший вишневый сервер!</p>
-    <br>
-    <a href="#" class="btn">Скачать клиент</a>
+
+    <!-- Верхнее меню -->
+    <div class="navbar">
+        <div class="logo">CHERRY <span>CLIENT</span></div>
+        <div class="menu">
+            <a href="#">Главная</a>
+            <a href="#">Скачать</a>
+            <a href="#">Обзор функций</a>
+            <a href="#">Функции</a>
+            <a href="#">Вход / Регистрация</a>
+        </div>
+    </div>
+
+    <!-- Центральная часть -->
+    <div class="hero">
+        <h1>CHERRY <span>CLIENT</span></h1>
+        <p>Продвинутый клиент для DDNet с расширенными возможностями. Открой для себя новый уровень игры с улучшенной производительностью и современным интерфейсом.</p>
+        
+        <div class="buttons">
+            <a href="#" class="btn btn-primary">⬇ Скачать сейчас</a>
+            <a href="#" class="btn btn-secondary">Узнать больше ➔</a>
+        </div>
+
+        <div class="online-counter">
+            Сейчас играют: 8 ||
+        </div>
+    </div>
+
 </body>
 </html>
