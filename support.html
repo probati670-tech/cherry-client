@@ -29,7 +29,6 @@
         .success-message h2 { color: #4CAF50; margin-top: 0; }
         .ticket-number { display: inline-block; background: #4CAF50; color: white; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 18px; font-weight: bold; margin: 15px 0; }
         
-        /* Блок проверки ответа */
         .check-ticket h2 { color: #ff7eb3; margin-top: 0; font-size: 22px; margin-bottom: 20px; border-bottom: 1px solid #22151a; padding-bottom: 15px; }
         .check-result { margin-top: 20px; padding: 20px; background: #0a0508; border: 1px solid #331a22; border-radius: 10px; display: none; }
         .check-result p { margin: 5px 0; font-size: 14px; color: #ccc; }
@@ -96,7 +95,6 @@
             <div class="ticket-number" id="ticket-id">#0000</div>
         </div>
 
-        <!-- БЛОК ПРОВЕРКИ ОТВЕТА -->
         <div class="check-ticket">
             <h2>📩 Проверить ответ поддержки</h2>
             <div class="form-group">
@@ -113,6 +111,9 @@
             </div>
         </div>
 
+        <div class="alt-contact">
+            Или напишите нам напрямую в <a href="https://t.me/chatcherryclient" target="_blank">Telegram</a>
+        </div>
     </div>
 
     <footer>
@@ -124,8 +125,8 @@
             <div class="footer-contacts">
                 <h3>Контакты</h3>
                 <div class="tg-buttons">
-                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
-                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
+                    <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="https://t.me/chatcherryclient" target="_blank" class="tg-btn">✈️ Telegram чат</a>
                 </div>
             </div>
         </div>
@@ -140,7 +141,7 @@
     </footer>
 
     <script>
-        const WORKER_URL = 'https://cherry-tg-bridge-v2.probati670.workers.dev'; // Убедись что тут -v2
+        const WORKER_URL = 'https://cherry-tg-bridge-v2.probati670.workers.dev';
 
         async function submitTicket(event) {
             event.preventDefault();
@@ -166,8 +167,6 @@
                 document.getElementById('form-container').style.display = 'none';
                 document.getElementById('success-container').style.display = 'block';
                 document.getElementById('ticket-id').innerText = "#" + data.message_id;
-                
-                // Автоматически подставляем ID в поле проверки
                 document.getElementById('check-id').value = data.message_id; 
 
             } catch (error) {
@@ -177,7 +176,6 @@
             }
         }
 
-        // Функция проверки ответа
         async function checkTicket() {
             const id = document.getElementById('check-id').value;
             if (!id) { alert('Введите номер тикета'); return; }
