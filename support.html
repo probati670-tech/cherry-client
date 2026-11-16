@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поддержка - Cherry Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; } .logo span { color: #ff2a75; }
+        .menu { display: flex; gap: 30px; }
+        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .menu a:hover, .menu a.active { color: #ff7eb3; }
+        
+        .content { flex: 1; max-width: 700px; margin: 0 auto; padding: 60px 20px; width: 100%; box-sizing: border-box; }
+        h1 { color: #ff2a75; font-size: 36px; margin-bottom: 10px; text-align: center; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 16px; }
+
+        /* Стили формы */
+        .ticket-form { background: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; }
+        .form-control { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 14px; transition: 0.3s; box-sizing: border-box; }
+        .form-control:focus { outline: none; border-color: #ff2a75; box-shadow: 0 0 10px rgba(255,42,117,0.2); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        
+        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; box-shadow: 0 4px 15px rgba(255,42,117,0.3); margin-top: 10px; }
+        .btn-submit:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* Сообщение об успехе */
+        .success-message { display: none; text-align: center; padding: 40px; background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 15px; }
+        .success-message h2 { color: #4CAF50; margin-top: 0; }
+        .success-message p { color: #ccc; }
+        .ticket-number { display: inline-block; background: #4CAF50; color: white; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 18px; font-weight: bold; margin: 15px 0; }
+
+        /* Альтернативный контакт */
+        .alt-contact { text-align: center; margin-top: 30px; color: #888; font-size: 14px; }
+        .alt-contact a { color: #ff2a75; text-decoration: none; font-weight: 600; }
+        .alt-contact a:hover { text-decoration: underline; }
+
+        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
+        .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        .tg-buttons { display: flex; gap: 15px; }
+        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .tg-btn:hover { border-color: #ff2a75; color: #ff2a75; }
+        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-bottom a { color: #888; text-decoration: none; transition: 0.3s; } .footer-bottom a:hover { color: #ff2a75; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
+        <div class="menu">
+            <a href="index.html">Главная</a>
+            <a href="download.html">Скачать</a>
+            <a href="overview.html">Обзор функций</a>
+            <a href="features.html">Документация</a>
+            <a href="compare.html">Сравнение</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Поддержка</h1>
+        <p class="subtitle">Возникли проблемы? Опишите ситуацию ниже, и мы обязательно ответим.</p>
+
+        <!-- Форма подачи тикета -->
+        <div class="ticket-form" id="form-container">
+            <form id="support-form" onsubmit="submitTicket(event)">
+                <div class="form-group">
+                    <label>Ваш ник в игре (DDNet)</label>
+                    <input type="text" class="form-control" id="ticket-nick" placeholder="Введите ваш ник" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Связь с вами (Telegram / Discord)</label>
+                    <input type="text" class="form-control" id="ticket-contact" placeholder="@username" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Категория обращения</label>
+                    <select class="form-control" id="ticket-type" required>
+                        <option value="" disabled selected>Выберите тему...</option>
+                        <option value="Вопрос по покупке">Вопрос по покупке Premium</option>
+                        <option value="Проблема с клиентом">Проблема с клиентом (Ошибка/Баг)</option>
+                        <option value="Жалоба на игрока">Жалоба на игрока</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Описание вопроса или жалобы</label>
+                    <textarea class="form-control" id="ticket-message" placeholder="Подробно опишите вашу проблему. Если это жалоба, прикрепите доказательства (ссылки на скриншоты/видео)." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submit-btn">Отправить тикет</button>
+            </form>
+        </div>
+
+        <!-- Сообщение об успехе (скрыто по умолчанию) -->
+        <div class="success-message" id="success-container">
+            <h2>Тикет успешно создан!</h2>
+            <p>Мы получили ваше обращение. Ожидайте ответа в указанном контакте.</p>
+            <div class="ticket-number" id="ticket-id">#0000</div>
+            <p style="font-size: 13px;">Если вы указали неверный контакт, создайте новый тикет или напишите нам в Telegram.</p>
+        </div>
+
+        <div class="alt-contact">
+            Или напишите нам напрямую в <a href="https://t.me/" target="_blank">Telegram</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>CHERRY CLIENT</h3>
+                <p>Продвинутый клиент для DDNet</p>
+            </div>
+            <div class="footer-contacts">
+                <h3>Контакты</h3>
+                <div class="tg-buttons">
+                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>
+                <a href="privacy.html">Политика конфиденциальности</a> • 
+                <a href="terms.html">Пользовательское соглашение</a> • 
+                <a href="support.html">Поддержка</a>
+            </div>
+            <div>© 2026 Cherry Client. Все права защищены.</div>
+        </div>
+    </footer>
+
+    <script>
+        async function submitTicket(event) {
+            event.preventDefault(); // Останавливаем перезагрузку страницы
+
+            // Получаем данные из формы
+            const nick = document.getElementById('ticket-nick').value;
+            const contact = document.getElementById('ticket-contact').value;
+            const type = document.getElementById('ticket-type').value;
+            const message = document.getElementById('ticket-message').value;
+
+            // Меняем кнопку на "Отправка..."
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "Отправка...";
+            btn.disabled = true;
+
+            // Генерируем случайный номер тикета (от 1000 до 9999)
+            const ticketId = Math.floor(Math.random() * 9000) + 1000;
+
+            // === ТУТ МОЖНО ПОДКЛЮЧИТЬ ОТПРАВКУ В ТЕЛЕГРАМ ИЛИ ДИСКОРД ===
+            // Пример для Discord Webhook (если захочешь, я расскажу как его получить):
+            /*
+            const webhookUrl = 'ТВОЯ_ССЫЛКА_НА_DISCORD_WEBHOOK';
+            const payload = {
+                content: `🚨 **Новый тикет #${ticketId}**\n**Ник:** ${nick}\n**Контакты:** ${contact}\n**Тема:** ${type}\n**Сообщение:** ${message}`
+            };
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(err => console.log(err));
+            */
+            // ================================================================
+
+            // Имитация задержки сети (1.5 секунды)
+            setTimeout(() => {
+                // Скрываем форму, показываем успех
+                document.getElementById('form-container').style.display = 'none';
+                const successContainer = document.getElementById('success-container');
+                successContainer.style.display = 'block';
+                document.getElementById('ticket-id').innerText = "#" + ticketId;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
