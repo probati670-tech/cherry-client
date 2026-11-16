@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Обзор функций Cherry Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Навигация */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 30px 60px; border-bottom: 1px solid #1a1a1a; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
+        .logo span { color: #ff0022; }
+        .menu { display: flex; gap: 30px; }
+        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .menu a:hover, .menu a.active { color: #ff0022; }
+        .menu a.login-btn { border: 1px solid #ff0022; padding: 8px 20px; border-radius: 5px; color: #ff0022; }
+        .menu a.login-btn:hover { background-color: #ff0022; color: white; }
+
+        /* Контент */
+        .overview-section { flex: 1; padding: 60px 20px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .page-header { text-align: center; margin-bottom: 60px; }
+        .page-header h1 { font-size: 42px; font-weight: 900; margin: 0 0 15px 0; }
+        .page-header h1 span { color: #ff0022; }
+        .page-header p { color: #888; font-size: 18px; max-width: 600px; margin: 0 auto; }
+
+        /* Сетка карточек */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        /* Карточка */
+        .feature-card { 
+            background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 12px; padding: 30px; 
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .feature-card:hover { 
+            transform: translateY(-5px); border-color: #ff0022; 
+            box-shadow: 0 10px 30px rgba(255,0,34,0.1); 
+        }
+        .feature-icon { font-size: 40px; margin-bottom: 20px; }
+        .feature-card h3 { font-size: 22px; margin: 0 0 15px 0; color: #fff; }
+        .feature-card p { color: #888; font-size: 14px; line-height: 1.6; margin: 0; }
+        
+        /* Ссылка внизу карточки */
+        .feature-link { display: inline-block; margin-top: 20px; color: #ff0022; font-size: 13px; font-weight: 700; text-decoration: none; }
+        .feature-link:hover { text-decoration: underline; }
+
+        /* Кнопка внизу страницы */
+        .cta-section { text-align: center; margin-top: 80px; }
+        .btn-download { background-color: #ff0022; color: white; padding: 16px 40px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; transition: 0.3s; display: inline-block; box-shadow: 0 0 20px rgba(255,0,34,0.3); }
+        .btn-download:hover { background-color: #ff1a3c; box-shadow: 0 0 30px rgba(255,0,34,0.6); transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
+        <div class="menu">
+            <a href="index.html">Главная</a>
+            <a href="download.html">Скачать</a>
+            <a href="overview.html" class="active">Обзор функций</a>
+            <a href="features.html">Документация</a>
+            <a href="index.html" class="login-btn">Вход / Регистрация</a>
+        </div>
+    </div>
+
+    <div class="overview-section">
+        <div class="page-header">
+            <h1>Всё, что нужно для <span>победы</span></h1>
+            <p>Открой для себя мощные модули Cherry Client. Каждая функция создана для максимальной производительности и незаметности.</p>
+        </div>
+
+        <div class="features-grid">
+            
+            <!-- Карточка 1 -->
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Умный Аимбот</h3>
+                <p>Плавное наведение на цель с настраиваемым FOV. Включает в себя режим Silent (бесшумное наведение), задержки выстрела и отрисовку боксов цели.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+            <!-- Карточка 2 -->
+            <div class="feature-card">
+                <div class="feature-icon">🪝</div>
+                <h3>Идеальный Крюк</h3>
+                <p>Автоматический захват цели крюком. Настройка приоритета (ближе к прицелу), игнорирование друзей и бесшумный режим для скрытной игры.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+            <!-- Карточка 3 -->
+            <div class="feature-card">
+                <div class="feature-icon">🔨</div>
+                <h3>Авто-Молот</h3>
+                <p>Больше никогда не промахнешься молотом. Настройка радиуса удара, приоритета цели и полная синхронизация с движением.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+            <!-- Карточка 4 -->
+            <div class="feature-card">
+                <div class="feature-icon">🔫</div>
+                <h3>Авто-Стрельба</h3>
+                <p>Автоматическая стрельба из пистолета и дробовика при наведении на врага. Идеально работает в связке с основным Аимботом.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+            <!-- Карточка 5 -->
+            <div class="feature-card">
+                <div class="feature-icon">👁️</div>
+                <h3>Визуалы и HUD</h3>
+                <p>Полная кастомизация клиента. Изменяй цвета интерфейса, включай трассеры, скины и другие визуальные улучшения.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+            <!-- Карточка 6 -->
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Авоид (Avoid)</h3>
+                <p>Умное избегание заморозки и других опасных механик. Клиент сам сделает движение, чтобы спасти твою жизнь в сложной ситуации.</p>
+                <a href="features.html" class="feature-link">Смотреть команды →</a>
+            </div>
+
+        </div>
+
+        <div class="cta-section">
+            <h2 style="margin-bottom: 20px;">Готов начать играть по-новому?</h2>
+            <a href="download.html" class="btn-download">Скачать Cherry Client</a>
+        </div>
+    </div>
+
+</body>
+</html>
