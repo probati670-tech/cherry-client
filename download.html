@@ -5,30 +5,25 @@
     <title>Скачать Cherry Client</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Копируем базовые стили с главной */
-        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 30px 60px; }
-        .logo { font-size: 28px; font-weight: 900; text-decoration: none; color: white; }
-        .logo span { color: #ff0022; }
-        .menu { display: flex; gap: 40px; }
-        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; cursor: pointer; }
-        .menu a:hover, .menu a.active { color: #ff0022; }
-        .menu a.login-btn { border: 1px solid #ff0022; padding: 8px 20px; border-radius: 5px; color: #ff0022; }
-        .menu a.login-btn:hover { background-color: #ff0022; color: white; }
+        body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
+        .logo span { color: #ff2a75; }
+        .menu { display: flex; gap: 30px; }
+        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .menu a:hover, .menu a.active { color: #ff7eb3; }
+        .menu a.login-btn { border: 1px solid #ff2a75; padding: 8px 20px; border-radius: 5px; color: #ff2a75; }
+        .menu a.login-btn:hover { background-color: #ff2a75; color: white; }
 
-        /* Стили для страницы скачивания */
         .download-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         .page-title { font-size: 36px; font-weight: 900; margin-bottom: 10px; text-align: center; }
         .page-subtitle { color: #888; margin-bottom: 60px; text-align: center; }
 
         .cards-container { display: flex; gap: 30px; justify-content: center; max-width: 900px; width: 100%; }
+        .card { background-color: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; flex: 1; display: flex; flex-direction: column; position: relative; }
         
-        /* Карточки */
-        .card { background-color: #0d0d0d; border: 1px solid #222; border-radius: 15px; padding: 40px; flex: 1; display: flex; flex-direction: column; position: relative; }
-        
-        /* Карточка Premium */
-        .card.premium { border-color: #ff0022; box-shadow: 0 0 30px rgba(255,0,34,0.15); }
-        .premium-badge { position: absolute; top: -15px; right: 20px; background-color: #ff0022; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,0,34,0.5); }
+        .card.premium { border-color: #ff2a75; box-shadow: 0 0 30px rgba(255,42,117,0.15); }
+        .premium-badge { position: absolute; top: -15px; right: 20px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,42,117,0.5); }
 
         .card h3 { font-size: 24px; font-weight: 900; margin-top: 0; margin-bottom: 10px; }
         .card p { color: #888; font-size: 14px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; }
@@ -36,29 +31,28 @@
         .features-list { list-style: none; padding: 0; margin: 0 0 40px 0; flex: 1; }
         .features-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #ccc; }
         .features-list li::before { content: "✓"; color: #fff; font-weight: bold; }
-        .card.premium .features-list li::before { color: #ff0022; }
+        .card.premium .features-list li::before { color: #ff2a75; }
 
-        .btn-download-free { background-color: #1a1a1a; color: white; border: 1px solid #333; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; display: block; box-sizing: border-box; font-family: 'Montserrat'; font-size: 15px;}
-        .btn-download-free:hover { background-color: #2a2a2a; }
+        .btn-download-free { background-color: #1a1014; color: white; border: 1px solid #331a22; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; display: block; box-sizing: border-box; font-family: 'Montserrat'; font-size: 15px;}
+        .btn-download-free:hover { background-color: #2a1a22; }
         
-        .btn-download-premium { background-color: #ff0022; color: white; border: none; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; box-shadow: 0 0 20px rgba(255,0,34,0.4); font-family: 'Montserrat'; font-size: 15px;}
-        .btn-download-premium:hover { background-color: #ff1a3c; box-shadow: 0 0 30px rgba(255,0,34,0.7); }
+        .btn-download-premium { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; box-shadow: 0 0 20px rgba(255,42,117,0.4); font-family: 'Montserrat'; font-size: 15px;}
+        .btn-download-premium:hover { box-shadow: 0 0 30px rgba(255,42,117,0.7); }
 
         .version-info { text-align: center; font-size: 12px; color: #555; margin-top: 15px; }
     </style>
 </head>
 <body>
-
     <div class="navbar">
         <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
-           <div class="menu">
-            <a href="compare.html">Сравнение версий</a>
-             <a href="index.html">Главная</a>
-             <a href="download.html">Скачать</a>
-             <a href="overview.html">Обзор функций</a>
-             <a href="features.html" class="active">Документация</a>
-             <a href="index.html" class="login-btn">Вход / Регистрация</a>
-           </div>
+        <div class="menu">
+            <a href="index.html">Главная</a>
+            <a href="download.html" class="active">Скачать</a>
+            <a href="overview.html">Обзор функций</a>
+            <a href="features.html">Документация</a>
+            <a href="compare.html">Сравнение</a>
+            <a href="index.html" class="login-btn">Вход / Регистрация</a>
+        </div>
     </div>
 
     <div class="download-section">
@@ -66,30 +60,23 @@
         <p class="page-subtitle">Скачайте бесплатную версию или приобретите Premium для доступа ко всем функциям</p>
 
         <div class="cards-container">
-            
-            <!-- БЕСПЛАТНАЯ ВЕРСИЯ -->
             <div class="card">
                 <h3>Бесплатная версия</h3>
                 <p>Получите доступ к основному функционалу Cherry Client совершенно бесплатно.</p>
-                
                 <ul class="features-list">
                     <li>Базовые функции (Aimbot, TAS)</li>
                     <li>Стандартные настройки</li>
                     <li>Обычная поддержка</li>
                     <li>Периодические обновления</li>
                 </ul>
-
-                <!-- ССЫЛКА НА СКАЧИВАНИЕ FREE -->
                 <a href="ССЫЛКА_НА_FREE_АРХИВ.zip" class="btn-download-free">⬇ Скачать бесплатно</a>
                 <div class="version-info">Версия 1.0.0 • Windows 64-bit</div>
             </div>
 
-            <!-- ПРЕМИУМ ВЕРСИЯ -->
             <div class="card premium">
                 <div class="premium-badge">Premium</div>
                 <h3>Премиум версия</h3>
                 <p>Все функции, приоритетная поддержка и эксклюзивные возможности.</p>
-                
                 <ul class="features-list">
                     <li>Все функции Free версии</li>
                     <li>Все премиум функции (Fly, Misc)</li>
@@ -97,14 +84,10 @@
                     <li>Без рекламы</li>
                     <li>Ранний доступ к Beta версиям</li>
                 </ul>
-
-                <!-- КНОПКА КУПИТЬ -->
                 <a href="#" class="btn-download-premium">👑 Купить Premium</a>
                 <div class="version-info">Подписка от 399 ₽ / месяц</div>
             </div>
-
         </div>
     </div>
-
 </body>
 </html>
