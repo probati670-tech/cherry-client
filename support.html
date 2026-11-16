@@ -11,29 +11,29 @@
         .menu { display: flex; gap: 30px; }
         .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
         .menu a:hover, .menu a.active { color: #ff7eb3; }
-        
         .content { flex: 1; max-width: 700px; margin: 0 auto; padding: 60px 20px; width: 100%; box-sizing: border-box; }
         h1 { color: #ff2a75; font-size: 36px; margin-bottom: 10px; text-align: center; }
         .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 16px; }
 
-        .ticket-form { background: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .ticket-form, .check-ticket { background: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; }
         .form-control { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 14px; transition: 0.3s; box-sizing: border-box; }
         .form-control:focus { outline: none; border-color: #ff2a75; box-shadow: 0 0 10px rgba(255,42,117,0.2); }
         textarea.form-control { resize: vertical; min-height: 120px; }
         
-        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; box-shadow: 0 4px 15px rgba(255,42,117,0.3); margin-top: 10px; }
+        .btn-submit { width: 100%; padding: 16px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; box-shadow: 0 4px 15px rgba(255,42,117,0.3); }
         .btn-submit:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
-        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        .success-message { display: none; text-align: center; padding: 40px; background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 15px; }
+        .success-message { display: none; text-align: center; padding: 40px; background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; border-radius: 15px; margin-bottom: 30px; }
         .success-message h2 { color: #4CAF50; margin-top: 0; }
-        .success-message p { color: #ccc; }
         .ticket-number { display: inline-block; background: #4CAF50; color: white; padding: 5px 15px; border-radius: 20px; font-family: monospace; font-size: 18px; font-weight: bold; margin: 15px 0; }
-
-        .alt-contact { text-align: center; margin-top: 30px; color: #888; font-size: 14px; }
-        .alt-contact a { color: #ff2a75; text-decoration: none; font-weight: 600; }
+        
+        /* Блок проверки ответа */
+        .check-ticket h2 { color: #ff7eb3; margin-top: 0; font-size: 22px; margin-bottom: 20px; border-bottom: 1px solid #22151a; padding-bottom: 15px; }
+        .check-result { margin-top: 20px; padding: 20px; background: #0a0508; border: 1px solid #331a22; border-radius: 10px; display: none; }
+        .check-result p { margin: 5px 0; font-size: 14px; color: #ccc; }
+        .check-result span { color: #ff2a75; font-weight: bold; }
 
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group">
                     <label>Описание вопроса или жалобы</label>
-                    <textarea class="form-control" id="ticket-message" placeholder="Подробно опишите вашу проблему. Если это жалоба, прикрепите доказательства." required></textarea>
+                    <textarea class="form-control" id="ticket-message" placeholder="Подробно опишите вашу проблему." required></textarea>
                 </div>
                 <button type="submit" class="btn-submit" id="submit-btn">Отправить тикет</button>
             </form>
@@ -92,13 +92,27 @@
 
         <div class="success-message" id="success-container">
             <h2>Тикет успешно создан!</h2>
-            <p>Мы получили ваше обращение и уже обрабатываем его. Ожидайте ответа.</p>
+            <p>Запомните номер вашего тикета. Вы сможете проверить ответ ниже.</p>
             <div class="ticket-number" id="ticket-id">#0000</div>
         </div>
 
-        <div class="alt-contact">
-            Или напишите нам напрямую в <a href="https://t.me/">Telegram</a>
+        <!-- БЛОК ПРОВЕРКИ ОТВЕТА -->
+        <div class="check-ticket">
+            <h2>📩 Проверить ответ поддержки</h2>
+            <div class="form-group">
+                <label>Введите номер вашего тикета (без решетки)</label>
+                <input type="number" class="form-control" id="check-id" placeholder="Например: 4521">
+            </div>
+            <button class="btn-submit" onclick="checkTicket()">Узнать ответ</button>
+            
+            <div class="check-result" id="check-result">
+                <p><span>Тема:</span> <span id="res-type"></span></p>
+                <p><span>Ваше сообщение:</span> <span id="res-msg"></span></p>
+                <hr style="border-color: #22151a; margin: 15px 0;">
+                <p><span>Ответ поддержки:</span> <span id="res-reply" style="color: #4CAF50;"></span></p>
+            </div>
         </div>
+
     </div>
 
     <footer>
@@ -126,9 +140,10 @@
     </footer>
 
     <script>
+        const WORKER_URL = 'https://cherry-tg-bridge-v2.probati670.workers.dev'; // Убедись что тут -v2
+
         async function submitTicket(event) {
             event.preventDefault();
-
             const nick = document.getElementById('ticket-nick').value;
             const contact = document.getElementById('ticket-contact').value;
             const type = document.getElementById('ticket-type').value;
@@ -138,29 +153,53 @@
             btn.innerText = "Отправка...";
             btn.disabled = true;
 
-            const ticketId = Math.floor(Math.random() * 9000) + 1000;
-
             try {
-                // ТВОЯ ССЫЛКА ОТ CLOUDFLARE WORKER УЖЕ ВСТАВЛЕНА СЮДА:
-                const WORKER_URL = 'https://cherry-tg-bridge-v2.probati670.workers.dev/api/ticket'; 
-
-                const response = await fetch(WORKER_URL, {
+                const response = await fetch(WORKER_URL + '/api/ticket', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nick, contact, type, message })
                 });
 
-                if (!response.ok) throw new Error('Ошибка сети');
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
 
                 document.getElementById('form-container').style.display = 'none';
-                const successContainer = document.getElementById('success-container');
-                successContainer.style.display = 'block';
-                document.getElementById('ticket-id').innerText = "#" + ticketId;
+                document.getElementById('success-container').style.display = 'block';
+                document.getElementById('ticket-id').innerText = "#" + data.message_id;
+                
+                // Автоматически подставляем ID в поле проверки
+                document.getElementById('check-id').value = data.message_id; 
 
             } catch (error) {
-                alert('Не удалось отправить тикет. Попробуйте позже.');
+                alert('Ошибка: ' + error.message);
                 btn.innerText = "Отправить тикет";
                 btn.disabled = false;
+            }
+        }
+
+        // Функция проверки ответа
+        async function checkTicket() {
+            const id = document.getElementById('check-id').value;
+            if (!id) { alert('Введите номер тикета'); return; }
+
+            const resBox = document.getElementById('check-result');
+            resBox.style.display = 'none';
+
+            try {
+                const response = await fetch(`${WORKER_URL}/api/ticket/${id}`);
+                if (!response.ok) {
+                    alert('Тикет с таким номером не найден. Проверьте номер.');
+                    return;
+                }
+                
+                const data = await response.json();
+                document.getElementById('res-type').innerText = data.type;
+                document.getElementById('res-msg').innerText = data.message;
+                document.getElementById('res-reply').innerText = data.reply;
+                
+                resBox.style.display = 'block';
+            } catch (e) {
+                alert('Ошибка при проверке. Попробуйте позже.');
             }
         }
     </script>
