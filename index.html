@@ -2,144 +2,231 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Cherry Client - DDNet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Cherry Client - Вход</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0a0a0a; color: white; font-family: 'Montserrat', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; }
-        .logo { font-size: 24px; font-weight: 900; } .logo span { color: #ff0022; }
-        .menu a { color: #ccc; text-decoration: none; margin-left: 30px; font-weight: 700; transition: 0.3s; cursor: pointer; }
-        .menu a:hover { color: #ff0022; }
-        .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-size: 64px; font-weight: 900; margin: 0 0 10px 0; } .hero h1 span { color: #ff0022; }
-        .hero p { color: #aaa; font-size: 18px; max-width: 600px; margin-bottom: 40px; }
-        .btn { padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 14px; transition: 0.3s; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; }
-        .btn-primary { background-color: #ff0022; color: white; box-shadow: 0 0 15px rgba(255,0,34,0.3); }
-        .btn-primary:hover { background-color: #ff1a3c; }
-        .btn-secondary { background-color: #1a1a1a; color: white; border: 1px solid #333; }
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        body { 
+            background-color: #0a0a0a; 
+            color: #ffffff; 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
         
-        /* --- МОДАЛЬНОЕ ОКНО --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background-color: #111; padding: 30px; border-radius: 10px; border: 1px solid #333; width: 380px; text-align: center; box-shadow: 0 0 30px rgba(255,0,34,0.2); position: relative; max-height: 90vh; overflow-y: auto;}
-        .close-btn { position: absolute; top: 10px; right: 15px; color: #aaa; cursor: pointer; font-size: 24px; }
-        
-        /* Главные вкладки (Вход / Регистрация) */
-        .main-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #333; }
-        .main-tab { flex: 1; padding: 10px; cursor: pointer; color: #777; font-weight: 900; font-size: 18px; transition: 0.3s; }
-        .main-tab.active { color: white; border-bottom: 3px solid #ff0022; }
-        
-        /* Вкладки внутри регистрации (Gmail / Логин) */
-        .sub-tabs { display: flex; margin-bottom: 15px; background: #1a1a1a; border-radius: 5px; padding: 5px; }
-        .sub-tab { flex: 1; padding: 8px; cursor: pointer; color: #777; font-size: 12px; font-weight: 700; border-radius: 3px; }
-        .sub-tab.active { background: #333; color: white; }
-        
-        .form-group { display: none; text-align: left; } 
+        /* --- КАРТОЧКА АВТОРИЗАЦИИ (как на скрине) --- */
+        .auth-card {
+            background-color: #121212; /* Темный фон карточки */
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .auth-title { text-align: center; font-size: 28px; font-weight: 700; color: #ff0022; margin: 0 0 10px 0; }
+        .auth-subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; }
+
+        /* --- ВКЛАДКИ ВХОД / РЕГИСТРАЦИЯ --- */
+        .tabs { 
+            display: flex; 
+            background-color: #1a1a1a; 
+            border-radius: 8px; 
+            padding: 4px; 
+            margin-bottom: 30px; 
+        }
+        .tab { 
+            flex: 1; 
+            padding: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: #888; 
+            border-radius: 6px; 
+            transition: 0.3s;
+            border: none;
+            background: none;
+        }
+        .tab.active { 
+            background-color: #ff0022; 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(255,0,34,0.3); 
+        }
+
+        /* --- ФОРМА --- */
+        .form-group { display: none; } 
         .form-group.active { display: block; }
-        .form-group label { font-size: 12px; color: #aaa; margin-bottom: 5px; display: block; margin-top: 10px;}
-        .form-group input { width: 100%; padding: 10px; background-color: #222; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        .form-group input:focus { outline: none; border-color: #ff0022; }
         
-        /* Капча */
-        .captcha-box { background: #222; padding: 10px; border-radius: 5px; margin: 15px 0; display: flex; align-items: center; justify-content: space-between; }
-        .captcha-text { font-family: monospace; font-size: 18px; color: #ff0022; letter-spacing: 2px; background: #111; padding: 5px 10px; border-radius: 3px; user-select: none; text-decoration: line-through; }
-        .captcha-input { width: 70px !important; margin-bottom: 0 !important; text-align: center; }
+        .input-label { display: block; font-size: 12px; color: #888; margin-bottom: 8px; }
+        .input-field { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #0a0a0a; 
+            border: 1px solid #2a2a2a; 
+            color: white; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .input-field:focus { outline: none; border-color: #ff0022; }
+
+        /* --- ДОПОЛНИТЕЛЬНЫЕ ЭЛЕМЕНТЫ (Запомнить / Забыли пароль) --- */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 12px;
+        }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; color: #aaa; cursor: pointer; }
+        .checkbox-container input { accent-color: #ff0022; cursor: pointer; }
+        .forgot-link { color: #ff0022; text-decoration: none; }
+        .forgot-link:hover { text-decoration: underline; }
+
+        /* --- КНОПКА --- */
+        .btn-submit { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #ff0022; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            cursor: pointer; 
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 4px 15px rgba(255,0,34,0.3);
+        }
+        .btn-submit:hover { background-color: #ff1a3c; box-shadow: 0 6px 20px rgba(255,0,34,0.5); }
+
+        /* --- НИЖНЯЯ ССЫЛКА --- */
+        .bottom-text { text-align: center; margin-top: 25px; font-size: 13px; color: #888; }
+        .bottom-text a { color: #ff0022; text-decoration: none; cursor: pointer; }
         
-        .error-msg { color: #ff0022; font-size: 12px; margin-bottom: 10px; display: none; }
-        .success-msg { color: #4CAF50; font-size: 12px; margin-bottom: 10px; display: none; }
+        /* --- ПОД-ВКЛАДКИ (Gmail / Логин) --- */
+        .sub-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .sub-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #888; font-size: 13px; border-bottom: 2px solid transparent; transition: 0.3s; }
+        .sub-tab.active { color: #ff0022; border-bottom: 2px solid #ff0022; }
+
+        /* --- КАПЧА --- */
+        .captcha-box { background: #1a1a1a; padding: 12px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #2a2a2a; }
+        .captcha-text { font-family: monospace; font-size: 18px; color: #ff0022; letter-spacing: 2px; user-select: none; text-decoration: line-through; }
+        .captcha-input { width: 80px; padding: 10px; background-color: #0a0a0a; border: 1px solid #333; color: white; border-radius: 5px; text-align: center; outline: none; }
+        .captcha-input:focus { border-color: #ff0022; }
+
+        .error-msg { color: #ff0022; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
+        .success-msg { color: #4CAF50; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo">CHERRY <span>CLIENT</span></div>
-        <div class="menu">
-            <a href="#">Главная</a>
-            <a id="login-link" onclick="openModal()">Вход / Регистрация</a>
-        </div>
-    </div>
+    <!-- Главная карточка -->
+    <div class="auth-card" id="auth-screen">
+        <h2 class="auth-title" id="main-title">Вход</h2>
+        <p class="auth-subtitle" id="main-subtitle">Войдите в свой аккаунт Cherry Client</p>
 
-    <div class="hero">
-        <h1>CHERRY <span>CLIENT</span></h1>
-        <p>Для скачивания необходимо авторизоваться.</p>
-        <div id="download-area" style="display: none;">
-            <a href="ССЫЛКА_НА_АРХИВ.zip" class="btn btn-primary">⬇ Скачать сейчас</a>
+        <!-- Переключатель Вход / Регистрация -->
+        <div class="tabs">
+            <button class="tab active" id="tab-login" onclick="switchMainTab('login')">Вход</button>
+            <button class="tab" id="tab-reg" onclick="switchMainTab('reg')">Регистрация</button>
         </div>
-        <div id="locked-area">
-            <button class="btn btn-secondary" onclick="openModal()" style="opacity: 0.5;">🔒 Скачивание заблокировано</button>
-        </div>
-    </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО -->
-    <div class="modal" id="auth-modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+        <!-- ================= ФОРМА ВХОДА ================= -->
+        <div id="form-login" class="form-group active">
+            <label class="input-label">Логин или Gmail</label>
+            <input type="text" class="input-field" id="login-user" placeholder="your_username">
             
-            <!-- ГЛАВНЫЕ ВКЛАДКИ -->
-            <div class="main-tabs">
-                <div class="main-tab" id="tab-btn-login" onclick="switchMainTab('login')">Вход</div>
-                <div class="main-tab active" id="tab-btn-reg" onclick="switchMainTab('reg')">Регистрация</div>
+            <label class="input-label">Пароль</label>
+            <input type="password" class="input-field" id="login-pass" placeholder="••••••••">
+            
+            <div class="form-options">
+                <label class="checkbox-container">
+                    <input type="checkbox"> Запомнить меня
+                </label>
+                <a class="forgot-link" href="#">Забыли пароль?</a>
             </div>
 
-            <!-- ================= ФОРМА ВХОДА ================= -->
-            <div id="form-login" class="form-group">
-                <label>Логин или Gmail</label>
-                <input type="text" id="login-user" placeholder="Введите ваш логин">
-                <label>Пароль</label>
-                <input type="password" id="login-pass" placeholder="Введите пароль">
-                
-                <div class="error-msg" id="err-auth">Неверный логин или пароль!</div>
-                
-                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="doLogin()">Войти</button>
+            <div class="error-msg" id="err-auth">Неверный логин или пароль!</div>
+            <button class="btn-submit" onclick="doLogin()">Войти</button>
+            
+            <div class="bottom-text">
+                Нет аккаунта? <a onclick="switchMainTab('reg')">Зарегистрироваться</a>
+            </div>
+        </div>
+
+        <!-- ================= ФОРМА РЕГИСТРАЦИИ ================= -->
+        <div id="form-reg" class="form-group">
+            
+            <!-- Под-вкладки -->
+            <div class="sub-tabs">
+                <div class="sub-tab active" id="sub-tab-email" onclick="switchSubTab('email')">Через Gmail</div>
+                <div class="sub-tab" id="sub-tab-login" onclick="switchSubTab('login')">Свой логин</div>
             </div>
 
-            <!-- ================= ФОРМА РЕГИСТРАЦИИ ================= -->
-            <div id="form-reg" class="form-group active">
-                <!-- Под-вкладки -->
-                <div class="sub-tabs">
-                    <div class="sub-tab active" id="sub-tab-email" onclick="switchSubTab('email')">Через Gmail</div>
-                    <div class="sub-tab" id="sub-tab-login" onclick="switchSubTab('login')">Свой логин</div>
+            <!-- Под-вкладка 1: Gmail -->
+            <div id="reg-email" style="display: block;">
+                <label class="input-label">Ваша почта Gmail</label>
+                <input type="email" class="input-field" id="reg-email-input" placeholder="example@gmail.com">
+                
+                <div id="email-step-1">
+                    <button class="btn-submit" onclick="sendEmailCode()">Получить код</button>
                 </div>
-
-                <!-- Под-вкладка 1: Gmail -->
-                <div id="reg-email" style="display: block;">
-                    <label>Ваша почта Gmail</label>
-                    <input type="email" id="reg-email-input" placeholder="example@gmail.com">
-                    <div id="email-step-1">
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="sendEmailCode()">Получить код</button>
-                    </div>
-                    <div id="email-step-2" style="display: none;">
-                        <div class="success-msg" id="msg-email-sent">Код отправлен! (Имитация: 1234)</div>
-                        <label>Введите код из письма</label>
-                        <input type="text" id="email-code" placeholder="1234">
-                        
-                        <div class="captcha-box">
-                            <span class="captcha-text" id="captcha-q-email"></span>
-                            <input type="number" class="captcha-input" id="captcha-a-email" placeholder="?">
-                        </div>
-                        
-                        <div class="error-msg" id="err-email">Неверный код или капча!</div>
-                        <button class="btn btn-primary" style="width: 100%;" onclick="verifyEmailCode()">Зарегистрироваться</button>
-                    </div>
-                </div>
-
-                <!-- Под-вкладка 2: Свой логин -->
-                <div id="reg-login" style="display: none;">
-                    <label>Логин (Имя_Фамилия)</label>
-                    <input type="text" id="reg-login-input" placeholder="Иван_Иванов">
-                    <label>Сложный пароль (мин. 8 символов, буквы и цифры)</label>
-                    <input type="password" id="reg-pass-input" placeholder="********">
+                
+                <div id="email-step-2" style="display: none;">
+                    <div class="success-msg" id="msg-email-sent">Код отправлен! (Имитация: 1234)</div>
+                    <label class="input-label">Введите код из письма</label>
+                    <input type="text" class="input-field" id="email-code" placeholder="1234">
                     
                     <div class="captcha-box">
-                        <span class="captcha-text" id="captcha-q-login"></span>
-                        <input type="number" class="captcha-input" id="captcha-a-login" placeholder="?">
+                        <span class="captcha-text" id="captcha-q-email"></span>
+                        <input type="number" class="captcha-input" id="captcha-a-email" placeholder="?">
                     </div>
                     
-                    <div class="error-msg" id="err-login">Проверьте формат логина, пароль и капчу!</div>
-                    <button class="btn btn-primary" style="width: 100%;" onclick="registerCustom()">Зарегистрироваться</button>
+                    <div class="error-msg" id="err-email">Неверный код или капча!</div>
+                    <button class="btn-submit" onclick="verifyEmailCode()">Зарегистрироваться</button>
                 </div>
             </div>
 
+            <!-- Под-вкладка 2: Свой логин -->
+            <div id="reg-login" style="display: none;">
+                <label class="input-label">Логин (Имя_Фамилия)</label>
+                <input type="text" class="input-field" id="reg-login-input" placeholder="Иван_Иванов">
+                
+                <label class="input-label">Сложный пароль (мин. 8 символов)</label>
+                <input type="password" class="input-field" id="reg-pass-input" placeholder="••••••••">
+                
+                <div class="captcha-box">
+                    <span class="captcha-text" id="captcha-q-login"></span>
+                    <input type="number" class="captcha-input" id="captcha-a-login" placeholder="?">
+                </div>
+                
+                <div class="error-msg" id="err-login">Проверьте логин, пароль и капчу!</div>
+                <button class="btn-submit" onclick="registerCustom()">Зарегистрироваться</button>
+            </div>
+            
+            <div class="bottom-text">
+                Уже есть аккаунт? <a onclick="switchMainTab('login')">Войти</a>
+            </div>
         </div>
+
+    </div>
+
+    <!-- Скрытый блок с кнопкой скачивания (появится после входа) -->
+    <div id="download-screen" style="display: none; text-align: center;">
+        <h1 style="font-size: 64px; font-weight: 900; margin: 0 0 10px 0;">CHERRY <span style="color:#ff0022;">CLIENT</span></h1>
+        <p style="color: #aaa; margin-bottom: 40px;">Спасибо за регистрацию! Ваш клиент готов к загрузке.</p>
+        <a href="ССЫЛКА_НА_АРХИВ.zip" class="btn-submit" style="display: inline-block; width: auto; padding: 15px 40px; text-decoration: none;">⬇ Скачать сейчас</a>
+        <br><br>
+        <a onclick="logout()" style="color: #888; cursor: pointer; text-decoration: underline;">Выйти из аккаунта</a>
     </div>
 
     <script>
@@ -147,27 +234,25 @@
         let currentCaptchaEmail = 0;
         let currentCaptchaLogin = 0;
 
-        // Открытие/закрытие
-        function openModal() { 
-            document.getElementById('auth-modal').style.display = 'flex'; 
-            generateCaptcha('email');
-            generateCaptcha('login');
-        }
-        function closeModal() { document.getElementById('auth-modal').style.display = 'none'; }
-
-        // --- ПЕРЕКЛЮЧАТЕЛИ ВКЛАДОК ---
+        // --- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ---
         function switchMainTab(tab) {
             document.getElementById('form-login').classList.remove('active');
             document.getElementById('form-reg').classList.remove('active');
-            document.getElementById('tab-btn-login').classList.remove('active');
-            document.getElementById('tab-btn-reg').classList.remove('active');
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-reg').classList.remove('active');
 
             if(tab === 'login') {
                 document.getElementById('form-login').classList.add('active');
-                document.getElementById('tab-btn-login').classList.add('active');
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('main-title').innerText = "Вход";
+                document.getElementById('main-subtitle').innerText = "Войдите в свой аккаунт Cherry Client";
             } else {
                 document.getElementById('form-reg').classList.add('active');
-                document.getElementById('tab-btn-reg').classList.add('active');
+                document.getElementById('tab-reg').classList.add('active');
+                document.getElementById('main-title').innerText = "Регистрация";
+                document.getElementById('main-subtitle').innerText = "Создайте новый аккаунт Cherry Client";
+                generateCaptcha('email');
+                generateCaptcha('login');
             }
         }
 
@@ -192,12 +277,9 @@
             let pass = document.getElementById('login-pass').value;
             let error = document.getElementById('err-auth');
 
-            // Получаем сохраненные данные
             let savedUser = localStorage.getItem('cherry_user');
             let savedPass = localStorage.getItem('cherry_pass');
 
-            // Проверяем, существует ли такой пользователь и совпадает ли пароль
-            // (Для почты Gmail пароль тоже сохраняется при регистрации)
             if(user === savedUser && pass === savedPass) {
                 finishLogin(user);
             } else {
@@ -227,8 +309,6 @@
             document.getElementById('email-step-1').style.display = 'none';
             document.getElementById('email-step-2').style.display = 'block';
             document.getElementById('msg-email-sent').style.display = 'block';
-            // Для Gmail пароль по умолчанию делаем "gmail123" (в реальности его бы не было)
-            localStorage.setItem('cherry_temp_email_pass', 'gmail123'); 
         }
 
         function verifyEmailCode() {
@@ -243,11 +323,9 @@
                 return;
             }
             
-            // Сохраняем пользователя (почту) и пароль
             localStorage.setItem('cherry_user', email);
-            localStorage.setItem('cherry_pass', 'gmail123'); // Пароль для входа
+            localStorage.setItem('cherry_pass', 'gmail123'); 
             finishLogin(email);
-            alert("Аккаунт создан! Ваш пароль для входа: gmail123 (в реальности пароль вводили бы вы)");
         }
 
         function registerCustom() {
@@ -274,44 +352,31 @@
                 return;
             }
 
-            // Сохраняем
             localStorage.setItem('cherry_user', login);
             localStorage.setItem('cherry_pass', pass);
             finishLogin(login);
-            alert("Успешная регистрация! Добро пожаловать, " + login);
         }
 
         // --- УСПЕШНЫЙ ВХОД ---
         function finishLogin(userName) {
-            // Разблокируем скачивание
-            document.getElementById('locked-area').style.display = 'none';
-            document.getElementById('download-area').style.display = 'block';
-            
-            // Меняем кнопку меню
-            let loginLink = document.getElementById('login-link');
-            loginLink.innerText = "Выйти (" + userName + ")";
-            loginLink.onclick = function() { 
-                localStorage.removeItem('cherry_user'); 
-                localStorage.removeItem('cherry_pass');
-                location.reload(); 
-            };
-            
-            closeModal();
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('download-screen').style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.removeItem('cherry_user'); 
+            localStorage.removeItem('cherry_pass');
+            location.reload(); 
         }
 
         // Проверка при загрузке страницы (если уже вошел)
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
             if(savedUser) {
-                document.getElementById('locked-area').style.display = 'none';
-                document.getElementById('download-area').style.display = 'block';
-                let loginLink = document.getElementById('login-link');
-                loginLink.innerText = "Выйти (" + savedUser + ")";
-                loginLink.onclick = function() { 
-                    localStorage.removeItem('cherry_user'); 
-                    localStorage.removeItem('cherry_pass');
-                    location.reload(); 
-                };
+                finishLogin(savedUser);
+            } else {
+                generateCaptcha('email');
+                generateCaptcha('login');
             }
         };
     </script>
