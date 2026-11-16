@@ -7,8 +7,7 @@
     <style>
         body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
-        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
-        .logo span { color: #ff2a75; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; } .logo span { color: #ff2a75; }
         .menu { display: flex; gap: 30px; }
         .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
         .menu a:hover, .menu a.active { color: #ff7eb3; }
@@ -18,28 +17,30 @@
         .download-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         .page-title { font-size: 36px; font-weight: 900; margin-bottom: 10px; text-align: center; }
         .page-subtitle { color: #888; margin-bottom: 60px; text-align: center; }
-
         .cards-container { display: flex; gap: 30px; justify-content: center; max-width: 900px; width: 100%; }
         .card { background-color: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; flex: 1; display: flex; flex-direction: column; position: relative; }
-        
         .card.premium { border-color: #ff2a75; box-shadow: 0 0 30px rgba(255,42,117,0.15); }
         .premium-badge { position: absolute; top: -15px; right: 20px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,42,117,0.5); }
-
         .card h3 { font-size: 24px; font-weight: 900; margin-top: 0; margin-bottom: 10px; }
         .card p { color: #888; font-size: 14px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; }
-
         .features-list { list-style: none; padding: 0; margin: 0 0 40px 0; flex: 1; }
         .features-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #ccc; }
-        .features-list li::before { content: "✓"; color: #fff; font-weight: bold; }
-        .card.premium .features-list li::before { color: #ff2a75; }
-
+        .features-list li::before { content: "✓"; color: #fff; font-weight: bold; } .card.premium .features-list li::before { color: #ff2a75; }
         .btn-download-free { background-color: #1a1014; color: white; border: 1px solid #331a22; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; display: block; box-sizing: border-box; font-family: 'Montserrat'; font-size: 15px;}
         .btn-download-free:hover { background-color: #2a1a22; }
-        
         .btn-download-premium { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; box-shadow: 0 0 20px rgba(255,42,117,0.4); font-family: 'Montserrat'; font-size: 15px;}
         .btn-download-premium:hover { box-shadow: 0 0 30px rgba(255,42,117,0.7); }
-
         .version-info { text-align: center; font-size: 12px; color: #555; margin-top: 15px; }
+
+        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
+        .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        .tg-buttons { display: flex; gap: 15px; }
+        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .tg-btn:hover { border-color: #ff2a75; color: #ff2a75; }
+        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-bottom a { color: #888; text-decoration: none; transition: 0.3s; } .footer-bottom a:hover { color: #ff2a75; }
     </style>
 </head>
 <body>
@@ -58,7 +59,6 @@
     <div class="download-section">
         <h1 class="page-title">Выберите версию</h1>
         <p class="page-subtitle">Скачайте бесплатную версию или приобретите Premium для доступа ко всем функциям</p>
-
         <div class="cards-container">
             <div class="card">
                 <h3>Бесплатная версия</h3>
@@ -72,7 +72,6 @@
                 <a href="ССЫЛКА_НА_FREE_АРХИВ.zip" class="btn-download-free">⬇ Скачать бесплатно</a>
                 <div class="version-info">Версия 1.0.0 • Windows 64-bit</div>
             </div>
-
             <div class="card premium">
                 <div class="premium-badge">Premium</div>
                 <h3>Премиум версия</h3>
@@ -89,5 +88,29 @@
             </div>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>CHERRY CLIENT</h3>
+                <p>Продвинутый клиент для DDNet</p>
+            </div>
+            <div class="footer-contacts">
+                <h3>Контакты</h3>
+                <div class="tg-buttons">
+                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>
+                <a href="#">Политика конфиденциальности</a> • 
+                <a href="#">Пользовательское соглашение</a> • 
+                <a href="#">Поддержка</a>
+            </div>
+            <div>© 2026 Cherry Client. Все права защищены.</div>
+        </div>
+    </footer>
 </body>
 </html>
