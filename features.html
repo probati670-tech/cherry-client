@@ -5,68 +5,57 @@
     <title>Документация Cherry Client</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; }
-        
-        /* Навигация */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #1a1a1a; }
+        body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid #22151a; }
         .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; }
-        .logo span { color: #ff0022; }
+        .logo span { color: #ff2a75; }
         .menu { display: flex; gap: 30px; }
         .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .menu a:hover, .menu a.active { color: #ff0022; }
-        .menu a.login-btn { border: 1px solid #ff0022; padding: 8px 20px; border-radius: 5px; color: #ff0022; }
+        .menu a:hover, .menu a.active { color: #ff7eb3; }
+        .menu a.login-btn { border: 1px solid #ff2a75; padding: 8px 20px; border-radius: 5px; color: #ff2a75; }
 
-        /* Макет страницы */
         .docs-layout { display: flex; max-width: 1400px; margin: 0 auto; padding: 40px 20px; gap: 40px; }
-        
-        /* Боковое меню */
         .sidebar { width: 280px; flex-shrink: 0; }
-        .sidebar-menu { list-style: none; padding: 0; margin: 0; background: #0d0d0d; border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; position: sticky; top: 20px; }
-        .sidebar-menu li { border-bottom: 1px solid #1a1a1a; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; background: #110a0d; border-radius: 12px; overflow: hidden; border: 1px solid #2a1a22; position: sticky; top: 20px; }
+        .sidebar-menu li { border-bottom: 1px solid #2a1a22; }
         .sidebar-menu li:last-child { border-bottom: none; }
         .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 15px 20px; color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s; font-weight: 600;}
-        .sidebar-menu a:hover { background: #151515; color: white; }
-        .sidebar-menu a.active { background: #ff0022; color: white; }
+        .sidebar-menu a:hover { background: #1a1014; color: white; }
+        .sidebar-menu a.active { background: #ff2a75; color: white; }
 
-        /* Контент */
         .content { flex: 1; min-width: 0; }
         .page-header { margin-bottom: 40px; }
         .page-header h1 { font-size: 36px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 15px; }
         .page-header p { color: #888; margin: 0; font-size: 16px; }
 
-        /* Секция с таблицей */
         .feature-section { margin-bottom: 50px; scroll-margin-top: 20px; }
-        .section-title { font-size: 24px; color: #fff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ff0022; display: inline-block; }
+        .section-title { font-size: 24px; color: #fff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ff2a75; display: inline-block; }
         .section-desc { color: #aaa; font-size: 14px; margin-bottom: 20px; }
 
-        /* Таблица */
-        .feature-table { width: 100%; border-collapse: collapse; background: #0d0d0d; border-radius: 8px; overflow: hidden; border: 1px solid #222; margin-bottom: 30px; }
-        .feature-table th, .feature-table td { padding: 15px 20px; text-align: left; font-size: 14px; border-bottom: 1px solid #1a1a1a; }
-        .feature-table th { background: #151515; color: #fff; font-weight: 700; }
+        .feature-table { width: 100%; border-collapse: collapse; background: #110a0d; border-radius: 8px; overflow: hidden; border: 1px solid #2a1a22; margin-bottom: 30px; }
+        .feature-table th, .feature-table td { padding: 15px 20px; text-align: left; font-size: 14px; border-bottom: 1px solid #2a1a22; }
+        .feature-table th { background: #1a1014; color: #fff; font-weight: 700; }
         .feature-table tr:last-child td { border-bottom: none; }
-        .feature-table tr:hover { background: #111; }
+        .feature-table tr:hover { background: #150a10; }
         
-        .cmd { font-family: monospace; color: #ff0022; background: rgba(255,0,34,0.1); padding: 4px 8px; border-radius: 4px; }
+        .cmd { font-family: monospace; color: #ff2a75; background: rgba(255,42,117,0.1); padding: 4px 8px; border-radius: 4px; }
         .range { color: #4CAF50; font-family: monospace; }
         .icon { font-size: 18px; }
     </style>
 </head>
 <body>
-
     <div class="navbar">
         <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
         <div class="menu">
-            <a href="compare.html">Сравнение версий</a>
             <a href="index.html">Главная</a>
             <a href="download.html">Скачать</a>
             <a href="overview.html">Обзор функций</a>
             <a href="features.html" class="active">Документация</a>
-            <a href="index.html" class="login-btn">Вход / Регистрация</a>
+            <a href="compare.html">Сравнение</a>
         </div>
     </div>
 
     <div class="docs-layout">
-        
         <div class="sidebar">
             <ul class="sidebar-menu">
                 <li><a href="#aimbot"><span class="icon">🎯</span> Аимбот</a></li>
@@ -84,7 +73,6 @@
                 <p>Полное описание всех функций, настроек и консольных команд</p>
             </div>
 
-            <!-- АИМБОТ -->
             <div class="feature-section" id="aimbot">
                 <h2 class="section-title">🎯 Аимбот - Основное</h2>
                 <table class="feature-table">
@@ -98,11 +86,20 @@
                 </table>
             </div>
 
-            <!-- РАЗНОЕ -->
+            <div class="feature-section" id="hook">
+                <h2 class="section-title">🪝 Крюк</h2>
+                <table class="feature-table">
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Включить</strong></td><td>Включает аим на крюк</td><td><span class="cmd">cherry_hook_enable</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>FOV (Угол обзора)</strong></td><td>Радиус поиска цели для крюка</td><td><span class="cmd">cherry_hook_fov</span></td><td><span class="range">1 - 360</span></td></tr>
+                        <tr><td><strong>Silent</strong></td><td>Крюк цепляется без визуального поворота</td><td><span class="cmd">cherry_hook_silent</span></td><td><span class="range">0 / 1</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="feature-section" id="misc">
                 <h2 class="section-title">⚙️ Разное (Misc)</h2>
-                <p class="section-desc">Боты, авто-действия и троллинг.</p>
-                
                 <table class="feature-table">
                     <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
                     <tbody>
@@ -110,69 +107,49 @@
                         <tr><td><strong>Авто-выстрел</strong></td><td>Стреляет при наведении</td><td><span class="cmd">cherry_misc_autofire</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Авто-перецеп</strong></td><td>Автоматически перецепляется (Rehook)</td><td><span class="cmd">cherry_misc_rehook</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Полет дамми</strong></td><td>Дает дамми возможность летать</td><td><span class="cmd">cherry_misc_dummyfly</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Джет-райд</strong></td><td>Ускоренное движение на джете</td><td><span class="cmd">cherry_misc_jetride</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Авто-край</strong></td><td>Автоматическое исследование краев карты</td><td><span class="cmd">cherry_misc_autoedge</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Убить при фризе</strong></td><td>Авто-смерть при заморозке</td><td><span class="cmd">cherry_misc_kill_freeze</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Спам эмоциями</strong></td><td>Троллинг: спам эмоциями</td><td><span class="cmd">cherry_misc_spam_emote</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Кража ID</strong></td><td>Позволяет заходить под ID других игроков</td><td><span class="cmd">cherry_misc_steal_id</span></td><td><span class="range">0 / 1</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- ВИЗУАЛЫ -->
             <div class="feature-section" id="visuals">
                 <h2 class="section-title">👁️ Визуалы и HUD</h2>
-                
                 <table class="feature-table">
                     <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
                     <tbody>
                         <tr><td><strong>HUD Музыки</strong></td><td>Показывает текущий трек</td><td><span class="cmd">cherry_vis_musichud</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Водяной знак</strong></td><td>Отображает логотип клиента на экране</td><td><span class="cmd">cherry_vis_watermark</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Линии прицела</strong></td><td>Рисует линии от игрока к прицелу</td><td><span class="cmd">cherry_vis_aimlines</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Линии пуль</strong></td><td>Показывает траекторию пуль</td><td><span class="cmd">cherry_vis_bulletlines</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Кастомные цвета</strong></td><td>Меняет цвет Ти, крюка, оружия</td><td><span class="cmd">cherry_vis_custom_colors</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Обводка тайлов</strong></td><td>Подсвечивает края блоков</td><td><span class="cmd">cherry_vis_tile_outline</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Плавная камера</strong></td><td>Сглаживает движения камеры</td><td><span class="cmd">cherry_vis_smooth_cam</span></td><td><span class="range">0 / 1</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- АВОИД -->
             <div class="feature-section" id="avoid">
                 <h2 class="section-title">🛡️ Авоид (Avoid)</h2>
-                <p class="section-desc">Автоматическое избегание опасностей.</p>
-                
                 <table class="feature-table">
                     <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
                     <tbody>
                         <tr><td><strong>Режим</strong></td><td>Базовый, Легит, Блатант, Бот</td><td><span class="cmd">cherry_avoid_mode</span></td><td><span class="range">0 - 4</span></td></tr>
                         <tr><td><strong>Player Prediction</strong></td><td>Предсказывает движение игроков</td><td><span class="cmd">cherry_avoid_prediction</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>NSIF</strong></td><td>Защита от смерти</td><td><span class="cmd">cherry_avoid_nsif</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Check ticks</strong></td><td>Задержка проверки тиков</td><td><span class="cmd">cherry_avoid_check_ticks</span></td><td><span class="range">0 - 50</span></td></tr>
-                        <tr><td><strong>Aimbot (в авоиде)</strong></td><td>Авто-наведение для выживания</td><td><span class="cmd">cherry_avoid_aim</span></td><td><span class="range">0 / 1</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- TAS -->
             <div class="feature-section" id="tas">
                 <h2 class="section-title">⏱️ TAS (Реплеи)</h2>
-                <p class="section-desc">Инструменты для записи и анализа идеальных прохождений.</p>
-                
                 <table class="feature-table">
                     <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
                     <tbody>
                         <tr><td><strong>TPS</strong></td><td>Тиков в секунду (обычно 50)</td><td><span class="cmd">cherry_tas_tps</span></td><td><span class="range">1 - 1000</span></td></tr>
                         <tr><td><strong>Авто-реплей</strong></td><td>Автоматически зацикливает реплей</td><td><span class="cmd">cherry_tas_autoreplay</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Авто-сохранение</strong></td><td>Сохраняет реплей каждые N секунд</td><td><span class="cmd">cherry_tas_autosave</span></td><td><span class="range">0 / 1</span></td></tr>
                         <tr><td><strong>Авто-синхронизация</strong></td><td>Синхронизация с облаком (GitHub)</td><td><span class="cmd">cherry_tas_autosync</span></td><td><span class="range">0 / 1</span></td></tr>
-                        <tr><td><strong>Скорость хука</strong></td><td>Скорость эталонного хука x100</td><td><span class="cmd">cherry_tas_hookspeed</span></td><td><span class="range">1000 - 10000</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
         </div>
     </div>
-
 </body>
 </html>
