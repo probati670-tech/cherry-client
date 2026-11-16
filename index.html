@@ -6,144 +6,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff2a75; /* Сочный малиновый */
-            --primary-light: #ff7eb3; /* Нежно-розовый (как крем) */
-            --bg-color: #0a0508; /* Очень темный, с оттенком вишни */
-            --card-bg: rgba(20, 10, 15, 0.7); /* Полупрозрачный фон карточек */
+            --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; --card-bg: rgba(20, 10, 15, 0.7);
         }
-
         * { box-sizing: border-box; }
         body { 
-            background-color: var(--bg-color); 
-            color: #ffffff; 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            height: 100vh; 
-            overflow: hidden; 
-            display: flex;
-            flex-direction: column;
+            background-color: var(--bg-color); color: #ffffff; font-family: 'Montserrat', sans-serif; 
+            margin: 0; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
             background-image: radial-gradient(circle at 80% 20%, rgba(255, 42, 117, 0.15) 0%, transparent 40%),
                               radial-gradient(circle at 20% 80%, rgba(255, 126, 179, 0.1) 0%, transparent 40%);
         }
+        #cherry-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.5; }
 
-        /* --- ФОН С ВИШНЯМИ --- */
-        #cherry-canvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none; opacity: 0.5;
-        }
-
-        /* --- НАВИГАЦИЯ (Парящая капсула) --- */
-        .navbar-container {
-            display: flex; justify-content: center; padding: 20px; z-index: 10; position: relative;
-        }
-        .navbar { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 30px; background: rgba(15, 5, 10, 0.8);
-            backdrop-filter: blur(15px); border: 1px solid rgba(255, 42, 117, 0.2);
-            border-radius: 50px; width: 100%; max-width: 1000px;
-        }
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        .logo span { color: var(--primary); }
-        
+        .navbar-container { display: flex; justify-content: center; padding: 20px; z-index: 10; position: relative; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 30px; background: rgba(15, 5, 10, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255, 42, 117, 0.2); border-radius: 50px; width: 100%; max-width: 1000px; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; } .logo span { color: var(--primary); }
         .menu { display: flex; gap: 25px; align-items: center; }
-        .menu a { 
-            color: #ccc; text-decoration: none; font-size: 14px; font-weight: 600; 
-            transition: 0.3s; cursor: pointer;
-        }
+        .menu a { color: #ccc; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; cursor: pointer; }
         .menu a:hover, .menu a.active { color: var(--primary-light); }
-        .menu a.login-btn {
-            background: linear-gradient(45deg, var(--primary), var(--primary-light));
-            padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700;
-            box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4);
-        }
+        .menu a.login-btn { background: linear-gradient(45deg, var(--primary), var(--primary-light)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); }
         .menu a.login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 42, 117, 0.6); }
 
-        /* --- ГЛАВНЫЙ ЭКРАН (Двухколоночный) --- */
-        .hero { 
-            flex: 1; display: flex; align-items: center; justify-content: center; 
-            padding: 0 50px; z-index: 10; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; gap: 50px;
-        }
-        
-        /* Левая колонка: Текст */
+        .hero { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 50px; z-index: 10; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; gap: 50px; }
         .hero-left { flex: 1; max-width: 600px; }
-        .hero h1 { 
-            font-size: 64px; font-weight: 900; line-height: 1.1; margin: 0 0 20px 0; 
-            background: linear-gradient(to right, #ffffff, var(--primary-light));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        } 
-        .hero h1 span { 
-            background: linear-gradient(to right, var(--primary), var(--primary-light));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p { 
-            color: #aaa; font-size: 18px; line-height: 1.6; margin-bottom: 40px; 
-        }
-
+        .hero h1 { font-size: 64px; font-weight: 900; line-height: 1.1; margin: 0 0 20px 0; background: linear-gradient(to right, #ffffff, var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } 
+        .hero h1 span { background: linear-gradient(to right, var(--primary), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: #aaa; font-size: 18px; line-height: 1.6; margin-bottom: 40px; }
         .buttons { display: flex; gap: 20px; align-items: center; }
-        .btn { 
-            padding: 16px 40px; border-radius: 30px; text-decoration: none; font-weight: 700; 
-            font-size: 16px; transition: 0.3s; border: none; cursor: pointer; 
-            font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px;
-        }
-        .btn-primary { 
-            background: linear-gradient(45deg, var(--primary), var(--primary-light));
-            color: white; box-shadow: 0 8px 25px rgba(255, 42, 117, 0.4); 
-        }
+        .btn { padding: 16px 40px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 16px; transition: 0.3s; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 8px 25px rgba(255, 42, 117, 0.4); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 42, 117, 0.6); }
-        
-        .btn-secondary { 
-            background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); 
-        }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
         .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
 
-        /* Правая колонка: Карточка визуала */
         .hero-right { flex: 1; display: flex; justify-content: flex-end; }
-        .visual-card {
-            background: var(--card-bg); border: 1px solid rgba(255, 42, 117, 0.3);
-            border-radius: 30px; padding: 40px; width: 100%; max-width: 450px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 42, 117, 0.1);
-            text-align: center; position: relative;
-        }
+        .visual-card { background: var(--card-bg); border: 1px solid rgba(255, 42, 117, 0.3); border-radius: 30px; padding: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 42, 117, 0.1); text-align: center; position: relative; }
         .visual-card h3 { color: var(--primary-light); margin-top: 0; font-size: 20px;}
-        .visual-card .online-counter { 
-            border: 1px solid rgba(255, 42, 117, 0.4); padding: 15px; border-radius: 15px; 
-            font-family: monospace; font-size: 20px; color: var(--primary-light); 
-            background: rgba(255, 42, 117, 0.05); margin-top: 20px;
-            box-shadow: 0 0 20px rgba(255, 42, 117, 0.1) inset;
-        }
-        .visual-card img { width: 120px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--primary)); }
+        .visual-card .online-counter { border: 1px solid rgba(255, 42, 117, 0.4); padding: 15px; border-radius: 15px; font-family: monospace; font-size: 20px; color: var(--primary-light); background: rgba(255, 42, 117, 0.05); margin-top: 20px; box-shadow: 0 0 20px rgba(255, 42, 117, 0.1) inset; }
 
-        /* ================= МОДАЛЬНОЕ ОКНО (АВТОРИЗАЦИЯ) ================= */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 2, 3, 0.9); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 2, 3, 0.9); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-
-        .auth-card {
-            background: #110a0d; border: 1px solid rgba(255, 42, 117, 0.3);
-            border-radius: 20px; padding: 40px; width: 100%; max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 42, 117, 0.15);
-            position: relative;
-        }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; transition: 0.3s; }
-        .close-modal:hover { color: var(--primary); }
+        .auth-card { background: #110a0d; border: 1px solid rgba(255, 42, 117, 0.3); border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 42, 117, 0.15); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; transition: 0.3s; } .close-modal:hover { color: var(--primary); }
         .auth-title { text-align: center; font-size: 26px; font-weight: 700; color: var(--primary-light); margin: 0 0 10px 0; }
         .auth-subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 25px; }
-
         .tabs { display: flex; background: #1a1014; border-radius: 12px; padding: 5px; margin-bottom: 25px; }
         .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: #888; border-radius: 8px; transition: 0.3s; border: none; background: none; }
         .tab.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255,42,117,0.3); }
-
-        .form-group { display: none; } 
-        .form-group.active { display: block; }
+        .form-group { display: none; } .form-group.active { display: block; }
         .input-label { display: block; font-size: 12px; color: #888; margin-bottom: 8px; }
         .input-field { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; margin-bottom: 15px; transition: 0.3s; }
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,42,117,0.2); }
         .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 12px; }
-        .checkbox-container { display: flex; align-items: center; gap: 8px; color: #aaa; cursor: pointer; }
-        .checkbox-container input { accent-color: var(--primary); cursor: pointer; }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; color: #aaa; cursor: pointer; } .checkbox-container input { accent-color: var(--primary); cursor: pointer; }
         .forgot-link { color: var(--primary); text-decoration: none; }
         .btn-submit { width: 100%; padding: 14px; background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; box-shadow: 0 4px 15px rgba(255,42,117,0.3); }
         .btn-submit:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.5); }
@@ -156,67 +70,86 @@
         .captcha-input:focus { border-color: var(--primary); }
         .error-msg { color: var(--primary); font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
         .success-msg { color: #4CAF50; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
+
+        /* FOOTER */
+        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; z-index: 10; position: relative; display: flex; flex-direction: column; gap: 30px; width: 100%; box-sizing: border-box;}
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
+        .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
+        .tg-buttons { display: flex; gap: 15px; }
+        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .tg-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .footer-bottom a { color: #888; text-decoration: none; transition: 0.3s; } .footer-bottom a:hover { color: var(--primary); }
     </style>
 </head>
 <body>
-
     <canvas id="cherry-canvas"></canvas>
-
-    <!-- Навигация -->
     <div class="navbar-container">
         <div class="navbar">
             <div class="logo">CHERRY <span>CLIENT</span></div>
             <div class="menu">
-                <a href="#" class="active">Главная</a>
-                <a href="download.html" id="nav-download" onclick="tryDownload(event)">Скачать</a>
+                <a href="index.html" class="active">Главная</a>
+                <a href="download.html">Скачать</a>
                 <a href="overview.html">Обзор функций</a>
                 <a href="features.html">Документация</a>
+                <a href="compare.html">Сравнение</a>
                 <a href="#" class="login-btn" id="nav-auth" onclick="openModal()">Вход / Регистрация</a>
             </div>
         </div>
     </div>
-
-    <!-- Главная часть (Две колонки) -->
     <div class="hero">
-        
-        <!-- Текст слева -->
         <div class="hero-left">
             <h1>Новый уровень <br><span>DDNet</span></h1>
             <p>Продвинутый клиент с уникальными функциями, улучшенной производительностью и современным интерфейсом. Почувствуй вкус победы.</p>
-            
             <div class="buttons">
                 <button class="btn btn-primary" onclick="tryDownload(event)">⬇ Скачать сейчас</button>
                 <a href="compare.html" class="btn btn-secondary">Сравнить версии ➔</a>
             </div>
         </div>
-
-        <!-- Карточка справа -->
         <div class="hero-right">
             <div class="visual-card">
-                <!-- Сюда можно вставить логотип, но пока эмодзи -->
                 <div style="font-size: 80px; line-height: 1; filter: drop-shadow(0 0 20px var(--primary));">🍒</div>
                 <h3>Серверы онлайн</h3>
                 <p style="color: #888; font-size: 14px;">Играй с друзьями прямо сейчас</p>
-                <div class="online-counter" id="online-counter">
-                    Сейчас играют: 92
+                <div class="online-counter" id="online-counter">Сейчас играют: 92</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <h3>CHERRY CLIENT</h3>
+                <p>Продвинутый клиент для DDNet</p>
+            </div>
+            <div class="footer-contacts">
+                <h3>Контакты</h3>
+                <div class="tg-buttons">
+                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
                 </div>
             </div>
         </div>
+        <div class="footer-bottom">
+            <div>
+                <a href="#">Политика конфиденциальности</a> • 
+                <a href="#">Пользовательское соглашение</a> • 
+                <a href="#">Поддержка</a>
+            </div>
+            <div>© 2026 Cherry Client. Все права защищены.</div>
+        </div>
+    </footer>
 
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ (осталось без изменений в логике, но в новых цветах) -->
     <div class="modal-overlay" id="auth-modal">
         <div class="auth-card">
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h2 class="auth-title" id="main-title">Вход</h2>
             <p class="auth-subtitle" id="main-subtitle">Войдите в свой аккаунт Cherry Client</p>
-
             <div class="tabs">
                 <button class="tab active" id="tab-login" onclick="switchMainTab('login')">Вход</button>
                 <button class="tab" id="tab-reg" onclick="switchMainTab('reg')">Регистрация</button>
             </div>
-
             <div id="form-login" class="form-group active">
                 <label class="input-label">Логин или Gmail</label>
                 <input type="text" class="input-field" id="login-user" placeholder="your_username">
@@ -229,7 +162,6 @@
                 <div class="error-msg" id="err-auth">Неверный логин или пароль!</div>
                 <button class="btn-submit" onclick="doLogin()">Войти</button>
             </div>
-
             <div id="form-reg" class="form-group">
                 <div class="sub-tabs">
                     <div class="sub-tab active" id="sub-tab-email" onclick="switchSubTab('email')">Через Gmail</div>
@@ -238,17 +170,12 @@
                 <div id="reg-email" style="display: block;">
                     <label class="input-label">Ваша почта Gmail</label>
                     <input type="email" class="input-field" id="reg-email-input" placeholder="example@gmail.com">
-                    <div id="email-step-1">
-                        <button class="btn-submit" onclick="sendEmailCode()">Получить код</button>
-                    </div>
+                    <div id="email-step-1"><button class="btn-submit" onclick="sendEmailCode()">Получить код</button></div>
                     <div id="email-step-2" style="display: none;">
                         <div class="success-msg" id="msg-email-sent">Код отправлен! (Имитация: 1234)</div>
                         <label class="input-label">Введите код из письма</label>
                         <input type="text" class="input-field" id="email-code" placeholder="1234">
-                        <div class="captcha-box">
-                            <span class="captcha-text" id="captcha-q-email"></span>
-                            <input type="number" class="captcha-input" id="captcha-a-email" placeholder="?">
-                        </div>
+                        <div class="captcha-box"><span class="captcha-text" id="captcha-q-email"></span><input type="number" class="captcha-input" id="captcha-a-email" placeholder="?"></div>
                         <div class="error-msg" id="err-email">Неверный код или капча!</div>
                         <button class="btn-submit" onclick="verifyEmailCode()">Зарегистрироваться</button>
                     </div>
@@ -258,214 +185,77 @@
                     <input type="text" class="input-field" id="reg-login-input" placeholder="Иван_Иванов">
                     <label class="input-label">Сложный пароль (мин. 8 символов)</label>
                     <input type="password" class="input-field" id="reg-pass-input" placeholder="••••••••">
-                    <div class="captcha-box">
-                        <span class="captcha-text" id="captcha-q-login"></span>
-                        <input type="number" class="captcha-input" id="captcha-a-login" placeholder="?">
-                    </div>
+                    <div class="captcha-box"><span class="captcha-text" id="captcha-q-login"></span><input type="number" class="captcha-input" id="captcha-a-login" placeholder="?"></div>
                     <div class="error-msg" id="err-login">Проверьте логин, пароль и капчу!</div>
                     <button class="btn-submit" onclick="registerCustom()">Зарегистрироваться</button>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
-        // ================= 1. ЛОГИКА ПАДАЮЩИХ ВИШЕН (Теперь розовые!) =================
         const canvas = document.getElementById('cherry-canvas');
         const ctx = canvas.getContext('2d');
         let cherries = [];
-        
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
         class Cherry {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height;
-                this.size = Math.random() * 20 + 10;
-                this.speedY = Math.random() * 1.5 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.opacity = Math.random() * 0.4 + 0.2;
-                // Рисуем "тортовые" вишни с помощью кружочков и градиента
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += Math.sin(this.y / 60) * 0.5;
-                if (this.y > canvas.height + 50) {
-                    this.y = -50; this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.opacity;
-                // Розово-малиновый градиент для вишен
-                let gradient = ctx.createRadialGradient(this.x - 3, this.y - 3, 2, this.x, this.y, this.size);
-                gradient.addColorStop(0, '#ff7eb3');
-                gradient.addColorStop(1, '#ff2a75');
-                
-                ctx.fillStyle = gradient;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
+            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height - canvas.height; this.size = Math.random() * 20 + 10; this.speedY = Math.random() * 1.5 + 0.5; this.opacity = Math.random() * 0.4 + 0.2; }
+            update() { this.y += this.speedY; this.x += Math.sin(this.y / 60) * 0.5; if (this.y > canvas.height + 50) { this.y = -50; this.x = Math.random() * canvas.width; } }
+            draw() { ctx.save(); ctx.globalAlpha = this.opacity; let gradient = ctx.createRadialGradient(this.x - 3, this.y - 3, 2, this.x, this.y, this.size); gradient.addColorStop(0, '#ff7eb3'); gradient.addColorStop(1, '#ff2a75'); ctx.fillStyle = gradient; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
         }
-
         for (let i = 0; i < 30; i++) cherries.push(new Cherry());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            cherries.forEach(c => { c.update(); c.draw(); });
-            requestAnimationFrame(animate);
-        }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); cherries.forEach(c => { c.update(); c.draw(); }); requestAnimationFrame(animate); }
         animate();
-
-
-        // ================= 2. ЛОГИКА АВТОРИЗАЦИИ =================
-        let currentCaptchaEmail = 0;
-        let currentCaptchaLogin = 0;
-
-        function openModal() { 
-            document.getElementById('auth-modal').classList.add('active'); 
-            generateCaptcha('email'); generateCaptcha('login');
-        }
+        let currentCaptchaEmail = 0; let currentCaptchaLogin = 0;
+        function openModal() { document.getElementById('auth-modal').classList.add('active'); generateCaptcha('email'); generateCaptcha('login'); }
         function closeModal() { document.getElementById('auth-modal').classList.remove('active'); }
-
         function switchMainTab(tab) {
-            document.getElementById('form-login').classList.remove('active');
-            document.getElementById('form-reg').classList.remove('active');
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('tab-reg').classList.remove('active');
-
-            if(tab === 'login') {
-                document.getElementById('form-login').classList.add('active');
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('main-title').innerText = "Вход";
-                document.getElementById('main-subtitle').innerText = "Войдите в свой аккаунт Cherry Client";
-            } else {
-                document.getElementById('form-reg').classList.add('active');
-                document.getElementById('tab-reg').classList.add('active');
-                document.getElementById('main-title').innerText = "Регистрация";
-                document.getElementById('main-subtitle').innerText = "Создайте новый аккаунт Cherry Client";
-            }
+            document.getElementById('form-login').classList.remove('active'); document.getElementById('form-reg').classList.remove('active'); document.getElementById('tab-login').classList.remove('active'); document.getElementById('tab-reg').classList.remove('active');
+            if(tab === 'login') { document.getElementById('form-login').classList.add('active'); document.getElementById('tab-login').classList.add('active'); document.getElementById('main-title').innerText = "Вход"; document.getElementById('main-subtitle').innerText = "Войдите в свой аккаунт Cherry Client"; } 
+            else { document.getElementById('form-reg').classList.add('active'); document.getElementById('tab-reg').classList.add('active'); document.getElementById('main-title').innerText = "Регистрация"; document.getElementById('main-subtitle').innerText = "Создайте новый аккаунт Cherry Client"; }
         }
-
         function switchSubTab(tab) {
-            document.getElementById('reg-email').style.display = 'none';
-            document.getElementById('reg-login').style.display = 'none';
-            document.getElementById('sub-tab-email').classList.remove('active');
-            document.getElementById('sub-tab-login').classList.remove('active');
-
-            if(tab === 'email') {
-                document.getElementById('reg-email').style.display = 'block';
-                document.getElementById('sub-tab-email').classList.add('active');
-            } else {
-                document.getElementById('reg-login').style.display = 'block';
-                document.getElementById('sub-tab-login').classList.add('active');
-            }
+            document.getElementById('reg-email').style.display = 'none'; document.getElementById('reg-login').style.display = 'none'; document.getElementById('sub-tab-email').classList.remove('active'); document.getElementById('sub-tab-login').classList.remove('active');
+            if(tab === 'email') { document.getElementById('reg-email').style.display = 'block'; document.getElementById('sub-tab-email').classList.add('active'); } 
+            else { document.getElementById('reg-login').style.display = 'block'; document.getElementById('sub-tab-login').classList.add('active'); }
         }
-
         function generateCaptcha(type) {
-            let a = Math.floor(Math.random() * 10) + 1;
-            let b = Math.floor(Math.random() * 10) + 1;
-            if(type === 'email') {
-                currentCaptchaEmail = a + b;
-                document.getElementById('captcha-q-email').innerText = `${a} + ${b} =`;
-            } else {
-                currentCaptchaLogin = a + b;
-                document.getElementById('captcha-q-login').innerText = `${a} + ${b} =`;
-            }
+            let a = Math.floor(Math.random() * 10) + 1; let b = Math.floor(Math.random() * 10) + 1;
+            if(type === 'email') { currentCaptchaEmail = a + b; document.getElementById('captcha-q-email').innerText = `${a} + ${b} =`; } 
+            else { currentCaptchaLogin = a + b; document.getElementById('captcha-q-login').innerText = `${a} + ${b} =`; }
         }
-
         function sendEmailCode() {
             let email = document.getElementById('reg-email-input').value;
             if(!email.includes('@gmail.com')) { alert("Введите корректную почту Gmail (@gmail.com)"); return; }
-            document.getElementById('email-step-1').style.display = 'none';
-            document.getElementById('email-step-2').style.display = 'block';
-            document.getElementById('msg-email-sent').style.display = 'block';
+            document.getElementById('email-step-1').style.display = 'none'; document.getElementById('email-step-2').style.display = 'block'; document.getElementById('msg-email-sent').style.display = 'block';
         }
-
         function verifyEmailCode() {
-            let code = document.getElementById('email-code').value;
-            let captchaAns = parseInt(document.getElementById('captcha-a-email').value);
-            let email = document.getElementById('reg-email-input').value;
-            let error = document.getElementById('err-email');
-
-            if(code !== '1234' || captchaAns !== currentCaptchaEmail) {
-                error.style.display = 'block'; generateCaptcha('email'); return;
-            }
-            localStorage.setItem('cherry_user', email);
-            localStorage.setItem('cherry_pass', 'gmail123'); 
-            finishLogin(email);
+            let code = document.getElementById('email-code').value; let captchaAns = parseInt(document.getElementById('captcha-a-email').value); let email = document.getElementById('reg-email-input').value; let error = document.getElementById('err-email');
+            if(code !== '1234' || captchaAns !== currentCaptchaEmail) { error.style.display = 'block'; generateCaptcha('email'); return; }
+            localStorage.setItem('cherry_user', email); localStorage.setItem('cherry_pass', 'gmail123'); finishLogin(email);
         }
-
         function registerCustom() {
-            let login = document.getElementById('reg-login-input').value;
-            let pass = document.getElementById('reg-pass-input').value;
-            let captchaAns = parseInt(document.getElementById('captcha-a-login').value);
-            let error = document.getElementById('err-login');
-
-            let loginRegex = /^[A-ZА-Я][a-zа-я]+_[A-ZА-Я][a-zа-я]+$/;
-            if(!loginRegex.test(login)) { alert("Логин должен быть в формате: Имя_Фамилия. Пример: Ivan_Ivanov"); return; }
-
-            let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-            if(!passRegex.test(pass)) { alert("Пароль слишком простой! Нужно минимум 8 символов, буква и цифра."); return; }
-
+            let login = document.getElementById('reg-login-input').value; let pass = document.getElementById('reg-pass-input').value; let captchaAns = parseInt(document.getElementById('captcha-a-login').value); let error = document.getElementById('err-login');
+            let loginRegex = /^[A-ZА-Я][a-zа-я]+_[A-ZА-Я][a-zа-я]+$/; if(!loginRegex.test(login)) { alert("Логин должен быть в формате: Имя_Фамилия. Пример: Ivan_Ivanov"); return; }
+            let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; if(!passRegex.test(pass)) { alert("Пароль слишком простой! Нужно минимум 8 символов, буква и цифра."); return; }
             if(captchaAns !== currentCaptchaLogin) { error.style.display = 'block'; generateCaptcha('login'); return; }
-
-            localStorage.setItem('cherry_user', login);
-            localStorage.setItem('cherry_pass', pass);
-            finishLogin(login);
+            localStorage.setItem('cherry_user', login); localStorage.setItem('cherry_pass', pass); finishLogin(login);
         }
-
         function doLogin() {
-            let user = document.getElementById('login-user').value;
-            let pass = document.getElementById('login-pass').value;
-            let error = document.getElementById('err-auth');
-            let savedUser = localStorage.getItem('cherry_user');
-            let savedPass = localStorage.getItem('cherry_pass');
-
-            if(user === savedUser && pass === savedPass) { finishLogin(user); } 
-            else { error.style.display = 'block'; }
+            let user = document.getElementById('login-user').value; let pass = document.getElementById('login-pass').value; let error = document.getElementById('err-auth'); let savedUser = localStorage.getItem('cherry_user'); let savedPass = localStorage.getItem('cherry_pass');
+            if(user === savedUser && pass === savedPass) { finishLogin(user); } else { error.style.display = 'block'; }
         }
-
         function finishLogin(userName) {
-            closeModal();
-            let navAuth = document.getElementById('nav-auth');
-            navAuth.innerText = "Выйти (" + userName + ")";
-            navAuth.classList.remove('login-btn');
-            navAuth.style.background = "transparent";
-            navAuth.style.color = "#aaa";
-            navAuth.style.boxShadow = "none";
-            navAuth.style.border = "1px solid #444";
-            navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); };
-            alert("Успешный вход! Теперь вам доступно скачивание.");
+            closeModal(); let navAuth = document.getElementById('nav-auth'); navAuth.innerText = "Выйти (" + userName + ")"; navAuth.classList.remove('login-btn'); navAuth.style.background = "transparent"; navAuth.style.color = "#aaa"; navAuth.style.boxShadow = "none"; navAuth.style.border = "1px solid #444";
+            navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); }; alert("Успешный вход! Теперь вам доступно скачивание.");
         }
-
         function tryDownload(e) {
-            e.preventDefault();
-            let savedUser = localStorage.getItem('cherry_user');
-            if(savedUser) {
-                alert("Скачивание началось!");
-                // window.location.href = "ССЫЛКА_НА_ТВОЙ_АРХИВ.zip";
-            } else {
-                openModal();
-            }
+            e.preventDefault(); let savedUser = localStorage.getItem('cherry_user');
+            if(savedUser) { alert("Скачивание началось!"); /* window.location.href = "ССЫЛКА.zip"; */ } else { openModal(); }
         }
-
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
-            if(savedUser) {
-                let navAuth = document.getElementById('nav-auth');
-                navAuth.innerText = "Выйти (" + savedUser + ")";
-                navAuth.classList.remove('login-btn');
-                navAuth.style.background = "transparent";
-                navAuth.style.color = "#aaa";
-                navAuth.style.boxShadow = "none";
-                navAuth.style.border = "1px solid #444";
-                navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); };
-            }
+            if(savedUser) { let navAuth = document.getElementById('nav-auth'); navAuth.innerText = "Выйти (" + savedUser + ")"; navAuth.classList.remove('login-btn'); navAuth.style.background = "transparent"; navAuth.style.color = "#aaa"; navAuth.style.boxShadow = "none"; navAuth.style.border = "1px solid #444"; navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); }; }
         };
     </script>
 </body>
