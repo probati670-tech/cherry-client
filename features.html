@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Функции Cherry Client</title>
+    <title>Документация Cherry Client</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         body { background-color: #050505; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; }
@@ -21,7 +21,7 @@
         
         /* Боковое меню */
         .sidebar { width: 280px; flex-shrink: 0; }
-        .sidebar-menu { list-style: none; padding: 0; margin: 0; background: #0d0d0d; border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; background: #0d0d0d; border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; position: sticky; top: 20px; }
         .sidebar-menu li { border-bottom: 1px solid #1a1a1a; }
         .sidebar-menu li:last-child { border-bottom: none; }
         .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 15px 20px; color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s; font-weight: 600;}
@@ -29,18 +29,18 @@
         .sidebar-menu a.active { background: #ff0022; color: white; }
 
         /* Контент */
-        .content { flex: 1; }
+        .content { flex: 1; min-width: 0; }
         .page-header { margin-bottom: 40px; }
         .page-header h1 { font-size: 36px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 15px; }
         .page-header p { color: #888; margin: 0; font-size: 16px; }
 
         /* Секция с таблицей */
-        .feature-section { margin-bottom: 50px; }
+        .feature-section { margin-bottom: 50px; scroll-margin-top: 20px; }
         .section-title { font-size: 24px; color: #fff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ff0022; display: inline-block; }
         .section-desc { color: #aaa; font-size: 14px; margin-bottom: 20px; }
 
         /* Таблица */
-        .feature-table { width: 100%; border-collapse: collapse; background: #0d0d0d; border-radius: 8px; overflow: hidden; border: 1px solid #222; }
+        .feature-table { width: 100%; border-collapse: collapse; background: #0d0d0d; border-radius: 8px; overflow: hidden; border: 1px solid #222; margin-bottom: 30px; }
         .feature-table th, .feature-table td { padding: 15px 20px; text-align: left; font-size: 14px; border-bottom: 1px solid #1a1a1a; }
         .feature-table th { background: #151515; color: #fff; font-weight: 700; }
         .feature-table tr:last-child td { border-bottom: none; }
@@ -48,256 +48,126 @@
         
         .cmd { font-family: monospace; color: #ff0022; background: rgba(255,0,34,0.1); padding: 4px 8px; border-radius: 4px; }
         .range { color: #4CAF50; font-family: monospace; }
-        
-        /* Иконки для категорий */
         .icon { font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <!-- Навигация -->
     <div class="navbar">
         <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
         <div class="menu">
             <a href="index.html">Главная</a>
             <a href="download.html">Скачать</a>
-            <a href="features.html" class="active">Функции</a>
+            <a href="overview.html">Обзор функций</a>
+            <a href="features.html" class="active">Документация</a>
             <a href="index.html" class="login-btn">Вход / Регистрация</a>
         </div>
     </div>
 
     <div class="docs-layout">
         
-        <!-- Боковое меню -->
         <div class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="#aimbot" class="active"><span class="icon">🎯</span> Аимбот</a></li>
+                <li><a href="#aimbot"><span class="icon">🎯</span> Аимбот</a></li>
                 <li><a href="#hook"><span class="icon">🪝</span> Крюк</a></li>
-                <li><a href="#hammer"><span class="icon">🔨</span> Молот</a></li>
-                <li><a href="#weapons"><span class="icon">🔫</span> Оружие</a></li>
                 <li><a href="#misc"><span class="icon">⚙️</span> Разное (Misc)</a></li>
                 <li><a href="#visuals"><span class="icon">👁️</span> Визуалы и HUD</a></li>
                 <li><a href="#avoid"><span class="icon">🛡️</span> Авоид (Avoid)</a></li>
+                <li><a href="#tas"><span class="icon">⏱️</span> TAS (Реплеи)</a></li>
             </ul>
         </div>
 
-        <!-- Контент -->
         <div class="content">
             <div class="page-header">
                 <h1>📖 Документация Cherry Client</h1>
                 <p>Полное описание всех функций, настроек и консольных команд</p>
             </div>
 
-            <!-- РАЗДЕЛ: АИМБОТ (ОСНОВНОЕ) -->
+            <!-- АИМБОТ -->
             <div class="feature-section" id="aimbot">
                 <h2 class="section-title">🎯 Аимбот - Основное</h2>
-                <p class="section-desc">Главные настройки наведения и визуализации цели.</p>
-                
                 <table class="feature-table">
-                    <thead>
-                        <tr>
-                            <th>Настройка</th>
-                            <th>Описание</th>
-                            <th>Консольная команда</th>
-                            <th>Диапазон</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
                     <tbody>
-                        <tr>
-                            <td><strong>Включить</strong></td>
-                            <td>Активирует основной модуль Аимбота</td>
-                            <td><span class="cmd">cherry_aim_enable</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Рисовать FOV</strong></td>
-                            <td>Отображает круг радиуса поиска цели на экране</td>
-                            <td><span class="cmd">cherry_aim_drawfov</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Бокс цели</strong></td>
-                            <td>Рисует квадрат вокруг игрока, в которого наведен аимбот</td>
-                            <td><span class="cmd">cherry_aim_box</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Свечение цели</strong></td>
-                            <td>Добавляет эффект свечения к цели</td>
-                            <td><span class="cmd">cherry_aim_glow</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Идеальный Silent</strong></td>
-                            <td>Пули/крюк летят точно в цель, но визуально камера не поворачивается</td>
-                            <td><span class="cmd">cherry_aim_silent</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Мин. задержка</strong></td>
-                            <td>Минимальная задержка перед выстрелом (в мс)</td>
-                            <td><span class="cmd">cherry_aim_mindelay</span></td>
-                            <td><span class="range">0 - 1000</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Макс. задержка</strong></td>
-                            <td>Максимальная задержка перед выстрелом (в мс)</td>
-                            <td><span class="cmd">cherry_aim_maxdelay</span></td>
-                            <td><span class="range">0 - 1000</span></td>
-                        </tr>
+                        <tr><td><strong>Включить</strong></td><td>Активирует Аимбот</td><td><span class="cmd">cherry_aim_enable</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Рисовать FOV</strong></td><td>Показывает радиус поиска цели</td><td><span class="cmd">cherry_aim_drawfov</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Идеальный Silent</strong></td><td>Стрельба точно в цель без поворота камеры</td><td><span class="cmd">cherry_aim_silent</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Задержка выстрела</strong></td><td>Мин/Макс задержка (мс)</td><td><span class="cmd">cherry_aim_delay</span></td><td><span class="range">0 - 1000</span></td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- РАЗДЕЛ: КРЮК -->
-            <div class="feature-section" id="hook">
-                <h2 class="section-title">🪝 Крюк</h2>
-                <p class="section-desc">Настройки авто-захвата крюком.</p>
-                
-                <table class="feature-table">
-                    <thead>
-                        <tr>
-                            <th>Настройка</th>
-                            <th>Описание</th>
-                            <th>Консольная команда</th>
-                            <th>Диапазон</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Включить</strong></td>
-                            <td>Включает аим на крюк</td>
-                            <td><span class="cmd">cherry_hook_enable</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>FOV (Угол обзора)</strong></td>
-                            <td>Радиус поиска цели для крюка (в градусах)</td>
-                            <td><span class="cmd">cherry_hook_fov</span></td>
-                            <td><span class="range">1 - 360</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Приоритет</strong></td>
-                            <td>Выбирает цель, которая ближе всего к прицелу</td>
-                            <td><span class="cmd">cherry_hook_priority</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Silent (Бесшумно)</strong></td>
-                            <td>Крюк цепляется без визуального поворота камеры</td>
-                            <td><span class="cmd">cherry_hook_silent</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Игнорировать друзей</strong></td>
-                            <td>Не будет наводиться на игроков из списка друзей</td>
-                            <td><span class="cmd">cherry_hook_ignore_friends</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Точность</strong></td>
-                            <td>Процент точности наведения крюка</td>
-                            <td><span class="cmd">cherry_hook_accuracy</span></td>
-                            <td><span class="range">1 - 100</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- РАЗДЕЛ: МОЛОТ -->
-            <div class="feature-section" id="hammer">
-                <h2 class="section-title">🔨 Молот</h2>
-                <p class="section-desc">Настройки авто-удара молотом.</p>
-                
-                <table class="feature-table">
-                    <thead>
-                        <tr>
-                            <th>Настройка</th>
-                            <th>Описание</th>
-                            <th>Консольная команда</th>
-                            <th>Диапазон</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Включить</strong></td>
-                            <td>Включает аим на молот</td>
-                            <td><span class="cmd">cherry_hammer_enable</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>FOV (Угол обзора)</strong></td>
-                            <td>Радиус поиска цели для молота</td>
-                            <td><span class="cmd">cherry_hammer_fov</span></td>
-                            <td><span class="range">1 - 360</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Приоритет</strong></td>
-                            <td>Выбирает цель ближе к прицелу</td>
-                            <td><span class="cmd">cherry_hammer_priority</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Silent</strong></td>
-                            <td>Удар происходит без визуального поворота</td>
-                            <td><span class="cmd">cherry_hammer_silent</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Игнорировать друзей</strong></td>
-                            <td>Не бьет игроков из списка друзей</td>
-                            <td><span class="cmd">cherry_hammer_ignore_friends</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- РАЗДЕЛ: ОРУЖИЕ -->
-            <div class="feature-section" id="weapons">
-                <h2 class="section-title">🔫 Пистолет / Дробовик</h2>
-                <p class="section-desc">Включение авто-стрельбы для огнестрельного оружия.</p>
-                
-                <table class="feature-table">
-                    <thead>
-                        <tr>
-                            <th>Настройка</th>
-                            <th>Описание</th>
-                            <th>Консольная команда</th>
-                            <th>Диапазон</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Пистолет (Вкл)</strong></td>
-                            <td>Автоматическая стрельба из пистолета при наведении</td>
-                            <td><span class="cmd">cherry_pistol_enable</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Дробовик (Вкл)</strong></td>
-                            <td>Автоматическая стрельба из дробовика при наведении</td>
-                            <td><span class="cmd">cherry_shotgun_enable</span></td>
-                            <td><span class="range">0 / 1</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- ПУСТЫЕ РАЗДЕЛЫ (Заглушки) -->
+            <!-- РАЗНОЕ -->
             <div class="feature-section" id="misc">
                 <h2 class="section-title">⚙️ Разное (Misc)</h2>
-                <p class="section-desc">Здесь будут отображаться функции из вкладки "Разное" (Авто-хук, Авто-выстрел и т.д.).</p>
+                <p class="section-desc">Боты, авто-действия и троллинг.</p>
+                
+                <table class="feature-table">
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Лунная походка</strong></td><td>Замедляет падение (Moonwalk)</td><td><span class="cmd">cherry_misc_moonwalk</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Авто-выстрел</strong></td><td>Стреляет при наведении</td><td><span class="cmd">cherry_misc_autofire</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Авто-перецеп</strong></td><td>Автоматически перецепляется (Rehook)</td><td><span class="cmd">cherry_misc_rehook</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Полет дамми</strong></td><td>Дает дамми возможность летать</td><td><span class="cmd">cherry_misc_dummyfly</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Джет-райд</strong></td><td>Ускоренное движение на джете</td><td><span class="cmd">cherry_misc_jetride</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Авто-край</strong></td><td>Автоматическое исследование краев карты</td><td><span class="cmd">cherry_misc_autoedge</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Убить при фризе</strong></td><td>Авто-смерть при заморозке</td><td><span class="cmd">cherry_misc_kill_freeze</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Спам эмоциями</strong></td><td>Троллинг: спам эмоциями</td><td><span class="cmd">cherry_misc_spam_emote</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Кража ID</strong></td><td>Позволяет заходить под ID других игроков</td><td><span class="cmd">cherry_misc_steal_id</span></td><td><span class="range">0 / 1</span></td></tr>
+                    </tbody>
+                </table>
             </div>
 
+            <!-- ВИЗУАЛЫ -->
             <div class="feature-section" id="visuals">
                 <h2 class="section-title">👁️ Визуалы и HUD</h2>
-                <p class="section-desc">Здесь будут функции отрисовки (Скины, Трассеры, Кастомный HUD).</p>
+                
+                <table class="feature-table">
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>HUD Музыки</strong></td><td>Показывает текущий трек</td><td><span class="cmd">cherry_vis_musichud</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Водяной знак</strong></td><td>Отображает логотип клиента на экране</td><td><span class="cmd">cherry_vis_watermark</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Линии прицела</strong></td><td>Рисует линии от игрока к прицелу</td><td><span class="cmd">cherry_vis_aimlines</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Линии пуль</strong></td><td>Показывает траекторию пуль</td><td><span class="cmd">cherry_vis_bulletlines</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Кастомные цвета</strong></td><td>Меняет цвет Ти, крюка, оружия</td><td><span class="cmd">cherry_vis_custom_colors</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Обводка тайлов</strong></td><td>Подсвечивает края блоков</td><td><span class="cmd">cherry_vis_tile_outline</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Плавная камера</strong></td><td>Сглаживает движения камеры</td><td><span class="cmd">cherry_vis_smooth_cam</span></td><td><span class="range">0 / 1</span></td></tr>
+                    </tbody>
+                </table>
             </div>
 
+            <!-- АВОИД -->
             <div class="feature-section" id="avoid">
                 <h2 class="section-title">🛡️ Авоид (Avoid)</h2>
-                <p class="section-desc">Здесь будут функции избегания (Авто-анчек, Авоид заморозки).</p>
+                <p class="section-desc">Автоматическое избегание опасностей.</p>
+                
+                <table class="feature-table">
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Режим</strong></td><td>Базовый, Легит, Блатант, Бот</td><td><span class="cmd">cherry_avoid_mode</span></td><td><span class="range">0 - 4</span></td></tr>
+                        <tr><td><strong>Player Prediction</strong></td><td>Предсказывает движение игроков</td><td><span class="cmd">cherry_avoid_prediction</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>NSIF</strong></td><td>Защита от смерти</td><td><span class="cmd">cherry_avoid_nsif</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Check ticks</strong></td><td>Задержка проверки тиков</td><td><span class="cmd">cherry_avoid_check_ticks</span></td><td><span class="range">0 - 50</span></td></tr>
+                        <tr><td><strong>Aimbot (в авоиде)</strong></td><td>Авто-наведение для выживания</td><td><span class="cmd">cherry_avoid_aim</span></td><td><span class="range">0 / 1</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAS -->
+            <div class="feature-section" id="tas">
+                <h2 class="section-title">⏱️ TAS (Реплеи)</h2>
+                <p class="section-desc">Инструменты для записи и анализа идеальных прохождений.</p>
+                
+                <table class="feature-table">
+                    <thead><tr><th>Настройка</th><th>Описание</th><th>Команда</th><th>Диапазон</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>TPS</strong></td><td>Тиков в секунду (обычно 50)</td><td><span class="cmd">cherry_tas_tps</span></td><td><span class="range">1 - 1000</span></td></tr>
+                        <tr><td><strong>Авто-реплей</strong></td><td>Автоматически зацикливает реплей</td><td><span class="cmd">cherry_tas_autoreplay</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Авто-сохранение</strong></td><td>Сохраняет реплей каждые N секунд</td><td><span class="cmd">cherry_tas_autosave</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Авто-синхронизация</strong></td><td>Синхронизация с облаком (GitHub)</td><td><span class="cmd">cherry_tas_autosync</span></td><td><span class="range">0 / 1</span></td></tr>
+                        <tr><td><strong>Скорость хука</strong></td><td>Скорость эталонного хука x100</td><td><span class="cmd">cherry_tas_hookspeed</span></td><td><span class="range">1000 - 10000</span></td></tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
