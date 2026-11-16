@@ -71,7 +71,6 @@
         .error-msg { color: var(--primary); font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
         .success-msg { color: #4CAF50; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; }
 
-        /* FOOTER */
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; z-index: 10; position: relative; display: flex; flex-direction: column; gap: 30px; width: 100%; box-sizing: border-box;}
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
         .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
@@ -126,19 +125,19 @@
             <div class="footer-contacts">
                 <h3>Контакты</h3>
                 <div class="tg-buttons">
-                    <a href="#" class="tg-btn">✈️ Telegram канал</a>
-                    <a href="#" class="tg-btn">✈️ Telegram чат</a>
+                    <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram канал</a>
+                    <a href="https://t.me/chatcherryclient" target="_blank" class="tg-btn">✈️ Telegram чат</a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-    <div>
-        <a href="privacy.html">Политика конфиденциальности</a> • 
-        <a href="terms.html">Пользовательское соглашение</a> • 
-        <a href="support.html">Поддержка</a>
-    </div>
-    <div>© 2026 Cherry Client. Все права защищены.</div>
-</div>
+            <div>
+                <a href="privacy.html">Политика конфиденциальности</a> • 
+                <a href="terms.html">Пользовательское соглашение</a> • 
+                <a href="support.html">Поддержка</a>
+            </div>
+            <div>© 2026 Cherry Client. Все права защищены.</div>
+        </div>
     </footer>
 
     <div class="modal-overlay" id="auth-modal">
@@ -251,7 +250,7 @@
         }
         function tryDownload(e) {
             e.preventDefault(); let savedUser = localStorage.getItem('cherry_user');
-            if(savedUser) { alert("Скачивание началось!"); /* window.location.href = "ССЫЛКА.zip"; */ } else { openModal(); }
+            if(savedUser) { alert("Скачивание началось!"); /* window.location.href = "ССЫЛКА_НА_ТВОЙ_АРХИВ.zip"; */ } else { openModal(); }
         }
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
