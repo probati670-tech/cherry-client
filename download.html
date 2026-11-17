@@ -13,6 +13,7 @@
         .menu a:hover, .menu a.active { color: #ff7eb3; }
         .menu a.login-btn { border: 1px solid #ff2a75; padding: 8px 20px; border-radius: 5px; color: #ff2a75; }
         .menu a.login-btn:hover { background-color: #ff2a75; color: white; }
+        .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 5px; color: white; border: none; }
 
         .download-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         .page-title { font-size: 36px; font-weight: 900; margin-bottom: 10px; text-align: center; }
@@ -52,7 +53,11 @@
             <a href="overview.html">Обзор функций</a>
             <a href="features.html">Документация</a>
             <a href="compare.html">Сравнение</a>
-            <!-- ДОБАВЛЕН ID ДЛЯ СКРИПТА -->
+            
+            <!-- КНОПКА АДМИНКИ -->
+            <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
+
+            <!-- КНОПКА ЛК -->
             <a href="index.html" class="login-btn" id="nav-auth">Вход / Регистрация</a>
         </div>
     </div>
@@ -70,7 +75,7 @@
                     <li>Обычная поддержка</li>
                     <li>Периодические обновления</li>
                 </ul>
-                <a href="ССЫЛКА_НА_FREE_АРХИВ.zip" class="btn-download-free">⬇ Скачать бесплатно</a>
+                <a href="#" class="btn-download-free" onclick="alert('Скачивание начнется... (ссылка добавится позже)')">⬇ Скачать бесплатно</a>
                 <div class="version-info">Версия 1.0.0 • Windows 64-bit</div>
             </div>
             <div class="card premium">
@@ -117,21 +122,17 @@
     </footer>
 
     <script>
-        // Функция заглушки для оплаты
         function showPaymentStub() {
-            alert("Оплата временно недоступна.\n\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой для оформления заказа: support@cherry-client.com или @nexnayyy");
+            alert("Оплата временно недоступна.\n\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой: support@cherry-client.com или @nexnayyy");
         }
 
-        // Проверка авторизации при загрузке страницы
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
             let navAuth = document.getElementById('nav-auth');
+            let navAdmin = document.getElementById('nav-admin');
             
             if(savedUser) { 
-                // Меняем текст кнопки
                 navAuth.innerText = "Личный кабинет (" + savedUser + ")"; 
-                
-                // Меняем стиль, чтобы было похоже на главную
                 navAuth.classList.remove('login-btn'); 
                 navAuth.style.background = "linear-gradient(45deg, #ff2a75, #ff7eb3)"; 
                 navAuth.style.color = "white"; 
@@ -139,9 +140,15 @@
                 navAuth.style.border = "none";
                 navAuth.style.padding = "8px 20px";
                 navAuth.style.borderRadius = "30px";
-                
-                // Меняем ссылку на личный кабинет
                 navAuth.href = "profile.html";
+
+                // Проверка на Админа
+                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                let userObj = allUsers.find(u => u.name === savedUser);
+                
+                if(userObj && userObj.role === 'admin') {
+                    navAdmin.style.display = 'block';
+                }
             }
         };
     </script>
