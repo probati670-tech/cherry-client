@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Общий чат - Cherry Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; 
+            --card-bg: rgba(20, 10, 15, 0.6); --border-color: rgba(255, 42, 117, 0.2);
+        }
+        * { box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Навигация */
+        .navbar-container { display: flex; justify-content: center; padding: 20px; z-index: 10; position: relative; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 30px; background: rgba(15, 5, 10, 0.8); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 50px; width: 100%; max-width: 1000px; }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; text-decoration: none; color: #fff; } .logo span { color: var(--primary); }
+        .menu { display: flex; gap: 25px; align-items: center; }
+        .menu a { color: #ccc; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; cursor: pointer; }
+        .menu a:hover, .menu a.active { color: var(--primary-light); }
+        
+        .menu a.login-btn { background: linear-gradient(45deg, var(--primary), var(--primary-light)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); }
+        .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); }
+        
+        .menu a.avatar-btn { display: flex; justify-content: center; align-items: center; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; font-weight: 900; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); transition: 0.3s; background-size: cover; background-position: center; padding: 0; border: 2px solid transparent; }
+        .menu a.avatar-btn:hover { transform: scale(1.1); border-color: white; }
+
+        /* Чат */
+        .chat-container { flex: 1; max-width: 900px; width: 100%; margin: 20px auto; display: flex; flex-direction: column; padding: 0 20px; }
+        .chat-box { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; min-height: 50vh; max-height: 65vh; }
+        
+        /* Скроллбар */
+        .chat-box::-webkit-scrollbar { width: 6px; }
+        .chat-box::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* Сообщения */
+        .message { display: flex; gap: 15px; align-items: flex-start; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .msg-avatar { width: 40px; height: 40px; border-radius: 50%; background: #110a0d; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; flex-shrink: 0; background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1); }
+        .msg-content { background: rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 0 15px 15px 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .msg-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .msg-name { font-weight: 700; color: #fff; font-size: 14px; }
+        .msg-time { font-size: 11px; color: #666; margin-left: auto; }
+        .msg-text { font-size: 14px; color: #ccc; line-height: 1.5; word-break: break-word; }
+
+        /* Префиксы */
+        .prefix-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-size: 10px; text-transform: uppercase; }
+        .prefix-vip { background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; }
+        .prefix-god { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: #fff; }
+        .prefix-dev { background: linear-gradient(45deg, #00bfff, #1e90ff); color: #fff; }
+        .prefix-cherry { background: linear-gradient(45deg, #ff0000, #8b0000); color: #fff; }
+
+        /* Ввод */
+        .chat-input-area { display: flex; gap: 15px; margin-top: 20px; }
+        .chat-input { flex: 1; padding: 15px 20px; background: #110a0d; border: 1px solid #331a22; border-radius: 30px; color: white; font-family: 'Montserrat'; font-size: 14px; outline: none; transition: 0.3s; }
+        .chat-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255,42,117,0.2); }
+        .btn-send { background: linear-gradient(45deg, var(--primary), var(--primary-light)); border: none; border-radius: 30px; padding: 0 30px; color: white; font-weight: 700; cursor: pointer; font-family: 'Montserrat'; transition: 0.3s; }
+        .btn-send:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,42,117,0.4); }
+
+        .login-warning { text-align: center; color: #ff9800; margin-bottom: 15px; font-weight: 600; display: none; }
+    </style>
+</head>
+<body>
+    <div class="navbar-container">
+        <div class="navbar">
+            <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
+            <div class="menu">
+                <a href="index.html">Главная</a>
+                <a href="download.html">Скачать</a>
+                <a href="chat.html" class="active">💬 Чат</a>
+                <a href="compare.html">Сравнение</a>
+                
+                <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
+                <a href="index.html" class="login-btn" id="nav-auth">Вход / Регистрация</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="login-warning" id="login-warning">Вы должны войти в аккаунт, чтобы писать в чат.</div>
+        
+        <div class="chat-box" id="chat-box">
+            <!-- Сообщения будут появляться здесь -->
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Написать сообщение..." onkeypress="handleKeyPress(event)">
+            <button class="btn-send" onclick="sendMessage()">Отправить</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = localStorage.getItem('cherry_user');
+        let userObj = null;
+        
+        if (currentUser) {
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            userObj = allUsers.find(u => u.name === currentUser);
+            
+            // Если забанен — не пускаем
+            if (userObj && userObj.status === 'banned') {
+                alert("Вы заблокированы и не можете писать в чат.");
+                window.location.href = "index.html";
+            }
+        }
+
+        // --- НАСТРОЙКА ШАПКИ ---
+        window.onload = function() {
+            let navAuth = document.getElementById('nav-auth');
+            let navAdmin = document.getElementById('nav-admin');
+            
+            if(currentUser && userObj) { 
+                navAuth.className = "avatar-btn";
+                navAuth.innerText = "";
+                navAuth.title = "Личный кабинет";
+                navAuth.href = "profile.html";
+                
+                if (userObj.avatar) {
+                    navAuth.style.backgroundImage = `url(${userObj.avatar})`;
+                } else {
+                    navAuth.innerText = currentUser.charAt(0).toUpperCase();
+                }
+
+                if(userObj.role === 'admin') { navAdmin.style.display = 'block'; }
+            } else {
+                // Если не залогинен
+                document.getElementById('login-warning').style.display = 'block';
+                document.getElementById('chat-input').placeholder = "Войдите, чтобы писать...";
+                document.getElementById('chat-input').disabled = true;
+            }
+            
+            renderChat();
+            // Обновляем чат каждые 2 секунды (имитация реального времени)
+            setInterval(renderChat, 2000);
+        };
+
+        // --- ЛОГИКА ЧАТА ---
+        function getMessages() {
+            return JSON.parse(localStorage.getItem('cherry_chat')) || [
+                { user: "Test_Admin", prefix: "cherry", avatar: "", text: "Всем привет! Добро пожаловать в наш чат 🍒", time: "16:00" },
+                { user: "Ligems", prefix: "vip", avatar: "", text: "Клиент топ, Aimbot работает идеально 🔥", time: "16:02" }
+            ];
+        }
+
+        function renderChat() {
+            const chatBox = document.getElementById('chat-box');
+            const messages = getMessages();
+            
+            // Проверяем, прокручен ли чат вниз (чтобы не мешать чтению)
+            const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 50;
+
+            chatBox.innerHTML = '';
+            
+            messages.forEach(msg => {
+                // Формируем префикс
+                let prefixHTML = '';
+                if (msg.prefix) {
+                    prefixHTML = `<span class="prefix-badge prefix-${msg.prefix}">${msg.prefix}</span>`;
+                }
+
+                // Формируем аватарку
+                let avatarStyle = msg.avatar ? `style="background-image: url(${msg.avatar}); color: transparent;"` : '';
+                let avatarLetter = msg.avatar ? '' : msg.user.charAt(0).toUpperCase();
+
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.innerHTML = `
+                    <div class="msg-avatar" ${avatarStyle}>${avatarLetter}</div>
+                    <div class="msg-content">
+                        <div class="msg-header">
+                            <span class="msg-name">${msg.user}</span>
+                            ${prefixHTML}
+                            <span class="msg-time">${msg.time}</span>
+                        </div>
+                        <div class="msg-text">${msg.text}</div>
+                    </div>
+                `;
+                chatBox.appendChild(div);
+            });
+
+            if (isScrolledToBottom) {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        function sendMessage() {
+            if (!currentUser) {
+                alert("Пожалуйста, войдите в аккаунт!");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            
+            if (!text) return;
+
+            const messages = getMessages();
+            
+            // Форматируем время
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            // Добавляем сообщение
+            messages.push({
+                user: currentUser,
+                prefix: userObj ? userObj.prefix : "",
+                avatar: userObj ? userObj.avatar : "",
+                text: text,
+                time: timeStr
+            });
+
+            // Сохраняем и чистим
+            localStorage.setItem('cherry_chat', JSON.stringify(messages));
+            input.value = '';
+            
+            renderChat();
+            
+            // Прокручиваем вниз
+            const chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Слушаем изменения в других вкладках (чтобы чат обновлялся, если открыто 2 окна)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'cherry_chat') {
+                renderChat();
+            }
+        });
+    </script>
+</body>
+</html>
