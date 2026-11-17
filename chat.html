@@ -50,17 +50,11 @@
         
         .msg-text { font-size: 14px; color: #ccc; line-height: 1.5; word-break: break-word; }
 
-        /* Блюр */
         .msg-text.blurred { filter: blur(5px); user-select: none; cursor: not-allowed; transition: 0.3s; }
         .msg-text.blurred:hover { filter: blur(8px); }
         .blur-warning { font-size: 11px; color: var(--danger); margin-top: 5px; font-weight: 700; display: block; }
 
-        /* Кнопка размута для админа */
-        .btn-unmute { 
-            background: rgba(76, 175, 80, 0.1); border: 1px solid var(--success); color: var(--success); 
-            padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; 
-            cursor: pointer; transition: 0.3s; margin-left: 5px;
-        }
+        .btn-unmute { background: rgba(76, 175, 80, 0.1); border: 1px solid var(--success); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-left: 5px; }
         .btn-unmute:hover { background: var(--success); color: white; }
 
         .prefix-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-size: 10px; text-transform: uppercase; }
@@ -78,7 +72,6 @@
         .btn-send:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; transform: none; }
 
         .login-warning { text-align: center; color: #ff9800; margin-bottom: 15px; font-weight: 600; display: none; }
-        
         .mute-warning { text-align: center; color: var(--danger); margin-bottom: 15px; font-weight: 700; display: none; background: rgba(255, 77, 77, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 77, 77, 0.3); }
         .mute-timer { font-family: monospace; font-size: 18px; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 5px; margin-left: 5px; color: #fff; border: 1px solid var(--danger); }
     </style>
@@ -118,7 +111,7 @@
             </div>
 
             <div class="chat-box" id="chat-box">
-                <!-- Сообщения -->
+                <!-- Сообщения будут подгружаться из Firebase -->
             </div>
         </div>
 
@@ -128,7 +121,27 @@
         </div>
     </div>
 
-    <script>
+    <!-- ПОДКЛЮЧАЕМ FIREBASE (v13.4.0) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+        // ТВОИ КЛЮЧИ ИЗ FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZ9oO-XulnyBUYeYsyykQDtFlVf4UqEWM",
+            authDomain: "cherry-client-8df4b.firebaseapp.com",
+            projectId: "cherry-client-8df4b",
+            storageBucket: "cherry-client-8df4b.firebasestorage.app",
+            messagingSenderId: "79421005122",
+            appId: "1:79421005122:web:48eea0a34de937fbef3cdb",
+            measurementId: "G-VKR6VB5YMF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const messagesRef = collection(db, "messages");
+
+        // ЛОКАЛЬНЫЕ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ (Для мута и префиксов)
         let currentUser = localStorage.getItem('cherry_user');
         let userObj = null;
         let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
@@ -162,17 +175,18 @@
                 if(userObj.role === 'admin') { navAdmin.style.display = 'block'; }
                 
                 checkMuteStatus();
-
             } else {
                 document.getElementById('login-warning').style.display = 'block';
                 document.getElementById('chat-input').placeholder = "Войдите, чтобы писать...";
                 document.getElementById('chat-input').disabled = true;
                 document.getElementById('btn-send').disabled = true;
             }
-            
-            renderChat();
+
+            // Запускаем слушатель Firebase
+            listenToChat();
         };
 
+        // --- ЛОГИКА МУТА ---
         function checkMuteStatus() {
             if (userObj && userObj.muteUntil && userObj.muteUntil > Date.now()) {
                 isMuted = true;
@@ -196,15 +210,6 @@
                     clearInterval(muteInterval);
                     muteInterval = null;
                 }
-
-                if (userObj && userObj.muteUntil) {
-                    userObj.muteUntil = null;
-                    let userIndex = allUsers.findIndex(u => u.name === currentUser);
-                    if(userIndex !== -1) {
-                        allUsers[userIndex] = userObj;
-                        localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
-                    }
-                }
             }
         }
 
@@ -223,88 +228,57 @@
                 String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
         }
 
-        function getMessages() {
-            let stored = JSON.parse(localStorage.getItem('cherry_chat')) || [];
-            let filtered = stored.filter(msg => 
-                !msg.text.includes("Всем привет! Добро пожаловать в наш чат") && 
-                !msg.text.includes("Клиент топ, Aimbot работает идеально")
-            );
-            if (stored.length !== filtered.length) {
-                localStorage.setItem('cherry_chat', JSON.stringify(filtered));
-            }
-            return filtered;
-        }
-
-        function renderChat() {
+        // --- РЕАЛЬНОЕ ВРЕМЯ ИЗ FIREBASE ---
+        function listenToChat() {
             const chatBox = document.getElementById('chat-box');
-            const messages = getMessages();
-            const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 50;
+            const q = query(messagesRef, orderBy("timestamp", "asc"));
 
-            chatBox.innerHTML = '';
-            
-            messages.forEach(msg => {
-                let prefixHTML = msg.prefix ? `<span class="prefix-badge prefix-${msg.prefix}">${msg.prefix}</span>` : '';
-                let avatarStyle = msg.avatar ? `style="background-image: url(${msg.avatar}); color: transparent;"` : '';
-                let avatarLetter = msg.avatar ? '' : msg.user.charAt(0).toUpperCase();
-                let textClass = msg.isFlagged ? 'msg-text blurred' : 'msg-text';
-                let warningHTML = msg.isFlagged ? '<span class="blur-warning">🚫 Скрыто (ссылка/реклама)</span>' : '';
+            onSnapshot(q, (snapshot) => {
+                const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 100;
+                chatBox.innerHTML = '';
 
-                // ПРОВЕРКА ДЛЯ АДМИНА: Показываем кнопку "Размутить", если автор сообщения в муте
-                let adminActionHTML = '';
-                if (userObj && userObj.role === 'admin') {
-                    let msgAuthor = allUsers.find(u => u.name === msg.user);
-                    // Если автор в муте и это не сам админ
-                    if (msgAuthor && msgAuthor.muteUntil && msgAuthor.muteUntil > Date.now() && msg.user !== currentUser) {
-                        adminActionHTML = `<button class="btn-unmute" onclick="unmuteUser('${msg.user}')">🔓 Размутить</button>`;
+                snapshot.forEach((docSnap) => {
+                    const msg = docSnap.data();
+                    const msgId = docSnap.id;
+                    
+                    let prefixHTML = msg.prefix ? `<span class="prefix-badge prefix-${msg.prefix}">${msg.prefix}</span>` : '';
+                    let avatarStyle = msg.avatar ? `style="background-image: url(${msg.avatar}); color: transparent;"` : '';
+                    let avatarLetter = msg.avatar ? '' : msg.user.charAt(0).toUpperCase();
+                    let textClass = msg.isFlagged ? 'msg-text blurred' : 'msg-text';
+                    let warningHTML = msg.isFlagged ? '<span class="blur-warning">🚫 Скрыто (ссылка/реклама)</span>' : '';
+
+                    // Кнопка "Размутить" (видна только админам, если сообщение заблюрено)
+                    let adminActionHTML = '';
+                    if (userObj && userObj.role === 'admin' && msg.isFlagged) {
+                        adminActionHTML = `<button class="btn-unmute" onclick="unmuteMessage('${msgId}')">🔓 Размутить</button>`;
                     }
-                }
 
-                const div = document.createElement('div');
-                div.className = 'message';
-                div.innerHTML = `
-                    <div class="msg-avatar" ${avatarStyle}>${avatarLetter}</div>
-                    <div class="msg-content">
-                        <div class="msg-header">
-                            <span class="msg-name">${msg.user}</span>
-                            ${prefixHTML}
-                            ${adminActionHTML}
-                            <span class="msg-time">${msg.time}</span>
+                    const div = document.createElement('div');
+                    div.className = 'message';
+                    div.innerHTML = `
+                        <div class="msg-avatar" ${avatarStyle}>${avatarLetter}</div>
+                        <div class="msg-content">
+                            <div class="msg-header">
+                                <span class="msg-name">${msg.user}</span>
+                                ${prefixHTML}
+                                ${adminActionHTML}
+                                <span class="msg-time">${msg.time}</span>
+                            </div>
+                            <div class="${textClass}">${msg.text}</div>
+                            ${warningHTML}
                         </div>
-                        <div class="${textClass}">${msg.text}</div>
-                        ${warningHTML}
-                    </div>
-                `;
-                chatBox.appendChild(div);
-            });
+                    `;
+                    chatBox.appendChild(div);
+                });
 
-            if (isScrolledToBottom || messages.length <= 3) {
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        }
-
-        // ФУНКЦИЯ СНЯТИЯ МУТА (ДЛЯ АДМИНА)
-        function unmuteUser(username) {
-            let targetIndex = allUsers.findIndex(u => u.name === username);
-            if (targetIndex !== -1) {
-                allUsers[targetIndex].muteUntil = null;
-                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
-                
-                // Если админ снял мут сам себе (на всякий случай)
-                if (username === currentUser) {
-                    userObj.muteUntil = null;
-                    checkMuteStatus();
+                if (isScrolledToBottom) {
+                    chatBox.scrollTop = chatBox.scrollHeight;
                 }
-                
-                renderChat(); // Перерисовываем чат, кнопка исчезнет
-            }
+            });
         }
 
-        function containsLink(text) {
-            const linkRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9_-]+\.(com|ru|net|org|io|me|tv|info|xyz|top|su)[^\s]*)/gi;
-            return linkRegex.test(text);
-        }
-
-        function sendMessage() {
+        // --- ОТПРАВКА СООБЩЕНИЯ В FIREBASE ---
+        async function sendMessage() {
             if (!currentUser || isMuted) return;
 
             const input = document.getElementById('chat-input');
@@ -313,6 +287,7 @@
 
             let isFlagged = false;
 
+            // Проверка на ссылки
             if (userObj.role !== 'admin' && containsLink(text)) {
                 isFlagged = true;
                 const muteDuration = 6 * 60 * 60 * 1000;
@@ -328,37 +303,51 @@
                 alert("Внимание! В вашем сообщении обнаружена ссылка. Вы получили мут на 6 часов.");
             }
 
-            const messages = getMessages();
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 
-            const newMessage = {
-                user: currentUser,
-                prefix: userObj ? userObj.prefix : "",
-                avatar: userObj ? userObj.avatar : "",
-                text: text,
-                time: timeStr,
-                isFlagged: isFlagged
-            };
+            try {
+                await addDoc(messagesRef, {
+                    user: currentUser,
+                    prefix: userObj ? userObj.prefix : "",
+                    avatar: userObj ? userObj.avatar : "",
+                    text: text,
+                    time: timeStr,
+                    isFlagged: isFlagged,
+                    timestamp: serverTimestamp()
+                });
+                input.value = '';
+            } catch (e) {
+                console.error("Ошибка при отправке: ", e);
+                alert("Не удалось отправить сообщение. Проверьте интернет.");
+            }
+        }
 
-            messages.push(newMessage);
-            localStorage.setItem('cherry_chat', JSON.stringify(messages));
-            input.value = '';
-            renderChat();
+        // Размут сообщения (снимает блюр)
+        async function unmuteMessage(msgId) {
+            try {
+                const msgRef = doc(db, "messages", msgId);
+                await updateDoc(msgRef, {
+                    isFlagged: false
+                });
+            } catch (e) {
+                console.error("Ошибка при размуте: ", e);
+            }
+        }
+
+        function containsLink(text) {
+            const linkRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9_-]+\.(com|ru|net|org|io|me|tv|info|xyz|top|su)[^\s]*)/gi;
+            return linkRegex.test(text);
         }
 
         function handleKeyPress(e) {
             if (e.key === 'Enter') sendMessage();
         }
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'cherry_chat' || e.key === 'cherry_all_users') {
-                allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-                if(currentUser) userObj = allUsers.find(u => u.name === currentUser);
-                checkMuteStatus();
-                renderChat();
-            }
-        });
+        
+        // Делаем функции глобальными для вызова из HTML
+        window.sendMessage = sendMessage;
+        window.handleKeyPress = handleKeyPress;
+        window.unmuteMessage = unmuteMessage;
     </script>
 </body>
 </html>
