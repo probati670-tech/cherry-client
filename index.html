@@ -7,6 +7,7 @@
     <style>
         :root {
             --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; --card-bg: rgba(20, 10, 15, 0.7);
+            --admin-gold: #ff9800;
         }
         * { box-sizing: border-box; }
         body { 
@@ -23,8 +24,14 @@
         .menu { display: flex; gap: 25px; align-items: center; }
         .menu a { color: #ccc; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; cursor: pointer; }
         .menu a:hover, .menu a.active { color: var(--primary-light); }
+        
+        /* Кнопка Личного Кабинета */
         .menu a.login-btn { background: linear-gradient(45deg, var(--primary), var(--primary-light)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); }
         .menu a.login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 42, 117, 0.6); }
+
+        /* Кнопка Админки */
+        .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); }
+        .menu a.admin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6); }
 
         .hero { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 50px; z-index: 10; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; gap: 50px; }
         .hero-left { flex: 1; max-width: 600px; }
@@ -75,7 +82,7 @@
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
         .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
         .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
-        .tg-buttons { display: flex; gap: 15px; }
+        .tg-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
         .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .tg-btn:hover { border-color: var(--primary); color: var(--primary); }
         .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -93,6 +100,11 @@
                 <a href="overview.html">Обзор функций</a>
                 <a href="features.html">Документация</a>
                 <a href="compare.html">Сравнение</a>
+                
+                <!-- КНОПКА АДМИНКИ (Скрыта по умолчанию) -->
+                <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
+                
+                <!-- КНОПКА ЛК -->
                 <a href="#" class="login-btn" id="nav-auth" onclick="openModal()">Вход / Регистрация</a>
             </div>
         </div>
@@ -126,7 +138,8 @@
                 <h3>Контакты</h3>
                 <div class="tg-buttons">
                     <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram канал</a>
-                    <a href="https://t.me/chatcherryclient" target="_blank" class="tg-btn">✈️ Telegram чат</a>
+                    <a href="https://t.me/nexnayyy" target="_blank" class="tg-btn">🛠️ Поддержка (ТГ)</a>
+                    <a href="mailto:support@cherry-client.com" class="tg-btn">📧 Email</a>
                 </div>
             </div>
         </div>
@@ -251,21 +264,20 @@
             if(user === savedUser && pass === savedPass) { finishLogin(user); } else { error.style.display = 'block'; }
         }
         
-        // ОБНОВЛЕННАЯ ФУНКЦИЯ ВХОДА
         function finishLogin(userName) {
             closeModal(); 
-            window.location.reload(); // Перезагружаем страницу, чтобы сработал onload и кнопка поменялась
+            window.location.reload();
         }
 
         function tryDownload(e) {
             e.preventDefault(); let savedUser = localStorage.getItem('cherry_user');
-            if(savedUser) { alert("Скачивание началось!"); /* window.location.href = "ССЫЛКА_НА_ТВОЙ_АРХИВ.zip"; */ } else { openModal(); }
+            if(savedUser) { alert("Скачивание началось!"); } else { openModal(); }
         }
         
-        // ОБНОВЛЕННЫЙ ONLOAD (ДЕЛАЕТ КНОПКУ ССЫЛКОЙ НА ПРОФИЛЬ)
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
             let navAuth = document.getElementById('nav-auth');
+            let navAdmin = document.getElementById('nav-admin');
             
             if(savedUser) { 
                 navAuth.innerText = "Личный кабинет (" + savedUser + ")"; 
@@ -274,10 +286,16 @@
                 navAuth.style.color = "white"; 
                 navAuth.style.boxShadow = "0 4px 15px rgba(255, 42, 117, 0.4)"; 
                 navAuth.style.border = "none";
-                
-                // Перенаправляем в личный кабинет
                 navAuth.href = "profile.html";
                 navAuth.onclick = null; 
+
+                // Проверка на Админа
+                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                let userObj = allUsers.find(u => u.name === savedUser);
+                
+                if(userObj && userObj.role === 'admin') {
+                    navAdmin.style.display = 'block'; // Показываем кнопку админки
+                }
             }
         };
     </script>
