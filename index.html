@@ -30,6 +30,19 @@
         .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); }
         .menu a.admin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6); }
 
+        /* Стиль для круглой аватарки в меню */
+        .menu a.avatar-btn { 
+            display: flex; justify-content: center; align-items: center;
+            width: 42px; height: 42px; border-radius: 50%; 
+            background: linear-gradient(45deg, var(--primary), var(--primary-light)); 
+            color: white; font-weight: 900; font-size: 16px;
+            box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); 
+            transition: 0.3s; 
+            background-size: cover; background-position: center;
+            padding: 0; border: 2px solid transparent;
+        }
+        .menu a.avatar-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(255, 42, 117, 0.6); border-color: white; }
+
         .hero { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 50px; z-index: 10; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; gap: 50px; }
         .hero-left { flex: 1; max-width: 600px; }
         .hero h1 { font-size: 64px; font-weight: 900; line-height: 1.1; margin: 0 0 20px 0; background: linear-gradient(to right, #ffffff, var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } 
@@ -98,7 +111,10 @@
                 <a href="features.html">Документация</a>
                 <a href="compare.html">Сравнение</a>
                 
+                <!-- Админка -->
                 <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
+                
+                <!-- Кнопка ЛК (теперь будет превращаться в аватарку) -->
                 <a href="#" class="login-btn" id="nav-auth" onclick="openModal()">Вход / Регистрация</a>
             </div>
         </div>
@@ -217,11 +233,11 @@
         // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
         function initDB() {
             let defaultUsers = [
-                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456", status: "active" },
-                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin", status: "active" },
-                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234", status: "active" },
-                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234", status: "active" },
-                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345", status: "active" }
+                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456", status: "active", prefix: "cherry", ownedPrefixes: ["cherry"] },
+                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin", status: "active", prefix: "", ownedPrefixes: [] },
+                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234", status: "active", prefix: "", ownedPrefixes: [] },
+                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234", status: "active", prefix: "vip", ownedPrefixes: ["vip"] },
+                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345", status: "active", prefix: "", ownedPrefixes: [] }
             ];
             if(!localStorage.getItem('cherry_all_users')) {
                 localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
@@ -268,7 +284,7 @@
             
             let allUsers = JSON.parse(localStorage.getItem('cherry_all_users'));
             if(!allUsers.find(u => u.name === email)) {
-                allUsers.push({ id: Date.now(), name: email, role: "user", sub: "free", pass: "gmail123", status: "active" });
+                allUsers.push({ id: Date.now(), name: email, role: "user", sub: "free", pass: "gmail123", status: "active", prefix: "", ownedPrefixes: [] });
                 localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
             }
             localStorage.setItem('cherry_user', email); 
@@ -295,13 +311,12 @@
                 return;
             }
             
-            allUsers.push({ id: Date.now(), name: login, role: "user", sub: "free", pass: pass, status: "active" });
+            allUsers.push({ id: Date.now(), name: login, role: "user", sub: "free", pass: pass, status: "active", prefix: "", ownedPrefixes: [] });
             localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
             localStorage.setItem('cherry_user', login); 
             finishLogin(login);
         }
 
-        // ОБНОВЛЕННЫЙ ВХОД С ПРОВЕРКОЙ БАНА
         function doLogin() {
             let user = document.getElementById('login-user').value; 
             let pass = document.getElementById('login-pass').value; 
@@ -311,7 +326,6 @@
             let userObj = allUsers.find(u => u.name === user && u.pass === pass);
             
             if(userObj) { 
-                // ПРОВЕРКА НА БАН
                 if(userObj.status === 'banned') {
                     alert("Ваш аккаунт заблокирован администратором.");
                     return;
@@ -336,6 +350,7 @@
             if(savedUser) { alert("Скачивание началось!"); } else { openModal(); }
         }
         
+        // ОБНОВЛЕННЫЙ ONLOAD (АВАТАРКА В ШАПКЕ)
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
             let navAuth = document.getElementById('nav-auth');
@@ -345,7 +360,6 @@
                 let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 let userObj = allUsers.find(u => u.name === savedUser);
 
-                // ПРОВЕРКА НА БАН ПРИ ЗАГРУЗКЕ
                 if (userObj && userObj.status === 'banned') {
                     alert("Ваш аккаунт был заблокирован администратором.");
                     localStorage.removeItem('cherry_user');
@@ -355,15 +369,22 @@
                     return;
                 }
 
-                navAuth.innerText = "Личный кабинет (" + savedUser + ")"; 
-                navAuth.classList.remove('login-btn'); 
-                navAuth.style.background = "linear-gradient(45deg, var(--primary), var(--primary-light))"; 
-                navAuth.style.color = "white"; 
-                navAuth.style.boxShadow = "0 4px 15px rgba(255, 42, 117, 0.4)"; 
-                navAuth.style.border = "none";
+                // Превращаем кнопку в круглую аватарку
+                navAuth.className = "avatar-btn"; // Меняем класс
+                navAuth.innerText = ""; // Убираем текст
+                navAuth.title = "Личный кабинет"; // Всплывающая подсказка
                 navAuth.href = "profile.html";
                 navAuth.onclick = null; 
 
+                if (userObj && userObj.avatar) {
+                    // Если есть картинка — ставим ее
+                    navAuth.style.backgroundImage = `url(${userObj.avatar})`;
+                } else {
+                    // Если картинки нет — показываем первую букву ника
+                    navAuth.innerText = savedUser.charAt(0).toUpperCase();
+                }
+
+                // Проверка на админа
                 if(userObj && userObj.role === 'admin') {
                     navAdmin.style.display = 'block';
                 }
