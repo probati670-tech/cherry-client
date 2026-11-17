@@ -12,17 +12,18 @@
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; overflow-x: hidden; }
 
+        /* Сайдбар */
         .sidebar { width: 280px; background: rgba(15, 5, 10, 0.85); backdrop-filter: blur(15px); border-right: 1px solid var(--border-color); padding: 30px 20px; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
         .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; text-decoration: none; color: #fff; margin-bottom: 40px; display: block; text-align: center; }
         .logo span { color: var(--primary); }
         
         .user-info { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--primary), var(--primary-light)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; box-shadow: 0 0 20px rgba(255,42,117,0.4); }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--primary), var(--primary-light)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; box-shadow: 0 0 20px rgba(255,42,117,0.4); background-size: cover; background-position: center; }
         .user-name { font-size: 18px; font-weight: 700; margin: 0 0 5px; }
         .user-status { font-size: 12px; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.1); color: #aaa; display: inline-block; }
         .user-status.premium { background: rgba(255, 42, 117, 0.2); color: var(--primary-light); border: 1px solid var(--primary); }
 
-        .nav-menu { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+        .nav-menu { display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; }
         .nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; border-radius: 12px; color: #aaa; text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
         .nav-item:hover, .nav-item.active { background: rgba(255, 42, 117, 0.1); color: var(--primary-light); border-color: rgba(255, 42, 117, 0.3); }
         .nav-item i { font-style: normal; font-size: 18px; }
@@ -33,6 +34,7 @@
         .logout-btn { margin-top: auto; color: #ff4d4d; }
         .logout-btn:hover { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border-color: rgba(255, 77, 77, 0.3); }
 
+        /* Контент */
         .main-content { margin-left: 280px; padding: 40px; flex: 1; min-height: 100vh; }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
@@ -50,22 +52,27 @@
         .info-row span:first-child { color: #888; }
         .info-row span:last-child { font-weight: 600; color: #fff; }
 
+        /* Формы и кнопки */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; }
-        .form-control { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; transition: 0.3s; box-sizing: border-box; }
+        .form-control { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; transition: 0.3s; box-sizing: border-box; resize: vertical; }
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255,42,117,0.2); }
         
         .btn { padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; border: none; font-family: 'Montserrat', sans-serif; display: inline-block; text-align: center; text-decoration: none; }
         .btn-primary { background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 4px 15px rgba(255,42,117,0.3); width: 100%; }
         .btn-primary:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.5); transform: translateY(-2px); }
-        .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; width: 100%; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        
+        /* Префиксы */
+        .prefix-badge { display: inline-block; padding: 4px 12px; border-radius: 6px; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
+        .prefix-vip { background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; }
+        .prefix-god { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: #fff; box-shadow: 0 0 10px #ff2a75; }
+        .prefix-dev { background: linear-gradient(45deg, #00bfff, #1e90ff); color: #fff; }
+        .prefix-cherry { background: linear-gradient(45deg, #ff0000, #8b0000); color: #fff; }
 
-        .table-orders { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .table-orders th { text-align: left; padding: 15px; color: #888; font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--border-color); }
-        .table-orders td { padding: 15px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
-        .status-paid { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .shop-item { background: #110a0d; border: 1px solid #331a22; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; }
+        .shop-item:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .shop-item .price { font-size: 20px; font-weight: 900; margin: 15px 0; color: var(--primary-light); }
 
         .alert { padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; display: none; }
         .alert-success { background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; color: #4CAF50; }
@@ -90,8 +97,8 @@
 
             <a class="nav-item active" onclick="switchTab('dashboard', this)"><i>📊</i> Обзор</a>
             <a class="nav-item" onclick="switchTab('license', this)"><i>🔑</i> Моя лицензия</a>
-            <a class="nav-item" onclick="switchTab('orders', this)"><i>🧾</i> Мои заказы</a>
-            <a class="nav-item" onclick="switchTab('settings', this)"><i>⚙️</i> Настройки</a>
+            <a class="nav-item" onclick="switchTab('shop', this)"><i>🛒</i> Магазин префиксов</a>
+            <a class="nav-item" onclick="switchTab('settings', this)"><i>⚙️</i> Настройки профиля</a>
             <a class="nav-item" href="support.html" style="margin-top: 20px;"><i>💬</i> Поддержка</a>
             
             <a class="nav-item logout-btn" onclick="logout()"><i>🚪</i> Выйти</a>
@@ -100,6 +107,7 @@
 
     <div class="main-content">
         
+        <!-- ВКЛАДКА: ОБЗОР -->
         <div id="tab-dashboard" class="tab-content active">
             <div class="page-header">
                 <h1>Добро пожаловать, <span id="welcome-name" style="color: var(--primary-light);">друг</span>!</h1>
@@ -109,21 +117,21 @@
             <div class="grid-cards">
                 <div class="card">
                     <h3>Информация об аккаунте</h3>
-                    <div class="info-row"><span>Имя пользователя:</span> <span id="dash-username">...</span></div>
+                    <div class="info-row"><span>Имя пользователя:</span> <span id="dash-username">...</span> <span id="dash-prefix"></span></div>
                     <div class="info-row"><span>Email:</span> <span id="dash-email">Не указан</span></div>
                     <div class="info-row"><span>Дата регистрации:</span> <span>17.11.2026</span></div>
                     <div class="info-row"><span>Статус:</span> <span id="dash-status" class="user-status">Пользователь</span></div>
                 </div>
 
                 <div class="card" style="border-color: var(--primary);">
-                    <h3>Быстрые действия</h3>
-                    <p style="color: #888; font-size: 14px; margin-bottom: 20px;">Хотите получить доступ ко всем функциям? Оформите подписку Premium.</p>
-                    <a href="download.html" class="btn btn-primary">👑 Купить Premium</a>
-                    <a href="support.html" class="btn btn-secondary" style="margin-top: 10px;">Задать вопрос</a>
+                    <h3>О себе</h3>
+                    <p id="dash-bio" style="color: #aaa; font-size: 14px; font-style: italic;">Описание пока не добавлено...</p>
+                    <a href="#" onclick="switchTab('settings', document.querySelectorAll('.nav-item')[4]); return false;" class="btn btn-secondary" style="margin-top: 15px; width: auto; padding: 10px 20px; font-size: 13px;">Изменить профиль</a>
                 </div>
             </div>
         </div>
 
+        <!-- ВКЛАДКА: ЛИЦЕНЗИЯ -->
         <div id="tab-license" class="tab-content">
             <div class="page-header">
                 <h1>Моя лицензия</h1>
@@ -154,65 +162,63 @@
             </div>
         </div>
 
-        <div id="tab-orders" class="tab-content">
+        <!-- ВКЛАДКА: МАГАЗИН ПРЕФИКСОВ -->
+        <div id="tab-shop" class="tab-content">
             <div class="page-header">
-                <h1>История заказов</h1>
-                <p>Все ваши покупки и транзакции.</p>
+                <h1>Магазин префиксов</h1>
+                <p>Купите красивый титул, который будет красоваться рядом с вашим ником.</p>
             </div>
-            <div class="card">
-                <table class="table-orders">
-                    <thead>
-                        <tr>
-                            <th>ID Заказа</th>
-                            <th>Дата</th>
-                            <th>Товар</th>
-                            <th>Сумма</th>
-                            <th>Статус</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>#ORD-9482</td>
-                            <td>17.11.2026</td>
-                            <td>Cherry Client Premium (1 мес)</td>
-                            <td>399 ₽</td>
-                            <td><span class="status-badge status-paid">Оплачен</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <div class="shop-grid">
+                <div class="shop-item">
+                    <span class="prefix-badge prefix-vip">VIP</span>
+                    <div class="price">99 ₽</div>
+                    <button class="btn btn-secondary" onclick="buyPrefix('vip', 99)">Купить</button>
+                </div>
+                <div class="shop-item">
+                    <span class="prefix-badge prefix-dev">DEV</span>
+                    <div class="price">199 ₽</div>
+                    <button class="btn btn-secondary" onclick="buyPrefix('dev', 199)">Купить</button>
+                </div>
+                <div class="shop-item">
+                    <span class="prefix-badge prefix-god">GOD</span>
+                    <div class="price">499 ₽</div>
+                    <button class="btn btn-secondary" onclick="buyPrefix('god', 499)">Купить</button>
+                </div>
+                <div class="shop-item">
+                    <span class="prefix-badge prefix-cherry">CHERRY</span>
+                    <div class="price">999 ₽</div>
+                    <button class="btn btn-secondary" onclick="buyPrefix('cherry', 999)">Купить</button>
+                </div>
             </div>
         </div>
 
+        <!-- ВКЛАДКА: НАСТРОЙКИ ПРОФИЛЯ -->
         <div id="tab-settings" class="tab-content">
             <div class="page-header">
                 <h1>Настройки профиля</h1>
-                <p>Обновите свои личные данные.</p>
+                <p>Настройте свой аватар, описание и активный префикс.</p>
             </div>
             <div class="grid-cards">
                 <div class="card">
-                    <h3>Основные данные</h3>
+                    <h3>Аватар и Описание</h3>
                     <div class="form-group">
-                        <label>Email адрес</label>
-                        <input type="email" class="form-control" id="settings-email" placeholder="example@mail.com">
+                        <label>Загрузить аватарку (макс. 2МБ)</label>
+                        <input type="file" id="avatar-upload" accept="image/*" class="form-control" onchange="previewAvatar(event)" style="padding: 10px;">
                     </div>
                     <div class="form-group">
-                        <label>Telegram Username</label>
-                        <input type="text" class="form-control" id="settings-tg" placeholder="@username">
+                        <label>О себе (Bio)</label>
+                        <textarea class="form-control" id="profile-bio" rows="3" placeholder="Напишите пару слов о себе..."></textarea>
                     </div>
-                    <button class="btn btn-primary" onclick="saveSettings()">Сохранить изменения</button>
+                    <button class="btn btn-primary" onclick="saveProfileSettings()">Сохранить изменения</button>
                 </div>
 
                 <div class="card">
-                    <h3>Безопасность</h3>
-                    <div class="form-group">
-                        <label>Новый пароль</label>
-                        <input type="password" class="form-control" placeholder="••••••••">
+                    <h3>Мои префиксы</h3>
+                    <p style="color: #888; font-size: 13px; margin-bottom: 15px;">Выберите префикс, который будет отображаться в профиле.</p>
+                    <div id="owned-prefixes-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Сюда будут добавляться купленные префиксы -->
                     </div>
-                    <div class="form-group">
-                        <label>Повторите пароль</label>
-                        <input type="password" class="form-control" placeholder="••••••••">
-                    </div>
-                    <button class="btn btn-secondary" onclick="alert('Пароль обновлен (имитация)!')">Обновить пароль</button>
                 </div>
             </div>
         </div>
@@ -222,103 +228,195 @@
 
     <script>
         let currentUser = localStorage.getItem('cherry_user');
+        if (!currentUser) { window.location.href = "index.html"; }
 
-        if (!currentUser) {
+        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+        let currentUserObj = allUsers.find(u => u.name === currentUser);
+
+        // Проверка на бан
+        if (currentUserObj && currentUserObj.status === 'banned') {
+            alert("Ваш аккаунт заблокирован администратором.");
+            localStorage.clear();
             window.location.href = "index.html";
         }
 
         window.onload = function() {
-            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-            let userObj = allUsers.find(u => u.name === currentUser);
-
-            // ПРОВЕРКА НА БАН
-            if (userObj && userObj.status === 'banned') {
-                alert("Ваш аккаунт заблокирован администратором.");
-                localStorage.removeItem('cherry_user');
-                localStorage.removeItem('cherry_pass');
-                localStorage.removeItem('cherry_premium');
-                window.location.href = "index.html";
-                return;
-            }
-
+            if (!currentUserObj) return;
+            
+            // Установка базовых данных
             document.getElementById('sidebar-username').innerText = currentUser;
             document.getElementById('welcome-name').innerText = currentUser;
             document.getElementById('dash-username').innerText = currentUser;
-            document.getElementById('user-avatar').innerText = currentUser.charAt(0).toUpperCase();
-
-            if (localStorage.getItem('cherry_premium') === 'true') {
-                setPremiumUI();
+            
+            if (currentUserObj.avatar) {
+                let av = document.getElementById('user-avatar');
+                av.style.backgroundImage = `url(${currentUserObj.avatar})`;
+                av.innerText = '';
+            } else {
+                document.getElementById('user-avatar').innerText = currentUser.charAt(0).toUpperCase();
             }
 
-            if (userObj && userObj.role === 'admin') {
+            if (currentUserObj.bio) {
+                document.getElementById('dash-bio').innerText = currentUserObj.bio;
+                document.getElementById('profile-bio').value = currentUserObj.bio;
+            }
+
+            renderPrefix(currentUserObj.prefix);
+            renderOwnedPrefixes();
+
+            if (localStorage.getItem('cherry_premium') === 'true') { setPremiumUI(); }
+            if (currentUserObj.role === 'admin') {
                 document.getElementById('sidebar-admin').style.display = 'flex';
             }
         };
 
+        // Отрисовка префикса
+        function renderPrefix(prefixCode) {
+            let prefixHTML = '';
+            if (prefixCode === 'vip') prefixHTML = '<span class="prefix-badge prefix-vip">VIP</span>';
+            if (prefixCode === 'dev') prefixHTML = '<span class="prefix-badge prefix-dev">DEV</span>';
+            if (prefixCode === 'god') prefixHTML = '<span class="prefix-badge prefix-god">GOD</span>';
+            if (prefixCode === 'cherry') prefixHTML = '<span class="prefix-badge prefix-cherry">CHERRY</span>';
+            
+            document.getElementById('dash-prefix').innerHTML = prefixHTML;
+            // Добавляем в сайдбар
+            let sideName = document.getElementById('sidebar-username');
+            sideName.innerHTML = currentUser + ' ' + prefixHTML;
+        }
+
+        // Отрисовка доступных префиксов для смены
+        function renderOwnedPrefixes() {
+            const list = document.getElementById('owned-prefixes-list');
+            list.innerHTML = '';
+            
+            let owned = currentUserObj.ownedPrefixes || [];
+
+            // Всегда доступен "Без префикса"
+            owned.forEach(p => {
+                let name = p.toUpperCase();
+                let cssClass = 'prefix-' + p;
+                let isEquipped = currentUserObj.prefix === p;
+
+                let div = document.createElement('div');
+                div.style.cssText = "display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;";
+                div.innerHTML = `
+                    <span class="prefix-badge ${cssClass}">${name}</span>
+                    ${isEquipped 
+                        ? '<span style="color:#4CAF50; font-size:12px; font-weight:bold;">Надет</span>' 
+                        : `<button onclick="equipPrefix('${p}')" style="background:none; border:1px solid #ff2a75; color:#ff2a75; padding:5px 10px; border-radius:5px; cursor:pointer;">Надеть</button>`}
+                `;
+                list.appendChild(div);
+            });
+
+            // Кнопка снять префикс
+            if (currentUserObj.prefix) {
+                let div = document.createElement('div');
+                div.style.cssText = "display:flex; justify-content:space-between; align-items:center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-top: 10px;";
+                div.innerHTML = `<span style="color:#aaa; font-size:13px;">Без префикса</span>
+                <button onclick="equipPrefix('')" style="background:none; border:1px solid #888; color:#888; padding:5px 10px; border-radius:5px; cursor:pointer;">Снять</button>`;
+                list.appendChild(div);
+            }
+
+            if (owned.length === 0 && !currentUserObj.prefix) {
+                list.innerHTML = '<p style="color:#666; font-size:13px; text-align:center;">У вас пока нет купленных префиксов.</p>';
+            }
+        }
+
+        // Надеть префикс
+        function equipPrefix(prefix) {
+            currentUserObj.prefix = prefix;
+            updateUserInDB();
+            renderPrefix(prefix);
+            renderOwnedPrefixes();
+            alert("Префикс обновлен!");
+        }
+
+        // Покупка префикса (Имитация)
+        function buyPrefix(prefix, price) {
+            let owned = currentUserObj.ownedPrefixes || [];
+            if (owned.includes(prefix)) {
+                alert("У вас уже есть этот префикс!");
+                return;
+            }
+            
+            // Тут должна быть оплата, но мы просто выдаем
+            if(confirm(`Купить префикс ${prefix.toUpperCase()} за ${price} ₽?\n\n(Оплата имитируется, префикс будет выдан бесплатно для теста)`)) {
+                owned.push(prefix);
+                currentUserObj.ownedPrefixes = owned;
+                updateUserInDB();
+                alert("Префикс успешно приобретен! Зайдите в настройки, чтобы надеть его.");
+                renderOwnedPrefixes();
+            }
+        }
+
+        // Настройки профиля
+        function previewAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("Файл слишком большой! Максимум 2МБ.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentUserObj.avatar = e.target.result; // Base64
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveProfileSettings() {
+            currentUserObj.bio = document.getElementById('profile-bio').value;
+            updateUserInDB();
+            
+            if (currentUserObj.avatar) {
+                let av = document.getElementById('user-avatar');
+                av.style.backgroundImage = `url(${currentUserObj.avatar})`;
+                av.innerText = '';
+            }
+            document.getElementById('dash-bio').innerText = currentUserObj.bio || "Описание пока не добавлено...";
+            alert("Профиль успешно обновлен!");
+        }
+
+        // Вспомогательные функции
+        function updateUserInDB() {
+            let index = allUsers.findIndex(u => u.name === currentUser);
+            if (index !== -1) {
+                allUsers[index] = currentUserObj;
+                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+            }
+        }
+
         function switchTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
             document.getElementById('tab-' + tabId).classList.add('active');
             if (element) element.classList.add('active');
         }
 
         function logout() {
             localStorage.removeItem('cherry_user');
-            localStorage.removeItem('cherry_pass');
-            localStorage.removeItem('cherry_premium');
             window.location.href = "index.html";
         }
 
         function activateKey() {
             const key = document.getElementById('license-key').value;
-            const alertBox = document.getElementById('activate-alert');
-            
-            if (key.length < 5) {
-                alertBox.innerText = "Введите корректный ключ!";
-                alertBox.style.display = 'block';
-                setTimeout(() => alertBox.style.display = 'none', 3000);
-                return;
-            }
-
+            if (key.length < 5) { alert("Введите корректный ключ!"); return; }
             localStorage.setItem('cherry_premium', 'true');
             setPremiumUI();
-            
-            alertBox.className = 'alert alert-success';
-            alertBox.innerText = "Лицензия успешно активирована!";
-            alertBox.style.display = 'block';
-            document.getElementById('license-key').value = '';
-            
-            setTimeout(() => {
-                alertBox.style.display = 'none';
-                switchTab('dashboard', document.querySelectorAll('.nav-item')[1]);
-            }, 2000);
+            alert("Лицензия успешно активирована!");
         }
 
         function setPremiumUI() {
             document.getElementById('sidebar-status').className = 'user-status premium';
             document.getElementById('sidebar-status').innerText = 'Premium';
-            document.getElementById('dash-status').className = 'user-status premium';
-            document.getElementById('dash-status').innerText = 'Premium';
-            
             document.getElementById('lic-plan').innerText = 'Premium (Месяц)';
             document.getElementById('lic-plan').style.color = 'var(--primary-light)';
-            
-            const date = new Date();
-            date.setMonth(date.getMonth() + 1);
+            const date = new Date(); date.setMonth(date.getMonth() + 1);
             document.getElementById('lic-date').innerText = date.toLocaleDateString('ru-RU');
-            
             const badge = document.getElementById('lic-status-badge');
             badge.className = 'user-status premium';
             badge.innerText = 'Активна';
-        }
-
-        function saveSettings() {
-            const email = document.getElementById('settings-email').value;
-            if (email) {
-                document.getElementById('dash-email').innerText = email;
-            }
-            alert('Настройки сохранены!');
         }
     </script>
 </body>
