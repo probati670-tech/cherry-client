@@ -217,10 +217,11 @@
         // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
         function initDB() {
             let defaultUsers = [
-                { id: 1, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
-                { id: 2, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
-                { id: 3, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
-                { id: 4, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
+                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456" },
+                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
+                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
+                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
+                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
             ];
             if(!localStorage.getItem('cherry_all_users')) {
                 localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
@@ -257,7 +258,6 @@
             document.getElementById('email-step-1').style.display = 'none'; document.getElementById('email-step-2').style.display = 'block'; document.getElementById('msg-email-sent').style.display = 'block';
         }
         
-        // СОХРАНЕНИЕ В БАЗУ ПРИ РЕГИСТРАЦИИ (Gmail)
         function verifyEmailCode() {
             let code = document.getElementById('email-code').value; 
             let captchaAns = parseInt(document.getElementById('captcha-a-email').value); 
@@ -275,7 +275,6 @@
             finishLogin(email);
         }
 
-        // СОХРАНЕНИЕ В БАЗУ ПРИ РЕГИСТРАЦИИ (Свой логин)
         function registerCustom() {
             let login = document.getElementById('reg-login-input').value; 
             let pass = document.getElementById('reg-pass-input').value; 
@@ -302,7 +301,6 @@
             finishLogin(login);
         }
 
-        // ПРОВЕРКА ПАРОЛЯ ПРИ ВХОДЕ ИЗ БАЗЫ
         function doLogin() {
             let user = document.getElementById('login-user').value; 
             let pass = document.getElementById('login-pass').value; 
