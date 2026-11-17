@@ -36,7 +36,7 @@
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
         .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
         .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
-        .tg-buttons { display: flex; gap: 15px; }
+        .tg-buttons { display: flex; gap: 15px; align-items: center; }
         .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .tg-btn:hover { border-color: #ff2a75; color: #ff2a75; }
         .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -83,7 +83,8 @@
                     <li>Без рекламы</li>
                     <li>Ранний доступ к Beta версиям</li>
                 </ul>
-                <a href="#" class="btn-download-premium">👑 Купить Premium</a>
+                <!-- Кнопка с заглушкой -->
+                <a href="#" class="btn-download-premium" onclick="event.preventDefault(); showPaymentStub();">👑 Купить Premium</a>
                 <div class="version-info">Подписка от 399 ₽ / месяц</div>
             </div>
         </div>
@@ -100,6 +101,7 @@
                 <div class="tg-buttons">
                     <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram канал</a>
                     <a href="https://t.me/chatcherryclient" target="_blank" class="tg-btn">✈️ Telegram чат</a>
+                    <a href="mailto:support@cherry-client.com" class="tg-btn">📧 Email</a>
                 </div>
             </div>
         </div>
@@ -110,7 +112,16 @@
                 <a href="support.html">Поддержка</a>
             </div>
             <div>© 2026 Cherry Client. Все права защищены.</div>
+            <!-- КОДОВОЕ СЛОВО ДЛЯ БАНКА -->
+            <div style="font-size: 11px; color: #444; margin-top: 10px;">Кодовое слово для верификации: Agetalp</div>
         </div>
     </footer>
+
+    <!-- Скрипт заглушки для банка -->
+    <script>
+        function showPaymentStub() {
+            alert("Оплата временно недоступна.\n\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой для оформления заказа: support@cherry-client.com или @cherryclient");
+        }
+    </script>
 </body>
 </html>
