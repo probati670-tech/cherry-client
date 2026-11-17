@@ -27,7 +27,6 @@
         .menu a.login-btn { background: linear-gradient(45deg, var(--primary), var(--primary-light)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); }
         .menu a.login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 42, 117, 0.6); }
 
-        /* Кнопка Админки */
         .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4); }
         .menu a.admin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6); }
 
@@ -214,6 +213,21 @@
         for (let i = 0; i < 30; i++) cherries.push(new Cherry());
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); cherries.forEach(c => { c.update(); c.draw(); }); requestAnimationFrame(animate); }
         animate();
+        
+        // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
+        function initDB() {
+            let defaultUsers = [
+                { id: 1, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
+                { id: 2, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
+                { id: 3, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
+                { id: 4, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
+            ];
+            if(!localStorage.getItem('cherry_all_users')) {
+                localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
+            }
+        }
+        initDB();
+
         let currentCaptchaEmail = 0; let currentCaptchaLogin = 0;
         
         function openModal() { 
@@ -242,21 +256,69 @@
             if(!email.includes('@gmail.com')) { alert("Введите корректную почту Gmail (@gmail.com)"); return; }
             document.getElementById('email-step-1').style.display = 'none'; document.getElementById('email-step-2').style.display = 'block'; document.getElementById('msg-email-sent').style.display = 'block';
         }
+        
+        // СОХРАНЕНИЕ В БАЗУ ПРИ РЕГИСТРАЦИИ (Gmail)
         function verifyEmailCode() {
-            let code = document.getElementById('email-code').value; let captchaAns = parseInt(document.getElementById('captcha-a-email').value); let email = document.getElementById('reg-email-input').value; let error = document.getElementById('err-email');
+            let code = document.getElementById('email-code').value; 
+            let captchaAns = parseInt(document.getElementById('captcha-a-email').value); 
+            let email = document.getElementById('reg-email-input').value; 
+            let error = document.getElementById('err-email');
+            
             if(code !== '1234' || captchaAns !== currentCaptchaEmail) { error.style.display = 'block'; generateCaptcha('email'); return; }
-            localStorage.setItem('cherry_user', email); localStorage.setItem('cherry_pass', 'gmail123'); finishLogin(email);
+            
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users'));
+            if(!allUsers.find(u => u.name === email)) {
+                allUsers.push({ id: Date.now(), name: email, role: "user", sub: "free", pass: "gmail123" });
+                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+            }
+            localStorage.setItem('cherry_user', email); 
+            finishLogin(email);
         }
+
+        // СОХРАНЕНИЕ В БАЗУ ПРИ РЕГИСТРАЦИИ (Свой логин)
         function registerCustom() {
-            let login = document.getElementById('reg-login-input').value; let pass = document.getElementById('reg-pass-input').value; let captchaAns = parseInt(document.getElementById('captcha-a-login').value); let error = document.getElementById('err-login');
-            let loginRegex = /^[A-ZА-Я][a-zа-я]+_[A-ZА-Я][a-zа-я]+$/; if(!loginRegex.test(login)) { alert("Логин должен быть в формате: Имя_Фамилия. Пример: Ivan_Ivanov"); return; }
-            let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; if(!passRegex.test(pass)) { alert("Пароль слишком простой! Нужно минимум 8 символов, буква и цифра."); return; }
+            let login = document.getElementById('reg-login-input').value; 
+            let pass = document.getElementById('reg-pass-input').value; 
+            let captchaAns = parseInt(document.getElementById('captcha-a-login').value); 
+            let error = document.getElementById('err-login');
+            
+            let loginRegex = /^[A-ZА-Я][a-zа-я]+_[A-ZА-Я][a-zа-я]+$/; 
+            if(!loginRegex.test(login)) { alert("Логин должен быть в формате: Имя_Фамилия. Пример: Ivan_Ivanov"); return; }
+            
+            let passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; 
+            if(!passRegex.test(pass)) { alert("Пароль слишком простой! Нужно минимум 8 символов, буква и цифра."); return; }
+            
             if(captchaAns !== currentCaptchaLogin) { error.style.display = 'block'; generateCaptcha('login'); return; }
-            localStorage.setItem('cherry_user', login); localStorage.setItem('cherry_pass', pass); finishLogin(login);
+            
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users'));
+            if(allUsers.find(u => u.name === login)) {
+                alert("Пользователь с таким логином уже существует!");
+                return;
+            }
+            
+            allUsers.push({ id: Date.now(), name: login, role: "user", sub: "free", pass: pass });
+            localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+            localStorage.setItem('cherry_user', login); 
+            finishLogin(login);
         }
+
+        // ПРОВЕРКА ПАРОЛЯ ПРИ ВХОДЕ ИЗ БАЗЫ
         function doLogin() {
-            let user = document.getElementById('login-user').value; let pass = document.getElementById('login-pass').value; let error = document.getElementById('err-auth'); let savedUser = localStorage.getItem('cherry_user'); let savedPass = localStorage.getItem('cherry_pass');
-            if(user === savedUser && pass === savedPass) { finishLogin(user); } else { error.style.display = 'block'; }
+            let user = document.getElementById('login-user').value; 
+            let pass = document.getElementById('login-pass').value; 
+            let error = document.getElementById('err-auth'); 
+            
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            let userObj = allUsers.find(u => u.name === user && u.pass === pass);
+            
+            if(userObj) { 
+                localStorage.setItem('cherry_user', userObj.name);
+                if(userObj.sub === 'premium') { localStorage.setItem('cherry_premium', 'true'); } 
+                else { localStorage.removeItem('cherry_premium'); }
+                finishLogin(userObj.name); 
+            } else { 
+                error.style.display = 'block'; 
+            }
         }
         
         function finishLogin(userName) {
@@ -284,19 +346,7 @@
                 navAuth.href = "profile.html";
                 navAuth.onclick = null; 
 
-                // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ДЛЯ АДМИНКИ ---
-                let defaultUsers = [
-                    { id: 1, name: "Admins_Team", role: "admin", sub: "premium" },
-                    { id: 2, name: "Ivan_Ivanov", role: "user", sub: "free" },
-                    { id: 3, name: "Ligems", role: "user", sub: "premium" },
-                    { id: 4, name: "Test_Manager", role: "user", sub: "free" }
-                ];
-                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || defaultUsers;
-                if(!localStorage.getItem('cherry_all_users')) {
-                    localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
-                }
-
-                // Проверка на Админа
+                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 let userObj = allUsers.find(u => u.name === savedUser);
                 if(userObj && userObj.role === 'admin') {
                     navAdmin.style.display = 'block';
