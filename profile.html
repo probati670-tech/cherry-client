@@ -228,6 +228,19 @@
         }
 
         window.onload = function() {
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            let userObj = allUsers.find(u => u.name === currentUser);
+
+            // ПРОВЕРКА НА БАН
+            if (userObj && userObj.status === 'banned') {
+                alert("Ваш аккаунт заблокирован администратором.");
+                localStorage.removeItem('cherry_user');
+                localStorage.removeItem('cherry_pass');
+                localStorage.removeItem('cherry_premium');
+                window.location.href = "index.html";
+                return;
+            }
+
             document.getElementById('sidebar-username').innerText = currentUser;
             document.getElementById('welcome-name').innerText = currentUser;
             document.getElementById('dash-username').innerText = currentUser;
@@ -237,20 +250,6 @@
                 setPremiumUI();
             }
 
-            // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
-            let defaultUsers = [
-                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456" },
-                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
-                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
-                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
-                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
-            ];
-            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || defaultUsers;
-            if(!localStorage.getItem('cherry_all_users')) {
-                localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
-            }
-
-            let userObj = allUsers.find(u => u.name === currentUser);
             if (userObj && userObj.role === 'admin') {
                 document.getElementById('sidebar-admin').style.display = 'flex';
             }
