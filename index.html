@@ -217,11 +217,11 @@
         // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
         function initDB() {
             let defaultUsers = [
-                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456" },
-                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
-                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
-                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
-                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
+                { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456", status: "active" },
+                { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin", status: "active" },
+                { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234", status: "active" },
+                { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234", status: "active" },
+                { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345", status: "active" }
             ];
             if(!localStorage.getItem('cherry_all_users')) {
                 localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
@@ -268,7 +268,7 @@
             
             let allUsers = JSON.parse(localStorage.getItem('cherry_all_users'));
             if(!allUsers.find(u => u.name === email)) {
-                allUsers.push({ id: Date.now(), name: email, role: "user", sub: "free", pass: "gmail123" });
+                allUsers.push({ id: Date.now(), name: email, role: "user", sub: "free", pass: "gmail123", status: "active" });
                 localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
             }
             localStorage.setItem('cherry_user', email); 
@@ -295,12 +295,13 @@
                 return;
             }
             
-            allUsers.push({ id: Date.now(), name: login, role: "user", sub: "free", pass: pass });
+            allUsers.push({ id: Date.now(), name: login, role: "user", sub: "free", pass: pass, status: "active" });
             localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
             localStorage.setItem('cherry_user', login); 
             finishLogin(login);
         }
 
+        // ОБНОВЛЕННЫЙ ВХОД С ПРОВЕРКОЙ БАНА
         function doLogin() {
             let user = document.getElementById('login-user').value; 
             let pass = document.getElementById('login-pass').value; 
@@ -310,6 +311,12 @@
             let userObj = allUsers.find(u => u.name === user && u.pass === pass);
             
             if(userObj) { 
+                // ПРОВЕРКА НА БАН
+                if(userObj.status === 'banned') {
+                    alert("Ваш аккаунт заблокирован администратором.");
+                    return;
+                }
+
                 localStorage.setItem('cherry_user', userObj.name);
                 if(userObj.sub === 'premium') { localStorage.setItem('cherry_premium', 'true'); } 
                 else { localStorage.removeItem('cherry_premium'); }
@@ -335,6 +342,19 @@
             let navAdmin = document.getElementById('nav-admin');
             
             if(savedUser) { 
+                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                let userObj = allUsers.find(u => u.name === savedUser);
+
+                // ПРОВЕРКА НА БАН ПРИ ЗАГРУЗКЕ
+                if (userObj && userObj.status === 'banned') {
+                    alert("Ваш аккаунт был заблокирован администратором.");
+                    localStorage.removeItem('cherry_user');
+                    localStorage.removeItem('cherry_pass');
+                    localStorage.removeItem('cherry_premium');
+                    window.location.reload();
+                    return;
+                }
+
                 navAuth.innerText = "Личный кабинет (" + savedUser + ")"; 
                 navAuth.classList.remove('login-btn'); 
                 navAuth.style.background = "linear-gradient(45deg, var(--primary), var(--primary-light))"; 
@@ -344,8 +364,6 @@
                 navAuth.href = "profile.html";
                 navAuth.onclick = null; 
 
-                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-                let userObj = allUsers.find(u => u.name === savedUser);
                 if(userObj && userObj.role === 'admin') {
                     navAdmin.style.display = 'block';
                 }
