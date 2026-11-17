@@ -7,7 +7,6 @@
     <style>
         :root {
             --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; --card-bg: rgba(20, 10, 15, 0.7);
-            --admin-gold: #ff9800;
         }
         * { box-sizing: border-box; }
         body { 
@@ -25,7 +24,6 @@
         .menu a { color: #ccc; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; cursor: pointer; }
         .menu a:hover, .menu a.active { color: var(--primary-light); }
         
-        /* Кнопка Личного Кабинета */
         .menu a.login-btn { background: linear-gradient(45deg, var(--primary), var(--primary-light)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); }
         .menu a.login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 42, 117, 0.6); }
 
@@ -101,10 +99,7 @@
                 <a href="features.html">Документация</a>
                 <a href="compare.html">Сравнение</a>
                 
-                <!-- КНОПКА АДМИНКИ (Скрыта по умолчанию) -->
                 <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
-                
-                <!-- КНОПКА ЛК -->
                 <a href="#" class="login-btn" id="nav-auth" onclick="openModal()">Вход / Регистрация</a>
             </div>
         </div>
@@ -289,12 +284,22 @@
                 navAuth.href = "profile.html";
                 navAuth.onclick = null; 
 
+                // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ДЛЯ АДМИНКИ ---
+                let defaultUsers = [
+                    { id: 1, name: "Admins_Team", role: "admin", sub: "premium" },
+                    { id: 2, name: "Ivan_Ivanov", role: "user", sub: "free" },
+                    { id: 3, name: "Ligems", role: "user", sub: "premium" },
+                    { id: 4, name: "Test_Manager", role: "user", sub: "free" }
+                ];
+                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || defaultUsers;
+                if(!localStorage.getItem('cherry_all_users')) {
+                    localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
+                }
+
                 // Проверка на Админа
-                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 let userObj = allUsers.find(u => u.name === savedUser);
-                
                 if(userObj && userObj.role === 'admin') {
-                    navAdmin.style.display = 'block'; // Показываем кнопку админки
+                    navAdmin.style.display = 'block';
                 }
             }
         };
