@@ -34,6 +34,9 @@
         .check-result p { margin: 5px 0; font-size: 14px; color: #ccc; }
         .check-result span { color: #ff2a75; font-weight: bold; }
 
+        .alt-contact { text-align: center; margin-top: 30px; font-size: 14px; color: #aaa; }
+        .alt-contact a { color: #ff2a75; text-decoration: none; font-weight: bold; }
+
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
         .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
@@ -68,8 +71,8 @@
                     <input type="text" class="form-control" id="ticket-nick" placeholder="Введите ваш ник" required>
                 </div>
                 <div class="form-group">
-                    <label>Связь с вами (Telegram / Discord)</label>
-                    <input type="text" class="form-control" id="ticket-contact" placeholder="@username" required>
+                    <label>Связь с вами (Telegram / Email)</label>
+                    <input type="text" class="form-control" id="ticket-contact" placeholder="@username или email" required>
                 </div>
                 <div class="form-group">
                     <label>Категория обращения</label>
@@ -112,7 +115,7 @@
         </div>
 
         <div class="alt-contact">
-            Или напишите нам напрямую в <a href="https://t.me/chatcherryclient" target="_blank">Telegram</a>
+            Или напишите нам напрямую на почту <a href="mailto:support@cherry-client.com">support@cherry-client.com</a> или в <a href="https://t.me/cherryclient" target="_blank">Telegram</a>.
         </div>
     </div>
 
@@ -137,6 +140,8 @@
                 <a href="support.html">Поддержка</a>
             </div>
             <div>© 2026 Cherry Client. Все права защищены.</div>
+            <!-- КОДОВОЕ СЛОВО ДЛЯ БАНКА -->
+            <div style="font-size: 11px; color: #444; margin-top: 10px;">Кодовое слово для верификации: Agetalp</div>
         </div>
     </footer>
 
