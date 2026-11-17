@@ -81,7 +81,7 @@
     <div class="main-content">
         <div class="page-header">
             <h1>Управление проектом</h1>
-            <div style="color: #888; font-size: 14px;">Вы вошли как: <strong style="color: var(--primary-light);">Admins_Team</strong></div>
+            <div style="color: #888; font-size: 14px;">Вы вошли как: <strong style="color: var(--primary-light);" id="current-admin-name">...</strong></div>
         </div>
 
         <div class="grid-stats">
@@ -140,7 +140,16 @@
     </div>
 
     <script>
-        // Инициализация фейковых данных (имитация базы данных)
+        // --- 1. ПРОВЕРКА ДОСТУПА ---
+        let currentUser = localStorage.getItem('cherry_user');
+        
+        // Если не залогинен — на главную
+        if (!currentUser) {
+            alert("Доступ запрещен. Пожалуйста, авторизуйтесь.");
+            window.location.href = "index.html";
+        }
+
+        // Инициализация фейковых данных (имитация базы данных для демонстрации)
         let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [
             { id: 1, name: "Admins_Team", role: "admin", sub: "premium" },
             { id: 2, name: "Ivan_Ivanov", role: "user", sub: "free" },
@@ -148,11 +157,23 @@
             { id: 4, name: "Test_Manager", role: "user", sub: "free" }
         ];
 
-        // Сохраняем в localStorage для имитации БД
+        // Сохраняем в localStorage, если массива еще нет
         if(!localStorage.getItem('cherry_all_users')) {
             localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
         }
 
+        // Проверяем, есть ли текущий пользователь в базе и является ли он админом
+        let userObj = allUsers.find(u => u.name === currentUser);
+        
+        if (!userObj || userObj.role !== 'admin') {
+            alert("Доступ запрещен. У вас нет прав администратора.");
+            window.location.href = "index.html";
+        }
+
+        // Вставляем имя админа в шапку
+        document.getElementById('current-admin-name').innerText = currentUser;
+
+        // --- 2. ЛОГИКА ПАНЕЛИ ---
         let currentEditingUserId = null;
 
         // Рендер таблицы
@@ -188,7 +209,7 @@
             document.getElementById('stat-premium-users').innerText = premiumCount;
         }
 
-        // Открытие модалки
+        // Открытие модалки редактирования
         function openEditModal(index) {
             currentEditingUserId = index;
             const user = allUsers[index];
@@ -200,6 +221,7 @@
             document.getElementById('edit-modal').classList.add('active');
         }
 
+        // Закрытие модалки
         function closeModal() {
             document.getElementById('edit-modal').classList.remove('active');
             currentEditingUserId = null;
@@ -219,8 +241,7 @@
             // Сохраняем в имитацию БД
             localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
 
-            // Если мы изменили сами себя, обновим глобальный статус
-            let currentUser = localStorage.getItem('cherry_user');
+            // Если мы изменили сами себя, обновим глобальный статус Premium для ЛК
             if(currentUser === allUsers[currentEditingUserId].name) {
                 if(newSub === 'premium') {
                     localStorage.setItem('cherry_premium', 'true');
@@ -231,7 +252,7 @@
 
             closeModal();
             renderTable();
-            alert('Данные пользователя обновлены!');
+            alert('Данные пользователя успешно обновлены!');
         }
 
         // Запуск при загрузке
