@@ -93,7 +93,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Логин</th>
-                        <th>Пароль</th> <!-- ДОБАВЛЕНО -->
+                        <th>Пароль</th>
                         <th>Роль</th>
                         <th>Подписка</th>
                         <th>Действия</th>
@@ -127,6 +127,20 @@
     </div>
 
     <script>
+        // --- ИНИЦИАЛИЗАЦИЯ БАЗЫ ---
+        let defaultUsers = [
+            { id: 1, name: "Test_Admin", role: "admin", sub: "premium", pass: "Test123456" },
+            { id: 2, name: "Admins_Team", role: "admin", sub: "premium", pass: "admin" },
+            { id: 3, name: "Ivan_Ivanov", role: "user", sub: "free", pass: "1234" },
+            { id: 4, name: "Ligems", role: "user", sub: "premium", pass: "1234" },
+            { id: 5, name: "Test_Manager", role: "user", sub: "free", pass: "Test12345" }
+        ];
+        
+        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || defaultUsers;
+        if(!localStorage.getItem('cherry_all_users')) {
+            localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers));
+        }
+
         let currentUser = localStorage.getItem('cherry_user');
         
         if (!currentUser) {
@@ -134,7 +148,6 @@
             window.location.href = "index.html";
         }
 
-        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
         let userObj = allUsers.find(u => u.name === currentUser);
         
         if (!userObj || userObj.role !== 'admin') {
@@ -165,7 +178,7 @@
                 tr.innerHTML = `
                     <td style="color:#666;">#${user.id}</td>
                     <td style="font-weight:600;">${user.name}</td>
-                    <td style="color:#ff9800; font-family:monospace;">${user.pass || '—'}</td> <!-- ВЫВОД ПАРОЛЯ -->
+                    <td style="color:#ff9800; font-family:monospace;">${user.pass || '—'}</td>
                     <td>${roleBadge}</td>
                     <td>${subBadge}</td>
                     <td><button class="btn-edit" onclick="openEditModal(${index})">✏️ Изменить</button></td>
