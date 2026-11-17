@@ -33,12 +33,15 @@
         .btn-download-premium:hover { box-shadow: 0 0 30px rgba(255,42,117,0.7); }
         .version-info { text-align: center; font-size: 12px; color: #555; margin-top: 15px; }
 
-        /* Стили для модалки тарифов */
+        /* --- СТИЛИ ДЛЯ МОДАЛЬНЫХ ОКОН --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 2, 3, 0.9); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
         .modal-overlay.active { display: flex; }
-        .pricing-modal { background: #110a0d; border: 1px solid #ff2a75; border-radius: 20px; padding: 40px; width: 100%; max-width: 900px; box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 42, 117, 0.15); position: relative; }
+        .pricing-modal, .checkout-modal { background: #110a0d; border: 1px solid #ff2a75; border-radius: 20px; padding: 40px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 42, 117, 0.15); position: relative; }
+        .pricing-modal { max-width: 900px; }
+        .checkout-modal { max-width: 500px; }
+        
         .close-modal { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; transition: 0.3s; } .close-modal:hover { color: #ff2a75; }
-        .pricing-modal h2 { text-align: center; font-size: 28px; margin-top: 0; margin-bottom: 30px; color: #ff7eb3; }
+        .pricing-modal h2, .checkout-modal h2 { text-align: center; font-size: 26px; margin-top: 0; margin-bottom: 30px; color: #ff7eb3; }
         
         .plans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
         @media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr 1fr; } }
@@ -50,11 +53,27 @@
         .plan-card .price { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 5px; }
         .plan-card .discount { font-size: 12px; color: #4CAF50; font-weight: 700; }
         
-        .modal-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #22151a; padding-top: 20px; }
-        .total-price { font-size: 18px; }
+        /* Стили для чекаута */
+        .checkout-section { margin-bottom: 25px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; }
+        .checkout-section h4 { margin: 0 0 15px 0; color: #fff; font-size: 16px; }
+        .checkout-list { list-style: none; padding: 0; margin: 0; }
+        .checkout-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 14px; color: #aaa; }
+        .checkout-list li::before { content: "✔"; color: #ff2a75; font-weight: bold; }
+        .duration-info { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
+        .duration-info span:last-child { color: #ff7eb3; font-weight: 700; }
+        
+        .input-group { margin-bottom: 25px; }
+        .input-group label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 15px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 10px; font-family: 'Montserrat'; outline: none; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
+        .input-group input:focus { border-color: #ff2a75; box-shadow: 0 0 10px rgba(255,42,117,0.2); }
+
+        .modal-footer { border-top: 1px solid #22151a; padding-top: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .total-price { text-align: center; font-size: 16px; }
         .total-price span { color: #ff7eb3; font-weight: 900; font-size: 24px; }
-        .btn-pay { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 15px 40px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat'; box-shadow: 0 4px 15px rgba(255,42,117,0.3); }
+        .btn-pay { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat'; box-shadow: 0 4px 15px rgba(255,42,117,0.3); width: 100%; }
         .btn-pay:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
+        .btn-back { background: none; border: none; color: #888; cursor: pointer; font-family: 'Montserrat'; font-size: 14px; transition: 0.3s; }
+        .btn-back:hover { color: #fff; }
 
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -109,7 +128,6 @@
                     <li>Без рекламы</li>
                     <li>Ранний доступ к Beta версиям</li>
                 </ul>
-                <!-- Кнопка теперь открывает модалку -->
                 <a href="#" class="btn-download-premium" onclick="event.preventDefault(); openPricingModal();">👑 Купить Premium</a>
                 <div class="version-info">Подписка от 399 ₽ / месяц</div>
             </div>
@@ -142,42 +160,69 @@
         </div>
     </footer>
 
-    <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА ТАРИФА -->
+    <!-- ШАГ 1: МОДАЛЬНОЕ ОКНО ВЫБОРА ТАРИФА -->
     <div class="modal-overlay" id="pricing-modal">
         <div class="pricing-modal">
-            <span class="close-modal" onclick="closePricingModal()">&times;</span>
+            <span class="close-modal" onclick="closeModals()">&times;</span>
             <h2>Выберите тариф Premium</h2>
             
             <div class="plans-grid" id="plans-grid">
-                <!-- Тариф на 1 месяц -->
-                <div class="plan-card active" onclick="selectPlan(this, '1 месяц', 399, '1')">
+                <div class="plan-card" onclick="selectPlan(this, '1 месяц', 399, 1)">
                     <h4>1 месяц</h4>
                     <div class="price">399 ₽</div>
                     <div class="discount">399 ₽ / мес</div>
                 </div>
-                <!-- Тариф на 3 месяца -->
-                <div class="plan-card" onclick="selectPlan(this, '3 месяца', 1099, '3')">
+                <div class="plan-card" onclick="selectPlan(this, '3 месяца', 1099, 3)">
                     <h4>3 месяца</h4>
                     <div class="price">1 099 ₽</div>
                     <div class="discount">-8% (366 ₽/мес)</div>
                 </div>
-                <!-- Тариф на 6 месяцев -->
-                <div class="plan-card" onclick="selectPlan(this, '6 месяцев', 1999, '6')">
+                <div class="plan-card" onclick="selectPlan(this, '6 месяцев', 1999, 6)">
                     <h4>6 месяцев</h4>
                     <div class="price">1 999 ₽</div>
                     <div class="discount">-16% (333 ₽/мес)</div>
                 </div>
-                <!-- Тариф на 12 месяцев -->
-                <div class="plan-card" onclick="selectPlan(this, '12 месяцев', 3499, '12')">
+                <div class="plan-card" onclick="selectPlan(this, '12 месяцев', 3499, 12)">
                     <h4>12 месяцев</h4>
                     <div class="price">3 499 ₽</div>
                     <div class="discount">-27% (291 ₽/мес)</div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ШАГ 2: МОДАЛЬНОЕ ОКНО ОФОРМЛЕНИЯ (ЧЕКАУТ) -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="checkout-modal">
+            <span class="close-modal" onclick="closeModals()">&times;</span>
+            <h2>Оформление заказа</h2>
+            
+            <div class="checkout-section">
+                <h4>Что вы получите:</h4>
+                <ul class="checkout-list">
+                    <li>Доступ к Premium-функциям клиента (Aimbot, TAS, Fly, Misc)</li>
+                    <li>Приоритетная поддержка</li>
+                    <li>Отсутствие рекламы</li>
+                    <li>Ранний доступ к Beta версиям</li>
+                </ul>
+            </div>
+
+            <div class="checkout-section">
+                <h4>Детали подписки:</h4>
+                <div class="duration-info"><span>Тариф:</span> <span id="checkout-plan-name">1 месяц</span></div>
+                <div class="duration-info"><span>Доступ предоставляется:</span> <span id="checkout-duration">30 дней</span></div>
+                <div class="duration-info"><span>Активация до:</span> <span id="checkout-end-date">...</span></div>
+            </div>
+
+            <div class="input-group">
+                <label>Email для получения чека и данных о заказе</label>
+                <input type="email" id="checkout-email" placeholder="example@mail.com">
+            </div>
 
             <div class="modal-footer">
-                <div class="total-price">Итого: <span id="total-price-display">399</span> ₽</div>
-                <button class="btn-pay" onclick="confirmPayment()">Перейти к оплате</button>
+                <div class="total-price">Сумма к оплате: <span id="checkout-price">399</span> ₽</div>
+                <button class="btn-pay" onclick="processPayment()">Оплатить</button>
+                <button class="btn-back" onclick="backToPlans()">← Выбрать другой тариф</button>
             </div>
         </div>
     </div>
@@ -209,11 +254,11 @@
         };
 
         // --- ЛОГИКА ТАРИФОВ ---
-        let selectedPlanName = "1 месяц";
-        let selectedPlanPrice = 399;
+        let selectedPlanName = "";
+        let selectedPlanPrice = 0;
+        let selectedPlanMonths = 0;
 
         function openPricingModal() {
-            // Проверяем, авторизован ли пользователь перед покупкой
             if (!localStorage.getItem('cherry_user')) {
                 alert("Пожалуйста, войдите в аккаунт или зарегистрируйтесь, чтобы приобрести Premium.");
                 window.location.href = "index.html";
@@ -222,25 +267,56 @@
             document.getElementById('pricing-modal').classList.add('active');
         }
 
-        function closePricingModal() {
+        function closeModals() {
             document.getElementById('pricing-modal').classList.remove('active');
+            document.getElementById('checkout-modal').classList.remove('active');
         }
 
+        // Шаг 1: Выбор тарифа
         function selectPlan(element, planName, price, months) {
-            // Убираем активный класс у всех
+            // Убираем активный класс у всех карточек
             document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active'));
-            // Добавляем активный класс выбранной
+            // Добавляем выбранной
             element.classList.add('active');
             
-            // Обновляем данные
+            // Сохраняем данные
             selectedPlanName = planName;
             selectedPlanPrice = price;
-            document.getElementById('total-price-display').innerText = price.toLocaleString('ru-RU');
+            selectedPlanMonths = months;
+
+            // Подготавливаем данные для окна чекаута
+            document.getElementById('checkout-plan-name').innerText = planName;
+            document.getElementById('checkout-price').innerText = price.toLocaleString('ru-RU');
+            
+            // Высчитываем дату окончания
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + months);
+            document.getElementById('checkout-duration').innerText = months + (months === 1 ? " месяц" : (months > 1 && months < 5 ? " месяца" : " месяцев"));
+            document.getElementById('checkout-end-date').innerText = endDate.toLocaleDateString('ru-RU');
+
+            // Переключаем окна
+            document.getElementById('pricing-modal').classList.remove('active');
+            document.getElementById('checkout-modal').classList.add('active');
         }
 
-        function confirmPayment() {
-            // Показываем заглушку, как требует банк
-            alert(`Вы выбрали тариф "${selectedPlanName}" на сумму ${selectedPlanPrice} ₽.\n\nОплата временно недоступна.\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой: support@cherry-client.com или @nexnayyy`);
+        // Шаг 2: Возврат назад к тарифам
+        function backToPlans() {
+            document.getElementById('checkout-modal').classList.remove('active');
+            document.getElementById('pricing-modal').classList.add('active');
+        }
+
+        // Шаг 3: Оплата (заглушка для банка)
+        function processPayment() {
+            const email = document.getElementById('checkout-email').value;
+            
+            // Валидация почты
+            if (!email || !email.includes('@')) {
+                alert("Пожалуйста, введите корректный Email для получения чека.");
+                return;
+            }
+
+            // Тут будет запрос к API Platega
+            alert(`Заказ сформирован!\n\nТариф: ${selectedPlanName}\nСумма: ${selectedPlanPrice} ₽\nЧек будет отправлен на: ${email}\n\nОплата временно недоступна.\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой: support@cherry-client.com или @nexnayyy`);
         }
     </script>
 </body>
