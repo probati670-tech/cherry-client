@@ -70,7 +70,17 @@
         .btn-send:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; transform: none; }
 
         .login-warning { text-align: center; color: #ff9800; margin-bottom: 15px; font-weight: 600; display: none; }
-        .mute-warning { text-align: center; color: var(--danger); margin-bottom: 15px; font-weight: 700; display: none; background: rgba(255, 77, 77, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(255, 77, 77, 0.3); }
+        
+        /* Плашка с мутом и таймером */
+        .mute-warning { 
+            text-align: center; color: var(--danger); margin-bottom: 15px; font-weight: 700; 
+            display: none; background: rgba(255, 77, 77, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 77, 77, 0.3); 
+        }
+        .mute-timer { 
+            font-family: monospace; font-size: 18px; background: rgba(0,0,0,0.5); 
+            padding: 4px 10px; border-radius: 5px; margin-left: 5px; color: #fff;
+            border: 1px solid var(--danger);
+        }
     </style>
 </head>
 <body>
@@ -93,7 +103,12 @@
 
     <div class="chat-container">
         <div class="login-warning" id="login-warning">Вы должны войти в аккаунт, чтобы писать в чат.</div>
-        <div class="mute-warning" id="mute-warning">Вы заглушены на 6 часов за отправку ссылок/рекламы.</div>
+        
+        <!-- Плашка с таймером -->
+        <div class="mute-warning" id="mute-warning">
+            Вы заглушены за отправку ссылок/рекламы.<br>
+            Размут через: <span class="mute-timer" id="mute-timer">00:00:00</span>
+        </div>
         
         <div class="chat-wrapper">
             <div class="pinned-rules">
@@ -119,6 +134,7 @@
         let userObj = null;
         let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
         let isMuted = false;
+        let muteInterval = null; // Переменная для хранения таймера
 
         if (currentUser) {
             userObj = allUsers.find(u => u.name === currentUser);
@@ -145,7 +161,10 @@
                 }
 
                 if(userObj.role === 'admin') { navAdmin.style.display = 'block'; }
+                
+                // Запускаем проверку мута при загрузке
                 checkMuteStatus();
+
             } else {
                 document.getElementById('login-warning').style.display = 'block';
                 document.getElementById('chat-input').placeholder = "Войдите, чтобы писать...";
@@ -156,6 +175,7 @@
             renderChat();
         };
 
+        // Проверка мута и запуск/остановка таймера
         function checkMuteStatus() {
             if (userObj && userObj.muteUntil && userObj.muteUntil > Date.now()) {
                 isMuted = true;
@@ -163,28 +183,72 @@
                 document.getElementById('chat-input').disabled = true;
                 document.getElementById('chat-input').placeholder = "Вы не можете писать (мут)...";
                 document.getElementById('btn-send').disabled = true;
+
+                // Запускаем таймер, если он еще не запущен
+                if (!muteInterval) {
+                    updateMuteTimer(); // Обновляем сразу
+                    muteInterval = setInterval(updateMuteTimer, 1000); // И каждую секунду
+                }
             } else {
+                // Если мута нет или он истек
                 isMuted = false;
                 document.getElementById('mute-warning').style.display = 'none';
                 document.getElementById('chat-input').disabled = false;
+                document.getElementById('chat-input').placeholder = "Написать сообщение...";
                 document.getElementById('btn-send').disabled = false;
+
+                // Останавливаем таймер
+                if (muteInterval) {
+                    clearInterval(muteInterval);
+                    muteInterval = null;
+                }
+
+                // Очищаем muteUntil в базе, если время вышло
+                if (userObj && userObj.muteUntil) {
+                    userObj.muteUntil = null;
+                    let userIndex = allUsers.findIndex(u => u.name === currentUser);
+                    if(userIndex !== -1) {
+                        allUsers[userIndex] = userObj;
+                        localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+                    }
+                }
             }
+        }
+
+        // Обновление циферок таймера
+        function updateMuteTimer() {
+            if (!userObj || !userObj.muteUntil) return;
+
+            const remaining = userObj.muteUntil - Date.now();
+
+            if (remaining <= 0) {
+                checkMuteStatus(); // Время вышло, снимаем мут
+                return;
+            }
+
+            const totalSeconds = Math.floor(remaining / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            // Форматируем в 00:00:00
+            const timeString = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+
+            document.getElementById('mute-timer').innerText = timeString;
         }
 
         function getMessages() {
             let stored = JSON.parse(localStorage.getItem('cherry_chat')) || [];
-            
-            // ЖЕСТКИЙ ФИЛЬТР: Находим старые тестовые сообщения и удаляем их из памяти
             let filtered = stored.filter(msg => 
                 !msg.text.includes("Всем привет! Добро пожаловать в наш чат") && 
                 !msg.text.includes("Клиент топ, Aimbot работает идеально")
             );
-            
-            // Если что-то удалили, обновляем память
             if (stored.length !== filtered.length) {
                 localStorage.setItem('cherry_chat', JSON.stringify(filtered));
             }
-            
             return filtered;
         }
 
@@ -240,7 +304,7 @@
 
             if (userObj.role !== 'admin' && containsLink(text)) {
                 isFlagged = true;
-                const muteDuration = 6 * 60 * 60 * 1000;
+                const muteDuration = 6 * 60 * 60 * 1000; // 6 часов
                 userObj.muteUntil = Date.now() + muteDuration;
                 
                 let userIndex = allUsers.findIndex(u => u.name === currentUser);
@@ -249,7 +313,7 @@
                     localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
                 }
                 
-                checkMuteStatus();
+                checkMuteStatus(); // Запустит таймер
                 alert("Внимание! В вашем сообщении обнаружена ссылка. Вы получили мут на 6 часов.");
             }
 
@@ -280,7 +344,7 @@
             if (e.key === 'cherry_chat' || e.key === 'cherry_all_users') {
                 allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 if(currentUser) userObj = allUsers.find(u => u.name === currentUser);
-                checkMuteStatus();
+                checkMuteStatus(); // Обновляет мут, если открыто 2 вкладки
                 renderChat();
             }
         });
