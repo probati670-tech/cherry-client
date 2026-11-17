@@ -1,149 +1,401 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Личный кабинет - Cherry Client</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #ff2a75; --primary-light: #ff7eb3; --bg: #0a0508; --panel: #110a0d; --border: #2a1a22; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; border-bottom: 1px solid var(--border); }
-        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; } .logo span { color: var(--primary); }
-        .menu { display: flex; gap: 30px; align-items: center; }
-        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .menu a:hover { color: var(--primary-light); }
-        
-        .content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
-        .profile-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; width: 100%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; }
-        
-        .avatar-large { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; font-size: 40px; font-weight: 900; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 0 30px rgba(255,42,117,0.4); }
-        
-        .username { font-size: 28px; font-weight: 900; margin-bottom: 5px; }
-        .role-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; }
-        .role-admin { background: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid #ff9800; }
-        .role-user { background: rgba(255, 255, 255, 0.1); color: #ccc; border: 1px solid #444; }
-        
-        .info-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .info-title { color: #888; font-size: 14px; }
-        .info-value { font-size: 18px; font-weight: bold; }
-        
-        .premium-active { color: #ff2a75; text-shadow: 0 0 10px rgba(255,42,117,0.5); }
-        .premium-free { color: #aaa; }
-        
-        .btn-logout { background: transparent; color: #ff0022; border: 1px solid #ff0022; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; width: 100%; }
-        .btn-logout:hover { background: rgba(255,0,34,0.1); }
-        
-        .btn-buy { background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; width: 100%; margin-bottom: 15px; text-decoration: none; display: block; box-sizing: border-box; }
-        .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,42,117,0.4); }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Личный кабинет - Cherry Client</title>
+<style>
+:root{
+  --accent:#ff3d81; --accent-2:#ff8a5c;
+  --bg:#08060a; --bg-2:#100c13; --card:rgba(255,255,255,.04); --card-b:rgba(255,255,255,.08);
+  --text:#e9ecf5; --muted:#8b93a7; --input:#0f121b; --danger:#ff5c7a; --ok:#34d399;
+  --shadow:0 10px 40px rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --bg:#f4f5fb; --bg-2:#ffffff; --card:#ffffff; --card-b:rgba(20,24,40,.08);
+  --text:#161a2b; --muted:#6b7288; --input:#f4f5fb; --shadow:0 10px 30px rgba(30,40,90,.08);
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(600px 400px at 85% -5%,color-mix(in srgb,var(--accent) 28%,transparent),transparent),
+             radial-gradient(500px 400px at -5% 105%,color-mix(in srgb,var(--accent-2) 20%,transparent),transparent)}
+button,input,textarea,select{font:inherit;color:inherit}
+.hidden{display:none!important}
 
-        /* Футер */
-        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; display: flex; flex-direction: column; gap: 30px; }
-        .footer-top { display: flex; justify-content: space-between; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .tg-buttons { display: flex; gap: 15px; }
-        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; }
-        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .footer-bottom a { color: #888; text-decoration: none; }
-    </style>
+/* ---------- Login ---------- */
+#login{position:relative;z-index:1;min-height:100%;display:grid;place-items:center;padding:20px}
+.login-card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--card-b);backdrop-filter:blur(20px);
+  border-radius:24px;padding:36px;box-shadow:var(--shadow);animation:rise .6s cubic-bezier(.2,.8,.2,1)}
+.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;place-items:center;font-weight:800;font-size:20px;color:#fff;margin-bottom:22px;box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 50%,transparent)}
+.login-card h1{font-size:26px;margin-bottom:6px}
+.login-card p{color:var(--muted);font-size:14px;margin-bottom:24px}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ---------- Fields ---------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:12.5px;color:var(--muted);font-weight:500}
+.input{width:100%;background:var(--input);border:1px solid var(--card-b);border-radius:12px;padding:12px 14px;outline:none;transition:.2s}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+textarea.input{resize:vertical;min-height:90px}
+.btn{border:0;cursor:pointer;border-radius:12px;padding:12px 20px;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 60%,var(--accent-2)));color:#fff;
+  box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 40%,transparent)}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn-ghost{background:var(--card);border:1px solid var(--card-b)}
+.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 35%,transparent)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-block{width:100%}
+.hint{font-size:12px;color:var(--muted);margin-top:14px;text-align:center}
+
+/* ---------- Layout ---------- */
+#app{position:relative;z-index:1;display:grid;grid-template-columns:270px 1fr;min-height:100%}
+aside{background:var(--bg-2);border-right:1px solid var(--card-b);padding:24px 18px;display:flex;flex-direction:column;gap:6px;
+  position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px 22px;font-weight:700;font-size:17px}
+.brand .logo{margin:0;width:38px;height:38px;font-size:16px;border-radius:11px}
+.nav-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:none;border:0;color:var(--muted);
+  cursor:pointer;font-weight:500;text-align:left;transition:.2s;width:100%}
+.nav-btn svg{width:20px;height:20px;flex:none}
+.nav-btn:hover{background:var(--card);color:var(--text)}
+.nav-btn.active{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.side-user{margin-top:auto;display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--card-b)}
+.side-user .meta{min-width:0;flex:1}
+.side-user b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-user small{color:var(--muted);font-size:12px}
+.icon-btn{background:none;border:0;cursor:pointer;color:var(--muted);padding:6px;border-radius:8px;display:grid;place-items:center}
+.icon-btn:hover{color:var(--danger);background:var(--card)}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;
+  font-weight:700;color:#fff;overflow:hidden;flex:none;background-size:cover;background-position:center}
+
+main{padding:36px clamp(18px,4vw,56px) 80px;max-width:980px;width:100%}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:12px}
+.topbar h2{font-size:28px;letter-spacing:-.02em}
+.topbar p{color:var(--muted);font-size:14px;margin-top:4px}
+.menu-btn{display:none}
+
+section.tab{display:none;animation:rise .4s ease}
+section.tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--card-b);border-radius:20px;padding:26px;margin-bottom:20px;box-shadow:var(--shadow)}
+.card h3{font-size:17px;margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:13.5px;margin-bottom:22px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+
+/* hero profile */
+.hero{display:flex;align-items:center;gap:22px;flex-wrap:wrap;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:90px;background:linear-gradient(120deg,var(--accent),var(--accent-2));opacity:.9}
+.hero>*{position:relative}
+.hero .avatar{width:96px;height:96px;font-size:34px;border:4px solid var(--bg-2);margin-top:30px;cursor:pointer;position:relative}
+.hero .avatar:hover::after{content:"Изменить";position:absolute;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;font-size:12px;font-weight:600}
+.hero-info{margin-top:46px}
+.hero-info h3{font-size:22px}
+.badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok);margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:18px}
+.stat b{font-size:26px;display:block;letter-spacing:-.02em}
+.stat span{color:var(--muted);font-size:13px}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap}
+
+.premium{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 18%,var(--bg-2)),var(--bg-2));
+  border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.premium>div{flex:1;min-width:240px}
+/* switch */
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--card-b)}
+.row:last-child{border:0;padding-bottom:0}
+.row:first-of-type{padding-top:0}
+.row b{font-size:14.5px;display:block}
+.row small{color:var(--muted);font-size:13px}
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{display:none}
+.switch span{position:absolute;inset:0;background:color-mix(in srgb,var(--muted) 35%,transparent);border-radius:99px;cursor:pointer;transition:.25s}
+.switch span::after{content:"";position:absolute;width:20px;height:20px;top:3px;left:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.switch input:checked+span{background:var(--accent)}
+.switch input:checked+span::after{transform:translateX(20px)}
+
+/* appearance */
+.theme-pick{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:26px}
+.theme-opt{border:2px solid var(--card-b);border-radius:16px;padding:14px;cursor:pointer;background:var(--input);transition:.2s;text-align:left}
+.theme-opt.on{border-color:var(--accent)}
+.theme-opt i{display:block;height:54px;border-radius:10px;margin-bottom:10px}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:.2s;outline:2px solid transparent}
+.sw.on{outline-color:var(--text)}
+.sw:hover{transform:scale(1.1)}
+
+/* sessions */
+.sess{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--card-b)}
+.sess:last-child{border:0}
+.sess .ic{width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--accent) 14%,transparent);display:grid;place-items:center;color:var(--accent)}
+.sess div{flex:1}
+.sess b{font-size:14px;display:block}.sess small{color:var(--muted);font-size:12.5px}
+
+/* toast */
+#toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,30px);background:var(--bg-2);border:1px solid var(--card-b);
+  padding:13px 20px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.35s;z-index:100;font-size:14px;font-weight:500}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:820px){
+  #app{grid-template-columns:1fr}
+  aside{position:fixed;z-index:50;left:0;top:0;width:280px;transform:translateX(-100%);transition:.3s}
+  aside.open{transform:none;box-shadow:var(--shadow)}
+  .menu-btn{display:grid}
+  .grid2,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat{padding:14px}.stat b{font-size:20px}
+}
+@media(max-width:520px){.stats{grid-template-columns:1fr}.login-card{padding:26px}}
+</style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
-        <div class="menu">
-            <a href="index.html">Главная</a>
-            <a href="download.html">Скачать</a>
-            <a href="overview.html">Обзор</a>
-            <a href="features.html">Документация</a>
-            <a href="compare.html">Сравнение</a>
-        </div>
+
+<!-- ============ ВХОД ============ -->
+<div id="login">
+  <form class="login-card" id="loginForm">
+    <div class="logo">🍒</div>
+    <h1>С возвращением 👋</h1>
+    <p>Войдите, чтобы открыть личный кабинет</p>
+    <div class="field"><label>Email</label><input class="input" type="email" id="lEmail" placeholder="you@example.com" required></div>
+    <div class="field"><label>Пароль</label><input class="input" type="password" id="lPass" placeholder="••••••••" required minlength="4"></div>
+    <button class="btn btn-primary btn-block" type="submit">Войти</button>
+    <div class="hint">Демо-режим: подойдёт любой email и пароль от 4 символов</div>
+  </form>
+</div>
+
+<!-- ============ КАБИНЕТ ============ -->
+<div id="app" class="hidden">
+  <aside id="side">
+    <div class="brand"><div class="logo">🍒</div>CHERRY CLIENT</div>
+    <button class="nav-btn active" data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Профиль</button>
+    <button class="nav-btn" data-tab="security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Безопасность</button>
+    <button class="nav-btn" data-tab="notify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 004 0"/></svg>Уведомления</button>
+    <button class="nav-btn" data-tab="look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 010 18" fill="currentColor"/></svg>Оформление</button>
+    <div class="side-user">
+      <div class="avatar" id="sideAv"></div>
+      <div class="meta"><b id="sideName"></b><small id="sideMail"></small></div>
+      <button class="icon-btn" id="logout" title="Выйти"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div style="display:flex;gap:12px;align-items:center">
+        <button class="icon-btn menu-btn" id="menuBtn"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <div><h2 id="title">Профиль</h2><p id="subtitle">Управляйте личными данными</p></div>
+      </div>
     </div>
 
-    <div class="content">
-        <div class="profile-card">
-            <div class="avatar-large" id="user-avatar">?</div>
-            <div class="username" id="user-name">Загрузка...</div>
-            <div class="role-badge role-user" id="user-role">Пользователь</div>
-            
-            <div class="info-box">
-                <span class="info-title">Подписка</span>
-                <span class="info-value premium-free" id="user-premium">Free</span>
-            </div>
-
-            <!-- Блок для покупки, показывается если не Premium -->
-            <div id="premium-block" style="display: none;">
-                <a href="download.html" class="btn-buy">👑 Купить Premium за 399 ₽</a>
-            </div>
-
-            <button class="btn-logout" onclick="logout()">Выйти из аккаунта</button>
+    <!-- Профиль -->
+    <section class="tab active" id="tab-profile">
+      <div class="card hero">
+        <div class="avatar" id="heroAv"></div>
+        <input type="file" id="avFile" accept="image/*" class="hidden">
+        <div class="hero-info"><h3 id="heroName"></h3><div style="color:var(--muted);font-size:14px" id="heroMail"></div><span class="badge">● Аккаунт активен</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="stDays">1</b><span>дней с нами</span></div>
+        <div class="stat"><b>DDNet</b><span>поддерживаемая игра</span></div>
+        <div class="stat"><b>Free</b><span>текущая подписка</span></div>
+      </div>
+      <div class="card premium">
+        <div>
+          <h3>🍒 Cherry Premium</h3>
+          <div class="sub" style="margin-bottom:0">Эксклюзивные функции, приоритетная поддержка и ранний доступ к обновлениям клиента</div>
         </div>
-    </div>
-
-    <footer>
-        <div class="footer-top">
-            <div class="footer-brand"><h3>CHERRY CLIENT</h3><p>Продвинутый клиент для DDNet</p></div>
-            <div class="tg-buttons">
-                <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram</a>
-                <a href="https://t.me/nexnayyy" target="_blank" class="tg-btn">🛠️ Поддержка</a>
-            </div>
+        <button class="btn btn-primary" id="buyPremium">Купить Premium за 399 ₽</button>
+      </div>
+      <form class="card" id="profileForm">
+        <h3>Личные данные</h3><div class="sub">Эти данные видны только вам</div>
+        <div class="grid2">
+          <div class="field"><label>Имя</label><input class="input" id="pName" required></div>
+          <div class="field"><label>Никнейм</label><input class="input" id="pNick" placeholder="@nickname"></div>
+          <div class="field"><label>Email</label><input class="input" id="pEmail" type="email" required></div>
+          <div class="field"><label>Телефон</label><input class="input" id="pPhone" placeholder="+7 ___ ___ __ __"></div>
+          <div class="field"><label>Город</label><input class="input" id="pCity"></div>
+          <div class="field"><label>Сайт</label><input class="input" id="pSite" placeholder="https://"></div>
         </div>
-        <div class="footer-bottom">
-            <div><a href="privacy.html">Политика</a> • <a href="terms.html">Соглашение</a> • <a href="support.html">Поддержка</a></div>
-            <div>© 2026 Cherry Client.</div>
+        <div class="field"><label>О себе</label><textarea class="input" id="pBio" maxlength="300"></textarea></div>
+        <div class="actions"><button type="button" class="btn btn-ghost" id="resetProfile">Отменить</button><button class="btn btn-primary">Сохранить изменения</button></div>
+      </form>
+    </section>
+
+    <!-- Безопасность -->
+    <section class="tab" id="tab-security">
+      <form class="card" id="passForm">
+        <h3>Смена пароля</h3><div class="sub">Используйте минимум 8 символов</div>
+        <div class="grid2">
+          <div class="field"><label>Текущий пароль</label><input class="input" type="password" id="oldPass" required></div><div></div>
+          <div class="field"><label>Новый пароль</label><input class="input" type="password" id="newPass" minlength="8" required></div>
+          <div class="field"><label>Повторите пароль</label><input class="input" type="password" id="newPass2" required></div>
         </div>
-    </footer>
+        <div class="actions"><button class="btn btn-primary">Обновить пароль</button></div>
+      </form>
+      <div class="card">
+        <div class="row"><div><b>Двухфакторная аутентификация</b><small>Дополнительный код при входе</small></div>
+          <label class="switch"><input type="checkbox" data-pref="twofa"><span></span></label></div>
+        <div class="row"><div><b>Уведомлять о новых входах</b><small>Письмо при входе с нового устройства</small></div>
+          <label class="switch"><input type="checkbox" data-pref="loginAlert"><span></span></label></div>
+      </div>
+      <div class="card">
+        <h3>Активные сессии</h3><div class="sub">Устройства, где выполнен вход</div>
+        <div class="sess"><div class="ic">💻</div><div><b id="curDev">Это устройство</b><small>Сейчас онлайн</small></div></div>
+        <div class="sess"><div class="ic">📱</div><div><b>iPhone · Safari</b><small>2 дня назад</small></div><button class="btn btn-ghost" onclick="toast('Сессия завершена')">Завершить</button></div>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--danger)">Опасная зона</h3><div class="sub">Удаление аккаунта необратимо</div>
+        <button class="btn btn-danger" id="delAcc">Удалить аккаунт</button>
+      </div>
+    </section>
 
-    <script>
-        const API_URL = 'https://cherry-tg-bridge-v2.probati670.workers.dev';
-        
-        window.onload = async function() {
-            const savedUser = localStorage.getItem('cherry_user');
-            if(!savedUser) {
-                window.location.href = 'index.html'; // Если не залогинен - на главную
-                return;
-            }
+    <!-- Уведомления -->
+    <section class="tab" id="tab-notify">
+      <div class="card">
+        <h3>Каналы</h3><div class="sub">Как мы будем с вами связываться</div>
+        <div class="row"><div><b>Email-рассылка</b><small>Новости и важные обновления</small></div><label class="switch"><input type="checkbox" data-pref="nEmail"><span></span></label></div>
+        <div class="row"><div><b>Push-уведомления</b><small>Мгновенные оповещения в браузере</small></div><label class="switch"><input type="checkbox" data-pref="nPush"><span></span></label></div>
+        <div class="row"><div><b>Telegram</b><small>Уведомления в мессенджер</small></div><label class="switch"><input type="checkbox" data-pref="nTg"><span></span></label></div>
+        <div class="row"><div><b>Акции и скидки</b><small>Специальные предложения</small></div><label class="switch"><input type="checkbox" data-pref="nPromo"><span></span></label></div>
+      </div>
+    </section>
 
-            document.getElementById('user-avatar').innerText = savedUser.charAt(0).toUpperCase();
-            document.getElementById('user-name').innerText = savedUser;
+    <!-- Оформление -->
+    <section class="tab" id="tab-look">
+      <div class="card">
+        <h3>Тема</h3><div class="sub">Выберите, как выглядит кабинет</div>
+        <div class="theme-pick">
+          <button class="theme-opt" data-theme="dark"><i style="background:linear-gradient(135deg,#0b0d14,#1c2030)"></i><b>Тёмная</b></button>
+          <button class="theme-opt" data-theme="light"><i style="background:linear-gradient(135deg,#f4f5fb,#fff);border:1px solid #ddd"></i><b>Светлая</b></button>
+        </div>
+        <h3>Акцентный цвет</h3><div class="sub">Кнопки, переключатели и подсветка</div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+    </section>
+  </main>
+</div>
 
-            // Получаем актуальные данные из БД
-            try {
-                const res = await fetch(`${API_URL}/api/me?username=${savedUser}`);
-                const data = await res.json();
-                
-                if(res.ok) {
-                    // Роль
-                    const roleBadge = document.getElementById('user-role');
-                    if(data.role === 'admin') {
-                        roleBadge.className = 'role-badge role-admin';
-                        roleBadge.innerText = 'Администратор';
-                    } else {
-                        roleBadge.className = 'role-badge role-user';
-                        roleBadge.innerText = 'Пользователь';
-                    }
+<div id="toast"></div>
 
-                    // Премиум
-                    const premiumBadge = document.getElementById('user-premium');
-                    if(data.is_premium === 1) {
-                        premiumBadge.className = 'info-value premium-active';
-                        premiumBadge.innerText = 'Premium активен';
-                        document.getElementById('premium-block').style.display = 'none';
-                    } else {
-                        premiumBadge.className = 'info-value premium-free';
-                        premiumBadge.innerText = 'Free версия';
-                        document.getElementById('premium-block').style.display = 'block';
-                    }
-                }
-            } catch(e) {
-                console.error("Ошибка загрузки профиля");
-            }
-        };
+<script>
+/* ======================================================================
+   ВАЖНО: это демо-версия. Данные хранятся в localStorage браузера.
+   Для настоящей авторизации на GitHub Pages подключите бэкенд
+   (Supabase / Firebase) — места для замены помечены "BACKEND".
+   ====================================================================== */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const KEY = 'cabinet_user_v1';
+const ACCENTS = [['#ff3d81','#ff8a5c'],['#7c5cff','#22d3ee'],['#3b82f6','#06b6d4'],['#10b981','#84cc16'],['#ef4444','#f97316'],['#8b5cf6','#ec4899']];
+const DEFAULT_PREFS = {twofa:false,loginAlert:true,nEmail:true,nPush:false,nTg:false,nPromo:false,theme:'dark',accent:0};
 
-        function logout() {
-            localStorage.removeItem('cherry_user');
-            localStorage.removeItem('cherry_role');
-            localStorage.removeItem('cherry_premium');
-            window.location.href = 'index.html';
-        }
-    </script>
+let user = load();
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(user)); }   // BACKEND: отправить на сервер
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ---------- Тема и акцент ---------- */
+function applyLook(){
+  const p = user ? user.prefs : DEFAULT_PREFS;
+  document.documentElement.dataset.theme = p.theme;
+  const [a,b] = ACCENTS[p.accent] || ACCENTS[0];
+  document.documentElement.style.setProperty('--accent',a);
+  document.documentElement.style.setProperty('--accent-2',b);
+  $$('.theme-opt').forEach(o=>o.classList.toggle('on',o.dataset.theme===p.theme));
+  $$('.sw').forEach((s,i)=>s.classList.toggle('on',i===p.accent));
+}
+$('#swatches').innerHTML = ACCENTS.map((c,i)=>`<button class="sw" data-i="${i}" style="background:linear-gradient(135deg,${c[0]},${c[1]})"></button>`).join('');
+$('#swatches').onclick = e => { const s=e.target.closest('.sw'); if(!s) return; user.prefs.accent=+s.dataset.i; save(); applyLook(); };
+$$('.theme-opt').forEach(o=>o.onclick=()=>{ user.prefs.theme=o.dataset.theme; save(); applyLook(); });
+
+/* ---------- Вход / выход ---------- */
+$('#loginForm').onsubmit = e => {
+  e.preventDefault();
+  const email = $('#lEmail').value.trim();
+  // BACKEND: supabase.auth.signInWithPassword({email, password})
+  user = load() && load().email===email ? load() : {
+    name: email.split('@')[0].replace(/^./,c=>c.toUpperCase()), nick:'', email, phone:'', city:'', site:'', bio:'',
+    avatar:'', since: Date.now(), prefs:{...DEFAULT_PREFS}
+  };
+  save(); show();
+  toast('Добро пожаловать, '+user.name+'!');
+};
+$('#logout').onclick = () => { $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); toast('Вы вышли из аккаунта'); };
+
+function show(){
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  fillUser(); applyLook();
+}
+
+/* ---------- Заполнение данных ---------- */
+function setAvatar(el){
+  if(user.avatar){ el.style.backgroundImage=`url(${user.avatar})`; el.textContent=''; }
+  else { el.style.backgroundImage=''; el.textContent=(user.name||'?')[0].toUpperCase(); }
+}
+function fillUser(){
+  ['sideAv','heroAv'].forEach(id=>setAvatar($('#'+id)));
+  $('#sideName').textContent=$('#heroName').textContent=user.name;
+  $('#sideMail').textContent=$('#heroMail').textContent=user.email;
+  $('#pName').value=user.name; $('#pNick').value=user.nick; $('#pEmail').value=user.email;
+  $('#pPhone').value=user.phone; $('#pCity').value=user.city; $('#pSite').value=user.site; $('#pBio').value=user.bio;
+  $('#stDays').textContent=Math.max(1,Math.ceil((Date.now()-user.since)/864e5));
+  $$('[data-pref]').forEach(i=>i.checked=!!user.prefs[i.dataset.pref]);
+  $('#curDev').textContent=(/Mobile/i.test(navigator.userAgent)?'Телефон':'Компьютер')+' · '+(navigator.userAgent.match(/(Firefox|Edg|Chrome|Safari)/)||['Браузер'])[0]+' (это устройство)';
+}
+
+/* ---------- Профиль ---------- */
+$('#profileForm').onsubmit = e => {
+  e.preventDefault();
+  Object.assign(user,{name:$('#pName').value.trim(),nick:$('#pNick').value.trim(),email:$('#pEmail').value.trim(),
+    phone:$('#pPhone').value.trim(),city:$('#pCity').value.trim(),site:$('#pSite').value.trim(),bio:$('#pBio').value.trim()});
+  save(); fillUser(); toast('Профиль сохранён ✓');   // BACKEND: update profile
+};
+$('#resetProfile').onclick = () => { fillUser(); toast('Изменения отменены'); };
+$('#heroAv').onclick = () => $('#avFile').click();
+$('#avFile').onchange = e => {
+  const f=e.target.files[0]; if(!f) return;
+  const img=new Image(), r=new FileReader();
+  r.onload=()=>{ img.src=r.result; };
+  img.onload=()=>{ // сжимаем до 256px, чтобы влезло в localStorage
+    const c=document.createElement('canvas'), s=256, m=Math.min(img.width,img.height);
+    c.width=c.height=s; c.getContext('2d').drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,s,s);
+    user.avatar=c.toDataURL('image/jpeg',.85); save(); fillUser(); toast('Аватар обновлён');   // BACKEND: storage upload
+  };
+  r.readAsDataURL(f);
+};
+
+/* ---------- Безопасность ---------- */
+$('#passForm').onsubmit = e => {
+  e.preventDefault();
+  if($('#newPass').value!==$('#newPass2').value) return toast('Пароли не совпадают');
+  e.target.reset(); toast('Пароль обновлён ✓');   // BACKEND: supabase.auth.updateUser({password})
+};
+$('#delAcc').onclick = () => {
+  if(confirm('Точно удалить аккаунт? Это действие нельзя отменить.')){
+    localStorage.removeItem(KEY); user=null; applyLook();
+    $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); toast('Аккаунт удалён');
+  }
+};
+$$('[data-pref]').forEach(i=>i.onchange=()=>{ user.prefs[i.dataset.pref]=i.checked; save(); toast('Настройка сохранена'); });
+
+$('#buyPremium').onclick = () => toast('Оплата скоро появится — напишите в поддержку в Telegram');   // BACKEND: ссылка на оплату
+
+/* ---------- Навигация ---------- */
+const TITLES={profile:['Профиль','Управляйте личными данными'],security:['Безопасность','Пароль, сессии и защита аккаунта'],
+  notify:['Уведомления','Выберите, о чём вам сообщать'],look:['Оформление','Тема и цвета интерфейса']};
+$$('.nav-btn').forEach(b=>b.onclick=()=>{
+  $$('.nav-btn').forEach(x=>x.classList.toggle('active',x===b));
+  $$('section.tab').forEach(s=>s.classList.toggle('active',s.id==='tab-'+b.dataset.tab));
+  $('#title').textContent=TITLES[b.dataset.tab][0]; $('#subtitle').textContent=TITLES[b.dataset.tab][1];
+  $('#side').classList.remove('open');
+});
+$('#menuBtn').onclick=()=>$('#side').classList.toggle('open');
+
+/* ---------- Старт ---------- */
+applyLook();
+if(user) show();   // BACKEND: проверить supabase.auth.getSession()
+</script>
 </body>
 </html>
