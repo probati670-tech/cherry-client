@@ -12,6 +12,7 @@
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
 
+        /* Навигация */
         .navbar-container { display: flex; justify-content: center; padding: 20px; z-index: 10; position: relative; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 35px; background: rgba(15, 5, 10, 0.8); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 50px; width: 100%; max-width: 1150px; }
         .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; text-decoration: none; color: #fff; } .logo span { color: var(--primary); }
@@ -25,12 +26,29 @@
         .menu a.avatar-btn { display: flex; justify-content: center; align-items: center; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; font-weight: 900; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 42, 117, 0.4); transition: 0.3s; background-size: cover; background-position: center; padding: 0; border: 2px solid transparent; }
         .menu a.avatar-btn:hover { transform: scale(1.1); border-color: white; }
 
+        /* Контейнер чата */
         .chat-container { flex: 1; max-width: 900px; width: 100%; margin: 20px auto; display: flex; flex-direction: column; padding: 0 20px; }
-        .chat-box { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; min-height: 50vh; max-height: 65vh; }
         
+        /* Обертка для чата (включает закреп и сами сообщения) */
+        .chat-wrapper { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; max-height: 65vh; }
+        
+        /* ЗАКРЕПЛЕННЫЕ ПРАВИЛА */
+        .pinned-rules { 
+            background: rgba(255, 42, 117, 0.15); 
+            border-bottom: 1px solid var(--border-color); 
+            padding: 15px 20px; 
+            display: flex; align-items: flex-start; gap: 15px; 
+        }
+        .pin-icon { font-size: 20px; margin-top: 2px; }
+        .pin-text { font-size: 13px; color: #ccc; line-height: 1.5; }
+        .pin-text strong { color: var(--primary-light); }
+
+        /* Скролл-зона сообщений */
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .chat-box::-webkit-scrollbar { width: 6px; }
         .chat-box::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
+        /* Сообщения */
         .message { display: flex; gap: 15px; align-items: flex-start; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -41,12 +59,14 @@
         .msg-time { font-size: 11px; color: #666; margin-left: auto; }
         .msg-text { font-size: 14px; color: #ccc; line-height: 1.5; word-break: break-word; }
 
+        /* Префиксы */
         .prefix-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-size: 10px; text-transform: uppercase; }
         .prefix-vip { background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; }
         .prefix-god { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: #fff; }
         .prefix-dev { background: linear-gradient(45deg, #00bfff, #1e90ff); color: #fff; }
         .prefix-cherry { background: linear-gradient(45deg, #ff0000, #8b0000); color: #fff; }
 
+        /* Ввод */
         .chat-input-area { display: flex; gap: 15px; margin-top: 20px; }
         .chat-input { flex: 1; padding: 15px 20px; background: #110a0d; border: 1px solid #331a22; border-radius: 30px; color: white; font-family: 'Montserrat'; font-size: 14px; outline: none; transition: 0.3s; }
         .chat-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255,42,117,0.2); }
@@ -77,8 +97,19 @@
     <div class="chat-container">
         <div class="login-warning" id="login-warning">Вы должны войти в аккаунт, чтобы писать в чат.</div>
         
-        <div class="chat-box" id="chat-box">
-            <!-- Сообщения будут появляться здесь -->
+        <div class="chat-wrapper">
+            <!-- ЗАКРЕПЛЕННЫЕ ПРАВИЛА -->
+            <div class="pinned-rules">
+                <div class="pin-icon">📌</div>
+                <div class="pin-text">
+                    <strong>Правила чата:</strong> Запрещен спам, реклама и оскорбления. Уважайте других участников. За нарушение правил — блокировка аккаунта без предупреждения.
+                </div>
+            </div>
+
+            <!-- САМИ СООБЩЕНИЯ -->
+            <div class="chat-box" id="chat-box">
+                <!-- Сообщения будут появляться здесь -->
+            </div>
         </div>
 
         <div class="chat-input-area">
@@ -124,19 +155,20 @@
                 document.getElementById('chat-input').disabled = true;
             }
             
-            // Рисуем чат один раз при загрузке
             renderChat();
         };
 
         function getMessages() {
-            // Базовые сообщения для красоты, если чат пустой
-            let defaultMessages = [
-                { user: "Test_Admin", prefix: "cherry", avatar: "", text: "Всем привет! Добро пожаловать в наш чат 🍒", time: "16:00" },
-                { user: "Ligems", prefix: "vip", avatar: "", text: "Клиент топ, Aimbot работает идеально 🔥", time: "16:02" }
-            ];
+            // Достаем сообщения из памяти
+            let stored = JSON.parse(localStorage.getItem('cherry_chat')) || [];
             
-            let stored = JSON.parse(localStorage.getItem('cherry_chat'));
-            return stored || defaultMessages;
+            // ФИЛЬТР: Удаляем старые тестовые сообщения, если они застряли в браузере
+            stored = stored.filter(msg => 
+                !msg.text.includes("Всем привет! Добро пожаловать в наш чат") && 
+                !msg.text.includes("Клиент топ, Aimbot работает идеально")
+            );
+            
+            return stored;
         }
 
         function renderChat() {
@@ -172,7 +204,7 @@
                 chatBox.appendChild(div);
             });
 
-            if (isScrolledToBottom) {
+            if (isScrolledToBottom || messages.length <= 3) {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
         }
@@ -204,7 +236,7 @@
             localStorage.setItem('cherry_chat', JSON.stringify(messages));
             input.value = '';
             
-            // Добавляем сообщение в конец без полной перерисовки (чтобы не мигало)
+            // Добавляем новое сообщение в конец
             const chatBox = document.getElementById('chat-box');
             const msg = messages[messages.length - 1];
             
@@ -235,7 +267,6 @@
             }
         }
 
-        // Слушаем изменения (если открыто две вкладки)
         window.addEventListener('storage', function(e) {
             if (e.key === 'cherry_chat') {
                 renderChat();
