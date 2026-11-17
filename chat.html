@@ -8,6 +8,7 @@
         :root {
             --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; 
             --card-bg: rgba(20, 10, 15, 0.6); --border-color: rgba(255, 42, 117, 0.2);
+            --danger: #ff4d4d;
         }
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
@@ -29,18 +30,15 @@
         
         .chat-wrapper { flex: 1; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; max-height: 65vh; }
         
-        /* Закрепленные правила */
         .pinned-rules { background: rgba(255, 42, 117, 0.15); border-bottom: 1px solid var(--border-color); padding: 15px 20px; display: flex; align-items: flex-start; gap: 15px; }
         .pin-icon { font-size: 20px; margin-top: 2px; }
         .pin-text { font-size: 13px; color: #ccc; line-height: 1.5; }
         .pin-text strong { color: var(--primary-light); }
 
-        /* Скролл-зона */
         .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .chat-box::-webkit-scrollbar { width: 6px; }
         .chat-box::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
-        /* Сообщения */
         .message { display: flex; gap: 15px; align-items: flex-start; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -52,26 +50,17 @@
         
         .msg-text { font-size: 14px; color: #ccc; line-height: 1.5; word-break: break-word; }
 
-        /* ЭФФЕКТ БЛЮРА ДЛЯ НАРУШИТЕЛЕЙ */
-        .msg-text.blurred { 
-            filter: blur(5px); 
-            user-select: none; 
-            cursor: not-allowed; 
-            transition: 0.3s;
-        }
-        .msg-text.blurred:hover {
-            filter: blur(8px); /* При наведении размывается еще сильнее */
-        }
+        /* Блюр */
+        .msg-text.blurred { filter: blur(5px); user-select: none; cursor: not-allowed; transition: 0.3s; }
+        .msg-text.blurred:hover { filter: blur(8px); }
         .blur-warning { font-size: 11px; color: var(--danger); margin-top: 5px; font-weight: 700; display: block; }
 
-        /* Префиксы */
         .prefix-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 900; font-size: 10px; text-transform: uppercase; }
         .prefix-vip { background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; }
         .prefix-god { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: #fff; }
         .prefix-dev { background: linear-gradient(45deg, #00bfff, #1e90ff); color: #fff; }
         .prefix-cherry { background: linear-gradient(45deg, #ff0000, #8b0000); color: #fff; }
 
-        /* Ввод */
         .chat-input-area { display: flex; gap: 15px; margin-top: 20px; }
         .chat-input { flex: 1; padding: 15px 20px; background: #110a0d; border: 1px solid #331a22; border-radius: 30px; color: white; font-family: 'Montserrat'; font-size: 14px; outline: none; transition: 0.3s; }
         .chat-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255,42,117,0.2); }
@@ -115,7 +104,7 @@
             </div>
 
             <div class="chat-box" id="chat-box">
-                <!-- Сообщения будут появляться здесь -->
+                <!-- Сообщения -->
             </div>
         </div>
 
@@ -133,9 +122,8 @@
 
         if (currentUser) {
             userObj = allUsers.find(u => u.name === currentUser);
-            
             if (userObj && userObj.status === 'banned') {
-                alert("Вы заблокированы и не можете писать в чат.");
+                alert("Вы заблокированы.");
                 window.location.href = "index.html";
             }
         }
@@ -157,10 +145,7 @@
                 }
 
                 if(userObj.role === 'admin') { navAdmin.style.display = 'block'; }
-
-                // Проверка на мут
                 checkMuteStatus();
-
             } else {
                 document.getElementById('login-warning').style.display = 'block';
                 document.getElementById('chat-input').placeholder = "Войдите, чтобы писать...";
@@ -171,7 +156,6 @@
             renderChat();
         };
 
-        // Проверка, не в муте ли юзер
         function checkMuteStatus() {
             if (userObj && userObj.muteUntil && userObj.muteUntil > Date.now()) {
                 isMuted = true;
@@ -188,27 +172,33 @@
         }
 
         function getMessages() {
-            return JSON.parse(localStorage.getItem('cherry_chat')) || [];
+            let stored = JSON.parse(localStorage.getItem('cherry_chat')) || [];
+            
+            // ЖЕСТКИЙ ФИЛЬТР: Находим старые тестовые сообщения и удаляем их из памяти
+            let filtered = stored.filter(msg => 
+                !msg.text.includes("Всем привет! Добро пожаловать в наш чат") && 
+                !msg.text.includes("Клиент топ, Aimbot работает идеально")
+            );
+            
+            // Если что-то удалили, обновляем память
+            if (stored.length !== filtered.length) {
+                localStorage.setItem('cherry_chat', JSON.stringify(filtered));
+            }
+            
+            return filtered;
         }
 
         function renderChat() {
             const chatBox = document.getElementById('chat-box');
             const messages = getMessages();
-            
             const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 50;
 
             chatBox.innerHTML = '';
             
             messages.forEach(msg => {
-                let prefixHTML = '';
-                if (msg.prefix) {
-                    prefixHTML = `<span class="prefix-badge prefix-${msg.prefix}">${msg.prefix}</span>`;
-                }
-
+                let prefixHTML = msg.prefix ? `<span class="prefix-badge prefix-${msg.prefix}">${msg.prefix}</span>` : '';
                 let avatarStyle = msg.avatar ? `style="background-image: url(${msg.avatar}); color: transparent;"` : '';
                 let avatarLetter = msg.avatar ? '' : msg.user.charAt(0).toUpperCase();
-
-                // Если сообщение помечено как нарушение — ставим блюр
                 let textClass = msg.isFlagged ? 'msg-text blurred' : 'msg-text';
                 let warningHTML = msg.isFlagged ? '<span class="blur-warning">🚫 Скрыто (ссылка/реклама)</span>' : '';
 
@@ -234,7 +224,6 @@
             }
         }
 
-        // Проверка на наличие ссылок в тексте
         function containsLink(text) {
             const linkRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9_-]+\.(com|ru|net|org|io|me|tv|info|xyz|top|su)[^\s]*)/gi;
             return linkRegex.test(text);
@@ -249,21 +238,18 @@
 
             let isFlagged = false;
 
-            // ПРОВЕРКА НА ССЫЛКИ (Если не админ)
             if (userObj.role !== 'admin' && containsLink(text)) {
                 isFlagged = true;
-                // Выдаем мут на 6 часов
-                const muteDuration = 6 * 60 * 60 * 1000; // 6 часов в миллисекундах
+                const muteDuration = 6 * 60 * 60 * 1000;
                 userObj.muteUntil = Date.now() + muteDuration;
                 
-                // Обновляем базу
                 let userIndex = allUsers.findIndex(u => u.name === currentUser);
                 if(userIndex !== -1) {
                     allUsers[userIndex] = userObj;
                     localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
                 }
                 
-                checkMuteStatus(); // Блокируем инпут
+                checkMuteStatus();
                 alert("Внимание! В вашем сообщении обнаружена ссылка. Вы получили мут на 6 часов.");
             }
 
@@ -277,25 +263,21 @@
                 avatar: userObj ? userObj.avatar : "",
                 text: text,
                 time: timeStr,
-                isFlagged: isFlagged // Помечаем сообщение
+                isFlagged: isFlagged
             };
 
             messages.push(newMessage);
             localStorage.setItem('cherry_chat', JSON.stringify(messages));
             input.value = '';
-            
-            renderChat(); // Перерисовываем
+            renderChat();
         }
 
         function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+            if (e.key === 'Enter') sendMessage();
         }
 
         window.addEventListener('storage', function(e) {
             if (e.key === 'cherry_chat' || e.key === 'cherry_all_users') {
-                // Обновляем данные о юзере (на случай если бан/мут выдали в другой вкладке)
                 allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 if(currentUser) userObj = allUsers.find(u => u.name === currentUser);
                 checkMuteStatus();
