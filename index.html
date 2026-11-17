@@ -137,7 +137,6 @@
                 <a href="support.html">Поддержка</a>
             </div>
             <div>© 2026 Cherry Client. Все права защищены.</div>
-            <!-- КОДОВОЕ СЛОВО ДЛЯ БАНКА -->
             <div style="font-size: 11px; color: #444; margin-top: 10px;">Кодовое слово для верификации: Agetalp</div>
         </div>
     </footer>
@@ -208,8 +207,13 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); cherries.forEach(c => { c.update(); c.draw(); }); requestAnimationFrame(animate); }
         animate();
         let currentCaptchaEmail = 0; let currentCaptchaLogin = 0;
-        function openModal() { document.getElementById('auth-modal').classList.add('active'); generateCaptcha('email'); generateCaptcha('login'); }
+        
+        function openModal() { 
+            document.getElementById('auth-modal').classList.add('active'); 
+            generateCaptcha('email'); generateCaptcha('login'); 
+        }
         function closeModal() { document.getElementById('auth-modal').classList.remove('active'); }
+        
         function switchMainTab(tab) {
             document.getElementById('form-login').classList.remove('active'); document.getElementById('form-reg').classList.remove('active'); document.getElementById('tab-login').classList.remove('active'); document.getElementById('tab-reg').classList.remove('active');
             if(tab === 'login') { document.getElementById('form-login').classList.add('active'); document.getElementById('tab-login').classList.add('active'); document.getElementById('main-title').innerText = "Вход"; document.getElementById('main-subtitle').innerText = "Войдите в свой аккаунт Cherry Client"; } 
@@ -246,17 +250,35 @@
             let user = document.getElementById('login-user').value; let pass = document.getElementById('login-pass').value; let error = document.getElementById('err-auth'); let savedUser = localStorage.getItem('cherry_user'); let savedPass = localStorage.getItem('cherry_pass');
             if(user === savedUser && pass === savedPass) { finishLogin(user); } else { error.style.display = 'block'; }
         }
+        
+        // ОБНОВЛЕННАЯ ФУНКЦИЯ ВХОДА
         function finishLogin(userName) {
-            closeModal(); let navAuth = document.getElementById('nav-auth'); navAuth.innerText = "Выйти (" + userName + ")"; navAuth.classList.remove('login-btn'); navAuth.style.background = "transparent"; navAuth.style.color = "#aaa"; navAuth.style.boxShadow = "none"; navAuth.style.border = "1px solid #444";
-            navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); }; alert("Успешный вход! Теперь вам доступно скачивание.");
+            closeModal(); 
+            window.location.reload(); // Перезагружаем страницу, чтобы сработал onload и кнопка поменялась
         }
+
         function tryDownload(e) {
             e.preventDefault(); let savedUser = localStorage.getItem('cherry_user');
             if(savedUser) { alert("Скачивание началось!"); /* window.location.href = "ССЫЛКА_НА_ТВОЙ_АРХИВ.zip"; */ } else { openModal(); }
         }
+        
+        // ОБНОВЛЕННЫЙ ONLOAD (ДЕЛАЕТ КНОПКУ ССЫЛКОЙ НА ПРОФИЛЬ)
         window.onload = function() {
             let savedUser = localStorage.getItem('cherry_user');
-            if(savedUser) { let navAuth = document.getElementById('nav-auth'); navAuth.innerText = "Выйти (" + savedUser + ")"; navAuth.classList.remove('login-btn'); navAuth.style.background = "transparent"; navAuth.style.color = "#aaa"; navAuth.style.boxShadow = "none"; navAuth.style.border = "1px solid #444"; navAuth.onclick = function() { localStorage.removeItem('cherry_user'); localStorage.removeItem('cherry_pass'); location.reload(); }; }
+            let navAuth = document.getElementById('nav-auth');
+            
+            if(savedUser) { 
+                navAuth.innerText = "Личный кабинет (" + savedUser + ")"; 
+                navAuth.classList.remove('login-btn'); 
+                navAuth.style.background = "linear-gradient(45deg, var(--primary), var(--primary-light))"; 
+                navAuth.style.color = "white"; 
+                navAuth.style.boxShadow = "0 4px 15px rgba(255, 42, 117, 0.4)"; 
+                navAuth.style.border = "none";
+                
+                // Перенаправляем в личный кабинет
+                navAuth.href = "profile.html";
+                navAuth.onclick = null; 
+            }
         };
     </script>
 </body>
