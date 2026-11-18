@@ -29,30 +29,101 @@
             overflow-x: hidden;
         }
 
-        /* Анимированный фон */
-        .bg-animation {
+        /* ===== ФОНЫ НА ВЫБОР ===== */
+        body.bg-default {
+            background: var(--bg-dark);
+        }
+        body.bg-default::before {
+            content: '';
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            width: 200%; height: 200%;
             background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.12) 0%, transparent 50%),
                         radial-gradient(circle at 80% 80%, rgba(255, 77, 0, 0.08) 0%, transparent 50%);
             animation: bgMove 25s ease-in-out infinite;
         }
 
-        @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-5%, -5%); }
+        body.bg-neon {
+            background: #0a0014;
+        }
+        body.bg-neon::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 110, 0.1) 0%, transparent 60%);
+            animation: neonPulse 8s ease-in-out infinite;
         }
 
-        /* Сайдбар */
+        body.bg-cyber {
+            background: #000;
+        }
+        body.bg-cyber::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+        body.bg-cyber::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, #000 100%);
+        }
+
+        body.bg-sunset {
+            background: #1a0a0a;
+        }
+        body.bg-sunset::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, 
+                rgba(255, 107, 107, 0.15) 0%, 
+                rgba(255, 154, 158, 0.1) 25%,
+                rgba(250, 208, 196, 0.05) 50%,
+                rgba(161, 140, 209, 0.1) 75%,
+                rgba(251, 194, 235, 0.15) 100%);
+            animation: sunsetShift 15s ease-in-out infinite;
+        }
+
+        body.bg-forest {
+            background: #0a1a0a;
+        }
+        body.bg-forest::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 30% 80%, rgba(0, 200, 83, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 20%, rgba(0, 230, 118, 0.1) 0%, transparent 50%);
+            animation: forestGlow 12s ease-in-out infinite;
+        }
+
+        @keyframes bgMove { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-5%, -5%); } }
+        @keyframes neonPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+        @keyframes sunsetShift { 0%, 100% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(30deg); } }
+        @keyframes forestGlow { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+
+        /* ===== САЙДБАР ===== */
         .sidebar {
             width: 260px;
             background: var(--bg-panel);
@@ -85,10 +156,7 @@
             animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         .brand-text {
             font-size: 20px;
@@ -103,6 +171,7 @@
             list-style: none;
             flex: 1;
             padding: 20px 15px;
+            overflow-y: auto;
         }
 
         .menu-item { margin-bottom: 6px; }
@@ -124,28 +193,16 @@
             font-size: 14px;
         }
 
-        .menu-link i {
-            width: 22px;
-            margin-right: 12px;
-            font-size: 16px;
-            transition: transform 0.3s;
-        }
-
-        .menu-link:hover {
-            background: rgba(255, 0, 110, 0.1);
-            color: white;
-            transform: translateX(5px);
-        }
-
+        .menu-link i { width: 22px; margin-right: 12px; font-size: 16px; transition: transform 0.3s; }
+        .menu-link:hover { background: rgba(255, 0, 110, 0.1); color: white; transform: translateX(5px); }
         .menu-link:hover i { transform: scale(1.2); }
-
         .menu-link.active {
             background: linear-gradient(90deg, rgba(255, 0, 110, 0.2), transparent);
             color: var(--primary);
             border-left: 3px solid var(--primary);
         }
 
-        .menu-link .badge-count {
+        .badge-count {
             margin-left: auto;
             background: var(--primary);
             color: white;
@@ -175,10 +232,7 @@
             overflow: hidden;
         }
 
-        .mini-avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .mini-info { flex: 1; }
         .mini-info h4 { font-size: 14px; margin-bottom: 2px; }
@@ -191,13 +245,9 @@
             border-radius: 8px;
             transition: all 0.3s;
         }
+        .logout:hover { color: var(--danger); background: rgba(255, 23, 68, 0.1); }
 
-        .logout:hover {
-            color: var(--danger);
-            background: rgba(255, 23, 68, 0.1);
-        }
-
-        /* Основной контент */
+        /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
         .main {
             margin-left: 260px;
             padding: 40px 50px;
@@ -222,7 +272,7 @@
         }
         .header p { color: var(--text-muted); font-size: 14px; }
 
-        /* Карточки */
+        /* ===== КАРТОЧКИ ===== */
         .card {
             background: var(--bg-panel);
             backdrop-filter: blur(20px);
@@ -232,35 +282,33 @@
             margin-bottom: 25px;
             transition: all 0.3s ease;
         }
-
         .card:hover {
             border-color: rgba(255, 0, 110, 0.3);
             box-shadow: 0 10px 40px rgba(255, 0, 110, 0.1);
         }
-
         .card-content { padding: 30px; }
+        .section-title { font-size: 20px; margin-bottom: 8px; font-weight: 700; }
+        .section-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
 
-        .section-title {
-            font-size: 20px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .section-desc {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        /* Профиль */
+        /* ===== ПРОФИЛЬ С 3D БАННЕРАМИ ===== */
         .profile-cover {
-            height: 160px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            height: 200px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+            transform-style: preserve-3d;
         }
 
-        .profile-cover::before {
+        .profile-cover:hover {
+            transform: perspective(1000px) rotateX(2deg);
+        }
+
+        /* Варианты баннеров */
+        .banner-default {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        .banner-default::before {
             content: '';
             position: absolute;
             width: 200%; height: 200%;
@@ -268,17 +316,122 @@
             animation: slide 20s linear infinite;
         }
 
-        @keyframes slide {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-50%, -50%); }
+        .banner-neon {
+            background: linear-gradient(135deg, #8a2be2, #00ffff, #ff006e);
+            background-size: 200% 200%;
+            animation: neonGradient 5s ease infinite;
         }
+        .banner-neon::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 50%);
+            animation: neonShine 3s ease-in-out infinite;
+        }
+
+        .banner-fire {
+            background: linear-gradient(135deg, #ff0000, #ff6600, #ffcc00);
+            background-size: 200% 200%;
+            animation: fireGradient 3s ease infinite;
+        }
+        .banner-fire::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 Q60 30 50 50 Q40 30 50 10' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+            background-size: 50px 50px;
+            animation: fireFlicker 2s ease-in-out infinite;
+        }
+
+        .banner-ice {
+            background: linear-gradient(135deg, #00bfff, #0080ff, #4169e1);
+            background-size: 200% 200%;
+            animation: iceGradient 4s ease infinite;
+        }
+        .banner-ice::before {
+            content: '❄';
+            position: absolute;
+            width: 100%; height: 100%;
+            font-size: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.1;
+            animation: snowFall 10s linear infinite;
+        }
+
+        .banner-gold {
+            background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700);
+            background-size: 200% 200%;
+            animation: goldGradient 3s ease infinite;
+        }
+        .banner-gold::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 40px);
+            animation: goldShine 2s linear infinite;
+        }
+
+        .banner-cyber {
+            background: #000;
+            position: relative;
+        }
+        .banner-cyber::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.3) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: cyberGrid 10s linear infinite;
+        }
+        .banner-cyber::after {
+            content: 'CHERRY CLIENT';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: 900;
+            color: rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            letter-spacing: 10px;
+        }
+
+        @keyframes slide { 0% { transform: translate(0, 0); } 100% { transform: translate(-50%, -50%); } }
+        @keyframes neonGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes neonShine { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+        @keyframes fireGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes fireFlicker { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        @keyframes iceGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes snowFall { 0% { transform: translateY(-100px) rotate(0deg); } 100% { transform: translateY(100px) rotate(360deg); } }
+        @keyframes goldGradient { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes goldShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        @keyframes cyberGrid { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, 30px); } }
+
+        .banner-selector {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        .profile-cover:hover .banner-selector { opacity: 1; }
 
         .profile-body { padding: 0 30px 30px; position: relative; }
 
-        .avatar-wrapper {
-            position: relative;
-            display: inline-block;
-        }
+        .avatar-wrapper { position: relative; display: inline-block; }
 
         .big-avatar {
             width: 120px; height: 120px;
@@ -297,13 +450,8 @@
             cursor: pointer;
             transition: transform 0.3s;
         }
-
         .big-avatar:hover { transform: scale(1.05); }
-
-        .big-avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .avatar-upload {
             position: absolute;
@@ -319,9 +467,7 @@
             cursor: pointer;
             z-index: 10;
         }
-
         .avatar-wrapper:hover .avatar-upload { opacity: 1; }
-
         .avatar-upload i { color: white; font-size: 30px; }
 
         .profile-info { margin-top: 70px; margin-left: 140px; }
@@ -333,8 +479,17 @@
             margin-bottom: 8px;
             flex-wrap: wrap;
         }
-
         .name-row h2 { font-size: 28px; font-weight: 800; }
+
+        .prefix {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
 
         .badge {
             background: rgba(255, 215, 0, 0.15);
@@ -349,15 +504,11 @@
             gap: 6px;
             animation: glow 2s ease-in-out infinite;
         }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
-        }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); } 50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); } }
 
         .email { color: var(--text-muted); font-size: 14px; }
 
-        /* Статистика */
+        /* ===== СТАТИСТИКА ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -375,7 +526,6 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-
         .stat-box:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
@@ -389,39 +539,9 @@
             margin-bottom: 8px;
             font-family: 'Courier New', monospace;
         }
+        .stat-label { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .stat-label {
-            color: var(--text-muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* API Ключ */
-        .api-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: stretch;
-        }
-
-        .api-key-text {
-            flex: 1;
-            background: rgba(0,0,0,0.3);
-            border: 2px dashed rgba(255, 0, 110, 0.3);
-            border-radius: 10px;
-            color: var(--primary);
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            padding: 14px 18px;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .api-key-text:focus {
-            border-color: var(--primary);
-            background: rgba(255, 0, 110, 0.05);
-        }
-
+        /* ===== КНОПКИ ===== */
         .btn {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -436,43 +556,17 @@
             gap: 8px;
             font-size: 14px;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4);
-        }
-
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4); }
         .btn:active { transform: translateY(0); }
+        .btn-outline { background: transparent; border: 2px solid var(--border); }
+        .btn-outline:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.1); }
+        .btn-success { background: linear-gradient(135deg, #00e676, #00bfa5); }
+        .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); }
+        .btn-small { padding: 8px 16px; font-size: 12px; }
 
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--border);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            background: rgba(255, 0, 110, 0.1);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #00e676, #00bfa5);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff1744, #d50000);
-        }
-
-        /* Форма */
+        /* ===== ФОРМЫ ===== */
         .form-group { margin-bottom: 20px; }
-
-        .form-label {
-            display: block;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
+        .form-label { display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 8px; font-weight: 600; }
         .form-input {
             width: 100%;
             background: rgba(0,0,0,0.3);
@@ -484,11 +578,23 @@
             transition: all 0.3s;
             outline: none;
         }
+        .form-input:focus { border-color: var(--primary); background: rgba(255, 0, 110, 0.05); }
 
-        .form-input:focus {
-            border-color: var(--primary);
-            background: rgba(255, 0, 110, 0.05);
+        /* ===== API КЛЮЧ ===== */
+        .api-wrapper { display: flex; gap: 12px; align-items: stretch; }
+        .api-key-text {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed rgba(255, 0, 110, 0.3);
+            border-radius: 10px;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            padding: 14px 18px;
+            outline: none;
+            transition: all 0.3s;
         }
+        .api-key-text:focus { border-color: var(--primary); background: rgba(255, 0, 110, 0.05); }
 
         /* ===== КОШЕЛЕК ===== */
         .balance-card {
@@ -499,7 +605,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .balance-card::before {
             content: '';
             position: absolute;
@@ -507,40 +612,14 @@
             width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         }
-
-        .balance-label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .balance-amount {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-
+        .balance-label { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+        .balance-amount { font-size: 48px; font-weight: 800; margin-bottom: 20px; }
         .balance-amount span { font-size: 24px; opacity: 0.8; }
+        .balance-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .balance-actions .btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
+        .balance-actions .btn:hover { background: rgba(255,255,255,0.3); }
 
-        .balance-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .balance-actions .btn {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .balance-actions .btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .transactions-list {
-            list-style: none;
-        }
-
+        .transactions-list { list-style: none; }
         .transaction-item {
             display: flex;
             align-items: center;
@@ -548,13 +627,8 @@
             border-bottom: 1px solid var(--border);
             transition: all 0.3s;
         }
-
-        .transaction-item:hover {
-            padding-left: 10px;
-        }
-
+        .transaction-item:hover { padding-left: 10px; }
         .transaction-item:last-child { border-bottom: none; }
-
         .transaction-icon {
             width: 45px; height: 45px;
             border-radius: 12px;
@@ -565,29 +639,68 @@
             margin-right: 15px;
             flex-shrink: 0;
         }
-
-        .transaction-icon.income {
-            background: rgba(0, 230, 118, 0.15);
-            color: var(--success);
-        }
-
-        .transaction-icon.expense {
-            background: rgba(255, 23, 68, 0.15);
-            color: var(--danger);
-        }
-
+        .transaction-icon.income { background: rgba(0, 230, 118, 0.15); color: var(--success); }
+        .transaction-icon.expense { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         .transaction-info { flex: 1; }
         .transaction-info h4 { font-size: 15px; margin-bottom: 3px; }
         .transaction-info p { font-size: 12px; color: var(--text-muted); }
-
-        .transaction-amount {
-            font-size: 16px;
-            font-weight: bold;
-            font-family: monospace;
-        }
-
+        .transaction-amount { font-size: 16px; font-weight: bold; font-family: monospace; }
         .transaction-amount.income { color: var(--success); }
         .transaction-amount.expense { color: var(--danger); }
+
+        /* ===== МАГАЗИН ПРЕФИКСОВ ===== */
+        .prefixes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .prefix-card {
+            background: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prefix-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 0, 110, 0.2);
+        }
+
+        .prefix-card.owned {
+            border-color: var(--success);
+        }
+
+        .prefix-card.owned::after {
+            content: '✓ КУПЛЕНО';
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--success);
+            color: white;
+            padding: 4px 35px;
+            font-size: 10px;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+
+        .prefix-preview {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .prefix-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .prefix-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; min-height: 40px; }
+        .prefix-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
 
         /* ===== БЕЗОПАСНОСТЬ ===== */
         .security-item {
@@ -596,9 +709,7 @@
             padding: 20px 0;
             border-bottom: 1px solid var(--border);
         }
-
         .security-item:last-child { border-bottom: none; }
-
         .security-icon {
             width: 50px; height: 50px;
             border-radius: 12px;
@@ -611,7 +722,6 @@
             margin-right: 18px;
             flex-shrink: 0;
         }
-
         .security-info { flex: 1; }
         .security-info h4 { font-size: 16px; margin-bottom: 4px; }
         .security-info p { font-size: 13px; color: var(--text-muted); }
@@ -622,9 +732,7 @@
             height: 26px;
             margin-left: 15px;
         }
-
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-
         .toggle-slider {
             position: absolute;
             cursor: pointer;
@@ -633,7 +741,6 @@
             border-radius: 26px;
             transition: 0.3s;
         }
-
         .toggle-slider::before {
             content: '';
             position: absolute;
@@ -643,14 +750,8 @@
             border-radius: 50%;
             transition: 0.3s;
         }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background: var(--primary);
-        }
-
-        .toggle-switch input:checked + .toggle-slider::before {
-            transform: translateX(24px);
-        }
+        .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
 
         .session-item {
             display: flex;
@@ -660,13 +761,12 @@
             border-radius: 12px;
             margin-bottom: 12px;
             border: 1px solid var(--border);
+            transition: all 0.3s;
         }
-
         .session-item.current {
             border-color: var(--success);
             background: rgba(0, 230, 118, 0.05);
         }
-
         .session-icon {
             width: 40px; height: 40px;
             border-radius: 10px;
@@ -677,27 +777,18 @@
             margin-right: 15px;
             font-size: 18px;
         }
-
         .session-info { flex: 1; }
         .session-info h4 { font-size: 14px; margin-bottom: 3px; }
         .session-info p { font-size: 12px; color: var(--text-muted); }
-
         .session-status {
             font-size: 11px;
             padding: 4px 10px;
             border-radius: 8px;
             font-weight: 600;
         }
-
-        .session-status.current {
-            background: rgba(0, 230, 118, 0.15);
-            color: var(--success);
-        }
-
-        .session-status.old {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-muted);
-        }
+        .session-status.current { background: rgba(0, 230, 118, 0.15); color: var(--success); }
+        .session-status.old { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+        .session-time { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
 
         /* ===== УВЕДОМЛЕНИЯ ===== */
         .notification-item {
@@ -710,18 +801,14 @@
             border: 1px solid var(--border);
             transition: all 0.3s;
             cursor: pointer;
+            animation: slideIn 0.4s ease;
         }
-
-        .notification-item:hover {
-            border-color: rgba(255, 0, 110, 0.3);
-            transform: translateX(5px);
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-
-        .notification-item.unread {
-            border-left: 3px solid var(--primary);
-            background: rgba(255, 0, 110, 0.05);
-        }
-
+        .notification-item:hover { border-color: rgba(255, 0, 110, 0.3); transform: translateX(5px); }
+        .notification-item.unread { border-left: 3px solid var(--primary); background: rgba(255, 0, 110, 0.05); }
         .notification-icon {
             width: 42px; height: 42px;
             border-radius: 10px;
@@ -732,23 +819,15 @@
             margin-right: 15px;
             flex-shrink: 0;
         }
-
         .notification-icon.info { background: rgba(33, 150, 243, 0.15); color: #2196f3; }
         .notification-icon.success { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .notification-icon.warning { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
         .notification-icon.danger { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
-
         .notification-content { flex: 1; }
         .notification-content h4 { font-size: 15px; margin-bottom: 5px; }
         .notification-content p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
         .notification-time { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
-
-        .notification-actions {
-            display: flex;
-            gap: 8px;
-            margin-left: 10px;
-        }
-
+        .notification-actions { display: flex; gap: 8px; margin-left: 10px; }
         .notif-btn {
             background: rgba(255,255,255,0.05);
             border: none;
@@ -761,31 +840,134 @@
             align-items: center;
             justify-content: center;
         }
+        .notif-btn:hover { background: rgba(255, 0, 110, 0.2); color: var(--primary); }
 
-        .notif-btn:hover {
-            background: rgba(255, 0, 110, 0.2);
-            color: var(--primary);
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 60px; margin-bottom: 20px; opacity: 0.3; }
+        .empty-state h3 { font-size: 20px; margin-bottom: 10px; color: var(--text-main); }
+
+        /* ===== ВЫБОР ФОНА ===== */
+        .bg-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
         }
 
-        .empty-state {
+        .bg-option {
+            height: 100px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-option:hover { transform: scale(1.05); }
+        .bg-option.active { border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 0, 110, 0.4); }
+        .bg-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--primary);
+            color: white;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .bg-option-default { background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.3), transparent), #0a0a0a; }
+        .bg-option-neon { background: radial-gradient(circle at 30% 50%, rgba(138, 43, 226, 0.5), transparent), #0a0014; }
+        .bg-option-cyber { background: linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px), #000; background-size: 10px 10px; }
+        .bg-option-sunset { background: linear-gradient(135deg, rgba(255, 107, 107, 0.4), rgba(161, 140, 209, 0.4)), #1a0a0a; }
+        .bg-option-forest { background: radial-gradient(ellipse at 30% 80%, rgba(0, 200, 83, 0.4), transparent), #0a1a0a; }
+
+        .bg-option-name {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
+
+        /* ===== ВЫБОР БАННЕРА ===== */
+        .banner-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .banner-option {
+            height: 80px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-option:hover { transform: scale(1.05); }
+        .banner-option.active { border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 0, 110, 0.4); }
+
+        .banner-option-name {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        /* ===== МОДАЛКА ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
             text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
+            animation: modalPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
-        .empty-state i {
-            font-size: 60px;
-            margin-bottom: 20px;
-            opacity: 0.3;
+        @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
         }
+        .modal h3 { font-size: 24px; margin-bottom: 10px; }
+        .modal p { color: var(--text-muted); margin-bottom: 25px; }
 
-        .empty-state h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: var(--text-main);
-        }
-
-        /* Toast */
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -804,27 +986,21 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
         }
-
         .toast.show { transform: translateX(0); opacity: 1; }
-
         .toast-icon {
             width: 36px; height: 36px;
-            background: rgba(255, 0, 110, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
             font-size: 16px;
         }
-
         .toast-content h4 { font-size: 14px; margin-bottom: 2px; }
         .toast-content p { font-size: 12px; color: var(--text-muted); }
 
-        /* Скрытый input для загрузки файла */
         #avatarInput { display: none; }
 
-        /* Адаптив */
+        /* ===== АДАПТИВ ===== */
         @media (max-width: 768px) {
             .sidebar { width: 70px; }
             .brand-text, .menu-link span, .mini-info, .badge-count { display: none; }
@@ -843,9 +1019,7 @@
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
     </style>
 </head>
-<body>
-    <div class="bg-animation"></div>
-
+<body class="bg-default">
     <!-- Сайдбар -->
     <aside class="sidebar">
         <div class="brand">
@@ -873,6 +1047,12 @@
                 </button>
             </li>
             <li class="menu-item">
+                <button class="menu-link" data-page="shop">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Магазин</span>
+                </button>
+            </li>
+            <li class="menu-item">
                 <button class="menu-link" data-page="security">
                     <i class="fas fa-shield-alt"></i>
                     <span>Безопасность</span>
@@ -882,7 +1062,13 @@
                 <button class="menu-link" data-page="notifications">
                     <i class="fas fa-bell"></i>
                     <span>Уведомления</span>
-                    <span class="badge-count" id="notifCount">3</span>
+                    <span class="badge-count" id="notifCount">0</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button class="menu-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Настройки</span>
                 </button>
             </li>
         </ul>
@@ -891,7 +1077,7 @@
             <div class="mini-avatar" id="miniAvatar">👤</div>
             <div class="mini-info">
                 <h4 id="miniName">Nick_Name</h4>
-                <p>Нет email</p>
+                <p id="miniPrefix">Без префикса</p>
             </div>
             <i class="fas fa-sign-out-alt logout" onclick="logout()" title="Выйти"></i>
         </div>
@@ -899,9 +1085,7 @@
 
     <input type="file" id="avatarInput" accept="image/*">
 
-    <!-- Основной контент -->
     <main class="main">
-
         <!-- ===== ПРОФИЛЬ ===== -->
         <div class="page active" id="page-profile">
             <div class="header">
@@ -910,11 +1094,15 @@
             </div>
 
             <div class="card">
-                <div class="profile-cover"></div>
+                <div class="profile-cover banner-default" id="profileCover" onclick="openBannerSelector()">
+                    <div class="banner-selector">
+                        <i class="fas fa-palette"></i> Сменить баннер
+                    </div>
+                </div>
                 <div class="profile-body">
                     <div class="avatar-wrapper">
                         <div class="big-avatar" id="bigAvatar">👤</div>
-                        <div class="avatar-upload" onclick="document.getElementById('avatarInput').click()">
+                        <div class="avatar-upload" onclick="event.stopPropagation(); document.getElementById('avatarInput').click()">
                             <i class="fas fa-camera"></i>
                         </div>
                     </div>
@@ -922,6 +1110,7 @@
                     <div class="profile-info">
                         <div class="name-row">
                             <h2 id="profileName">Nick_Name</h2>
+                            <span class="prefix" id="activePrefix" style="display:none;"></span>
                             <div class="badge"><i class="fas fa-star"></i> Premium Аккаунт</div>
                         </div>
                         <p class="email" id="profileEmail">example@mail.com</p>
@@ -997,58 +1186,29 @@
                     <button class="btn" onclick="showToast('Вывод', 'Функция вывода в разработке')">
                         <i class="fas fa-arrow-up"></i> Вывести
                     </button>
-                    <button class="btn" onclick="showToast('История', 'Полная история экспортирована')">
-                        <i class="fas fa-download"></i> Экспорт
-                    </button>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-content">
                     <h3 class="section-title">История транзакций</h3>
-                    <p class="section-desc">Последние операции с вашим балансом</p>
-                    <ul class="transactions-list" id="transactionsList">
-                        <li class="transaction-item">
-                            <div class="transaction-icon income"><i class="fas fa-arrow-down"></i></div>
-                            <div class="transaction-info">
-                                <h4>Пополнение баланса</h4>
-                                <p>19 ноября 2026, 14:32</p>
-                            </div>
-                            <div class="transaction-amount income">+500.00 ₽</div>
-                        </li>
-                        <li class="transaction-item">
-                            <div class="transaction-icon expense"><i class="fas fa-shopping-cart"></i></div>
-                            <div class="transaction-info">
-                                <h4>Покупка Premium</h4>
-                                <p>15 ноября 2026, 09:15</p>
-                            </div>
-                            <div class="transaction-amount expense">-299.00 ₽</div>
-                        </li>
-                        <li class="transaction-item">
-                            <div class="transaction-icon income"><i class="fas fa-gift"></i></div>
-                            <div class="transaction-info">
-                                <h4>Бонус за приглашение</h4>
-                                <p>10 ноября 2026, 18:47</p>
-                            </div>
-                            <div class="transaction-amount income">+100.00 ₽</div>
-                        </li>
-                        <li class="transaction-item">
-                            <div class="transaction-icon expense"><i class="fas fa-key"></i></div>
-                            <div class="transaction-info">
-                                <h4>Продление лицензии</h4>
-                                <p>1 ноября 2026, 12:00</p>
-                            </div>
-                            <div class="transaction-amount expense">-150.00 ₽</div>
-                        </li>
-                        <li class="transaction-item">
-                            <div class="transaction-icon income"><i class="fas fa-arrow-down"></i></div>
-                            <div class="transaction-info">
-                                <h4>Пополнение баланса</h4>
-                                <p>28 октября 2026, 20:11</p>
-                            </div>
-                            <div class="transaction-amount income">+1,099.00 ₽</div>
-                        </li>
-                    </ul>
+                    <ul class="transactions-list" id="transactionsList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== МАГАЗИН ===== -->
+        <div class="page" id="page-shop">
+            <div class="header">
+                <h1>Магазин префиксов</h1>
+                <p>Купите эксклюзивный префикс для вашего ника</p>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="section-title">Доступные префиксы</h3>
+                    <p class="section-desc">Выберите префикс, который будет отображаться рядом с вашим ником</p>
+                    <div class="prefixes-grid" id="prefixesGrid"></div>
                 </div>
             </div>
         </div>
@@ -1063,49 +1223,33 @@
             <div class="card">
                 <div class="card-content">
                     <h3 class="section-title">Настройки безопасности</h3>
-                    <p class="section-desc">Управляйте параметрами защиты аккаунта</p>
-
                     <div class="security-item">
                         <div class="security-icon"><i class="fas fa-lock"></i></div>
                         <div class="security-info">
                             <h4>Смена пароля</h4>
-                            <p>Последнее изменение: 30 дней назад</p>
+                            <p>Последнее изменение: <span id="lastPasswordChange">30 дней назад</span></p>
                         </div>
-                        <button class="btn btn-outline" onclick="openChangePassword()">Изменить</button>
+                        <button class="btn btn-outline btn-small" onclick="openChangePassword()">Изменить</button>
                     </div>
-
                     <div class="security-item">
                         <div class="security-icon"><i class="fas fa-mobile-alt"></i></div>
                         <div class="security-info">
                             <h4>Двухфакторная аутентификация</h4>
-                            <p>Дополнительный уровень защиты через SMS или приложение</p>
+                            <p>Дополнительный уровень защиты</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" id="2faToggle" onchange="toggle2FA(this)">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-
                     <div class="security-item">
                         <div class="security-icon"><i class="fas fa-envelope"></i></div>
                         <div class="security-info">
                             <h4>Уведомления о входе</h4>
-                            <p>Получать email при входе с нового устройства</p>
+                            <p>Email при входе с нового устройства</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" checked onchange="showToast('Настройки', 'Уведомления о входе обновлены')">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="security-item">
-                        <div class="security-icon"><i class="fas fa-user-shield"></i></div>
-                        <div class="security-info">
-                            <h4>Скрыть профиль</h4>
-                            <p>Ваш профиль не будет виден другим пользователям</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" onchange="showToast('Приватность', 'Настройки приватности обновлены')">
+                            <input type="checkbox" id="loginNotifToggle" onchange="toggleSetting('loginNotif', this.checked)">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -1116,39 +1260,8 @@
                 <div class="card-content">
                     <h3 class="section-title">Активные сессии</h3>
                     <p class="section-desc">Устройства, на которых выполнен вход в ваш аккаунт</p>
-
-                    <div class="session-item current">
-                        <div class="session-icon"><i class="fas fa-desktop"></i></div>
-                        <div class="session-info">
-                            <h4>Windows PC - Chrome</h4>
-                            <p>Москва, Россия • Сейчас активна</p>
-                        </div>
-                        <span class="session-status current">Текущая</span>
-                    </div>
-
-                    <div class="session-item">
-                        <div class="session-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="session-info">
-                            <h4>iPhone 13 - Safari</h4>
-                            <p>Москва, Россия • 2 дня назад</p>
-                        </div>
-                        <button class="btn btn-outline" style="padding: 8px 14px; font-size: 12px;" onclick="terminateSession(this)">
-                            Завершить
-                        </button>
-                    </div>
-
-                    <div class="session-item">
-                        <div class="session-icon"><i class="fas fa-laptop"></i></div>
-                        <div class="session-info">
-                            <h4>MacBook Pro - Firefox</h4>
-                            <p>Санкт-Петербург, Россия • 5 дней назад</p>
-                        </div>
-                        <button class="btn btn-outline" style="padding: 8px 14px; font-size: 12px;" onclick="terminateSession(this)">
-                            Завершить
-                        </button>
-                    </div>
-
-                    <button class="btn btn-danger" style="margin-top: 15px;" onclick="terminateAllSessions()">
+                    <div id="sessionsList"></div>
+                    <button class="btn btn-danger btn-small" style="margin-top: 15px;" onclick="terminateAllSessions()">
                         <i class="fas fa-sign-out-alt"></i> Завершить все другие сессии
                     </button>
                 </div>
@@ -1163,85 +1276,110 @@
             </div>
 
             <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-                <button class="btn btn-outline" onclick="markAllRead()">
+                <button class="btn btn-outline btn-small" onclick="markAllRead()">
                     <i class="fas fa-check-double"></i> Прочитать все
                 </button>
-                <button class="btn btn-outline" onclick="clearNotifications()">
+                <button class="btn btn-outline btn-small" onclick="clearNotifications()">
                     <i class="fas fa-trash"></i> Очистить
                 </button>
             </div>
 
-            <div id="notificationsList">
-                <div class="notification-item unread" data-id="1">
-                    <div class="notification-icon success"><i class="fas fa-check-circle"></i></div>
-                    <div class="notification-content">
-                        <h4>Платеж успешно обработан</h4>
-                        <p>Ваш баланс пополнен на 500.00 ₽. Спасибо за покупку!</p>
-                        <div class="notification-time">2 часа назад</div>
-                    </div>
-                    <div class="notification-actions">
-                        <button class="notif-btn" onclick="markRead(this)" title="Отметить прочитанным"><i class="fas fa-check"></i></button>
-                        <button class="notif-btn" onclick="deleteNotification(this)" title="Удалить"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
+            <div id="notificationsList"></div>
+        </div>
 
-                <div class="notification-item unread" data-id="2">
-                    <div class="notification-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
-                    <div class="notification-content">
-                        <h4>Подписка истекает через 7 дней</h4>
-                        <p>Ваша Premium подписка закончится 26 ноября 2026. Продлите сейчас со скидкой 20%!</p>
-                        <div class="notification-time">5 часов назад</div>
-                    </div>
-                    <div class="notification-actions">
-                        <button class="notif-btn" onclick="markRead(this)" title="Отметить прочитанным"><i class="fas fa-check"></i></button>
-                        <button class="notif-btn" onclick="deleteNotification(this)" title="Удалить"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
+        <!-- ===== НАСТРОЙКИ ===== -->
+        <div class="page" id="page-settings">
+            <div class="header">
+                <h1>Настройки</h1>
+                <p>Персонализируйте ваш личный кабинет</p>
+            </div>
 
-                <div class="notification-item unread" data-id="3">
-                    <div class="notification-icon info"><i class="fas fa-info-circle"></i></div>
-                    <div class="notification-content">
-                        <h4>Новое обновление клиента v2.5.0</h4>
-                        <p>Доступна новая версия Cherry Client с улучшенной производительностью и новыми функциями.</p>
-                        <div class="notification-time">1 день назад</div>
-                    </div>
-                    <div class="notification-actions">
-                        <button class="notif-btn" onclick="markRead(this)" title="Отметить прочитанным"><i class="fas fa-check"></i></button>
-                        <button class="notif-btn" onclick="deleteNotification(this)" title="Удалить"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-
-                <div class="notification-item" data-id="4">
-                    <div class="notification-icon danger"><i class="fas fa-shield-alt"></i></div>
-                    <div class="notification-content">
-                        <h4>Вход с нового устройства</h4>
-                        <p>Зафиксирован вход в аккаунт с устройства iPhone 13. Если это не вы — срочно смените пароль.</p>
-                        <div class="notification-time">2 дня назад</div>
-                    </div>
-                    <div class="notification-actions">
-                        <button class="notif-btn" onclick="deleteNotification(this)" title="Удалить"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-
-                <div class="notification-item" data-id="5">
-                    <div class="notification-icon success"><i class="fas fa-gift"></i></div>
-                    <div class="notification-content">
-                        <h4>Бонус за приглашение друга</h4>
-                        <p>Ваш друг зарегистрировался по вашей ссылке. Начислено 100.00 ₽ на баланс!</p>
-                        <div class="notification-time">9 дней назад</div>
-                    </div>
-                    <div class="notification-actions">
-                        <button class="notif-btn" onclick="deleteNotification(this)" title="Удалить"><i class="fas fa-times"></i></button>
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="section-title">Фон личного кабинета</h3>
+                    <p class="section-desc">Выберите тему оформления фона</p>
+                    <div class="bg-selector">
+                        <div class="bg-option bg-option-default" data-bg="default" onclick="changeBackground('default')">
+                            <span class="bg-option-name">По умолчанию</span>
+                        </div>
+                        <div class="bg-option bg-option-neon" data-bg="neon" onclick="changeBackground('neon')">
+                            <span class="bg-option-name">Неон</span>
+                        </div>
+                        <div class="bg-option bg-option-cyber" data-bg="cyber" onclick="changeBackground('cyber')">
+                            <span class="bg-option-name">Кибер</span>
+                        </div>
+                        <div class="bg-option bg-option-sunset" data-bg="sunset" onclick="changeBackground('sunset')">
+                            <span class="bg-option-name">Закат</span>
+                        </div>
+                        <div class="bg-option bg-option-forest" data-bg="forest" onclick="changeBackground('forest')">
+                            <span class="bg-option-name">Лес</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="section-title">Баннер профиля</h3>
+                    <p class="section-desc">Выберите 3D баннер для вашего профиля</p>
+                    <div class="banner-selector-grid">
+                        <div class="banner-option banner-default" data-banner="default" onclick="changeBanner('default')">
+                            <span class="banner-option-name">Cherry</span>
+                        </div>
+                        <div class="banner-option banner-neon" data-banner="neon" onclick="changeBanner('neon')">
+                            <span class="banner-option-name">Неон</span>
+                        </div>
+                        <div class="banner-option banner-fire" data-banner="fire" onclick="changeBanner('fire')">
+                            <span class="banner-option-name">Огонь</span>
+                        </div>
+                        <div class="banner-option banner-ice" data-banner="ice" onclick="changeBanner('ice')">
+                            <span class="banner-option-name">Лёд</span>
+                        </div>
+                        <div class="banner-option banner-gold" data-banner="gold" onclick="changeBanner('gold')">
+                            <span class="banner-option-name">Золото</span>
+                        </div>
+                        <div class="banner-option banner-cyber" data-banner="cyber" onclick="changeBanner('cyber')">
+                            <span class="banner-option-name">Кибер</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="section-title">Данные</h3>
+                    <p class="section-desc">Управление данными аккаунта</p>
+                    <button class="btn btn-outline btn-small" onclick="exportData()" style="margin-right: 10px;">
+                        <i class="fas fa-download"></i> Экспорт данных
+                    </button>
+                    <button class="btn btn-danger btn-small" onclick="resetData()">
+                        <i class="fas fa-trash"></i> Сбросить все данные
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Модалка выбора баннера -->
+    <div class="modal" id="bannerModal">
+        <div class="modal-content">
+            <h3>Выберите баннер</h3>
+            <p>Нажмите на баннер, чтобы применить</p>
+            <div class="banner-selector-grid" style="margin-bottom: 20px;">
+                <div class="banner-option banner-default" data-banner="default" onclick="changeBanner('default'); closeModal('bannerModal')"></div>
+                <div class="banner-option banner-neon" data-banner="neon" onclick="changeBanner('neon'); closeModal('bannerModal')"></div>
+                <div class="banner-option banner-fire" data-banner="fire" onclick="changeBanner('fire'); closeModal('bannerModal')"></div>
+                <div class="banner-option banner-ice" data-banner="ice" onclick="changeBanner('ice'); closeModal('bannerModal')"></div>
+                <div class="banner-option banner-gold" data-banner="gold" onclick="changeBanner('gold'); closeModal('bannerModal')"></div>
+                <div class="banner-option banner-cyber" data-banner="cyber" onclick="changeBanner('cyber'); closeModal('bannerModal')"></div>
+            </div>
+            <button class="btn btn-outline" onclick="closeModal('bannerModal')">Закрыть</button>
+        </div>
+    </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">
-        <div class="toast-icon"><i class="fas fa-check" id="toastIcon"></i></div>
+        <div class="toast-icon" id="toastIconBox"><i class="fas fa-check" id="toastIcon"></i></div>
         <div class="toast-content">
             <h4 id="toastTitle">Успешно!</h4>
             <p id="toastMessage">Действие выполнено</p>
@@ -1249,65 +1387,287 @@
     </div>
 
     <script>
+        // ===== ДАННЫЕ ПО УМОЛЧАНИЮ =====
+        const defaultData = {
+            username: 'Nick_Name',
+            email: 'example@mail.com',
+            avatar: null,
+            banner: 'default',
+            background: 'default',
+            balance: 1250.00,
+            activePrefix: null,
+            ownedPrefixes: [],
+            transactions: [
+                { type: 'income', title: 'Пополнение баланса', amount: 500, date: '2026-11-19T14:32:00' },
+                { type: 'expense', title: 'Покупка Premium', amount: 299, date: '2026-11-15T09:15:00' },
+                { type: 'income', title: 'Бонус за приглашение', amount: 100, date: '2026-11-10T18:47:00' },
+                { type: 'expense', title: 'Продление лицензии', amount: 150, date: '2026-11-01T12:00:00' }
+            ],
+            sessions: [
+                { id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true },
+                { id: 2, device: 'iPhone 13 - Safari', location: 'Москва, Россия', time: Date.now() - 172800000, current: false }
+            ],
+            notifications: [
+                { id: 1, type: 'success', title: 'Платеж успешно обработан', text: 'Ваш баланс пополнен на 500.00 ₽', time: Date.now() - 7200000, read: false },
+                { id: 2, type: 'warning', title: 'Подписка истекает через 7 дней', text: 'Ваша Premium подписка закончится 26 ноября 2026', time: Date.now() - 18000000, read: false },
+                { id: 3, type: 'info', title: 'Новое обновление клиента v2.5.0', text: 'Доступна новая версия с улучшениями', time: Date.now() - 86400000, read: false },
+                { id: 4, type: 'danger', title: 'Вход с нового устройства', text: 'Зафиксирован вход с iPhone 13', time: Date.now() - 172800000, read: true }
+            ],
+            settings: { loginNotif: true, twoFA: false },
+            lastPasswordChange: Date.now() - 2592000000
+        };
+
+        // Префиксы
+        const prefixes = [
+            { id: 'vip', name: 'VIP', price: 299, color: '#ffd700', bg: 'rgba(255, 215, 0, 0.2)', icon: '👑', desc: 'Золотой префикс VIP игрока' },
+            { id: 'pro', name: 'PRO', price: 499, color: '#00e676', bg: 'rgba(0, 230, 118, 0.2)', icon: '⚡', desc: 'Префикс профессионала' },
+            { id: 'elite', name: 'ELITE', price: 799, color: '#ff006e', bg: 'rgba(255, 0, 110, 0.2)', icon: '💎', desc: 'Элитный статус игрока' },
+            { id: 'legend', name: 'LEGEND', price: 999, color: '#9c27b0', bg: 'rgba(156, 39, 176, 0.2)', icon: '🔥', desc: 'Легендарный префикс' },
+            { id: 'admin', name: 'ADMIN', price: 1499, color: '#ff1744', bg: 'rgba(255, 23, 68, 0.2)', icon: '🛡️', desc: 'Администраторский статус' },
+            { id: 'dev', name: 'DEV', price: 1999, color: '#00bcd4', bg: 'rgba(0, 188, 212, 0.2)', icon: '💻', desc: 'Префикс разработчика' }
+        ];
+
+        // ===== ЗАГРУЗКА ДАННЫХ =====
+        let data = loadData();
+
+        function loadData() {
+            const saved = localStorage.getItem('cherryData');
+            if (saved) {
+                try {
+                    return { ...defaultData, ...JSON.parse(saved) };
+                } catch(e) {
+                    return { ...defaultData };
+                }
+            }
+            return { ...defaultData };
+        }
+
+        function saveData() {
+            localStorage.setItem('cherryData', JSON.stringify(data));
+        }
+
         // ===== НАВИГАЦИЯ =====
         document.querySelectorAll('.menu-link[data-page]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = link.getAttribute('data-page');
-                
                 document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
-                
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById('page-' + page).classList.add('active');
             });
         });
 
-        // ===== ЗАГРУЗКА АВАТАРКИ =====
-        const avatarInput = document.getElementById('avatarInput');
-        const bigAvatar = document.getElementById('bigAvatar');
-        const miniAvatar = document.getElementById('miniAvatar');
-
-        // Загрузка сохраненной аватарки
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
         window.addEventListener('load', () => {
-            const savedAvatar = localStorage.getItem('cherryAvatar');
-            if (savedAvatar) {
-                setAvatar(savedAvatar);
-            }
+            applyBackground(data.background);
+            applyBanner(data.banner);
+            applyAvatar(data.avatar);
+            applyPrefix(data.activePrefix);
+            updateProfileDisplay();
+            updateBalance();
+            renderTransactions();
+            renderPrefixes();
+            renderSessions();
+            renderNotifications();
+            updateNotifCount();
             animateCounters();
+            startSessionTimer();
+            startNotificationSimulator();
+            loadSettings();
         });
 
-        avatarInput.addEventListener('change', (e) => {
+        // ===== ФОН =====
+        function changeBackground(bg) {
+            data.background = bg;
+            applyBackground(bg);
+            saveData();
+            showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`);
+        }
+
+        function applyBackground(bg) {
+            document.body.className = 'bg-' + bg;
+            document.querySelectorAll('.bg-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.bg === bg);
+            });
+        }
+
+        function getBgName(bg) {
+            const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес' };
+            return names[bg] || bg;
+        }
+
+        // ===== БАННЕР =====
+        function changeBanner(banner) {
+            data.banner = banner;
+            applyBanner(banner);
+            saveData();
+            showToast('Баннер изменён', `Баннер "${getBannerName(banner)}" применён`);
+        }
+
+        function applyBanner(banner) {
+            const cover = document.getElementById('profileCover');
+            cover.className = 'profile-cover banner-' + banner;
+            const selector = document.createElement('div');
+            selector.className = 'banner-selector';
+            selector.innerHTML = '<i class="fas fa-palette"></i> Сменить баннер';
+            cover.appendChild(selector);
+            
+            document.querySelectorAll('.banner-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.banner === banner);
+            });
+        }
+
+        function getBannerName(banner) {
+            const names = { default: 'Cherry', neon: 'Неон', fire: 'Огонь', ice: 'Лёд', gold: 'Золото', cyber: 'Кибер' };
+            return names[banner] || banner;
+        }
+
+        function openBannerSelector() {
+            document.getElementById('bannerModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // ===== АВАТАР =====
+        document.getElementById('avatarInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 if (file.size > 2 * 1024 * 1024) {
                     showToast('Ошибка', 'Файл слишком большой (макс. 2MB)', 'error');
                     return;
                 }
-
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    const imgData = event.target.result;
-                    setAvatar(imgData);
-                    localStorage.setItem('cherryAvatar', imgData);
-                    showToast('Аватар обновлен', 'Ваша новая аватарка сохранена');
+                    data.avatar = event.target.result;
+                    applyAvatar(data.avatar);
+                    saveData();
+                    showToast('Аватар обновлён', 'Ваша новая аватарка сохранена');
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        function setAvatar(imgData) {
-            const imgHTML = `<img src="${imgData}" alt="Avatar">`;
-            bigAvatar.innerHTML = imgHTML;
-            miniAvatar.innerHTML = imgHTML;
+        function applyAvatar(imgData) {
+            const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤';
+            document.getElementById('bigAvatar').innerHTML = imgHTML;
+            document.getElementById('miniAvatar').innerHTML = imgHTML;
         }
 
-        // ===== КОПИРОВАНИЕ КЛЮЧА =====
+        // ===== ПРЕФИКСЫ =====
+        function applyPrefix(prefixId) {
+            const prefixEl = document.getElementById('activePrefix');
+            const miniPrefix = document.getElementById('miniPrefix');
+            
+            if (!prefixId) {
+                prefixEl.style.display = 'none';
+                miniPrefix.textContent = 'Без префикса';
+                return;
+            }
+
+            const prefix = prefixes.find(p => p.id === prefixId);
+            if (prefix) {
+                prefixEl.style.display = 'inline-flex';
+                prefixEl.style.background = prefix.bg;
+                prefixEl.style.color = prefix.color;
+                prefixEl.innerHTML = `${prefix.icon} ${prefix.name}`;
+                miniPrefix.textContent = prefix.name;
+                miniPrefix.style.color = prefix.color;
+            }
+        }
+
+        function buyPrefix(prefixId) {
+            const prefix = prefixes.find(p => p.id === prefixId);
+            if (!prefix) return;
+
+            if (data.ownedPrefixes.includes(prefixId)) {
+                data.activePrefix = prefixId;
+                applyPrefix(prefixId);
+                saveData();
+                renderPrefixes();
+                showToast('Префикс активирован', `${prefix.name} теперь отображается у вашего ника`);
+                return;
+            }
+
+            if (data.balance < prefix.price) {
+                showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error');
+                return;
+            }
+
+            if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
+                data.balance -= prefix.price;
+                data.ownedPrefixes.push(prefixId);
+                data.activePrefix = prefixId;
+                data.transactions.unshift({
+                    type: 'expense',
+                    title: `Покупка префикса ${prefix.name}`,
+                    amount: prefix.price,
+                    date: new Date().toISOString()
+                });
+                applyPrefix(prefixId);
+                updateBalance();
+                renderTransactions();
+                renderPrefixes();
+                saveData();
+                showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
+                
+                addNotification('success', 'Префикс куплен', `Вы приобрели префикс ${prefix.name}`);
+            }
+        }
+
+        function renderPrefixes() {
+            const grid = document.getElementById('prefixesGrid');
+            grid.innerHTML = prefixes.map(p => {
+                const owned = data.ownedPrefixes.includes(p.id);
+                const active = data.activePrefix === p.id;
+                return `
+                    <div class="prefix-card ${owned ? 'owned' : ''}">
+                        <div class="prefix-preview" style="color: ${p.color}; background: ${p.bg};">
+                            ${p.icon} ${p.name}
+                        </div>
+                        <div class="prefix-name">${p.name}</div>
+                        <div class="prefix-desc">${p.desc}</div>
+                        <div class="prefix-price">${owned ? (active ? 'АКТИВЕН' : 'КУПЛЕНО') : p.price + ' ₽'}</div>
+                        <button class="btn ${owned ? (active ? 'btn-outline' : 'btn-success') : ''} btn-small" 
+                                onclick="buyPrefix('${p.id}')" style="width: 100%; justify-content: center;">
+                            ${owned ? (active ? '<i class="fas fa-check"></i> Активен' : '<i class="fas fa-play"></i> Активировать') : '<i class="fas fa-shopping-cart"></i> Купить'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== ПРОФИЛЬ =====
+        function updateProfileDisplay() {
+            document.getElementById('profileName').textContent = data.username;
+            document.getElementById('profileEmail').textContent = data.email;
+            document.getElementById('miniName').textContent = data.username;
+            document.getElementById('username').value = data.username;
+            document.getElementById('email').value = data.email;
+        }
+
+        function saveProfile() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!username || !email) {
+                showToast('Ошибка', 'Заполните все поля', 'error');
+                return;
+            }
+
+            data.username = username;
+            data.email = email;
+            updateProfileDisplay();
+            saveData();
+            showToast('Успешно!', 'Данные профиля обновлены');
+        }
+
         function copyKey() {
             const copyText = document.getElementById("apiKeyInput");
             copyText.select();
             copyText.setSelectionRange(0, 99999);
-
             navigator.clipboard.writeText(copyText.value).then(() => {
                 showToast('Скопировано!', 'API ключ скопирован в буфер обмена');
             }).catch(() => {
@@ -1316,216 +1676,273 @@
             });
         }
 
-        // ===== СОХРАНЕНИЕ ПРОФИЛЯ =====
-        function saveProfile() {
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            
-            if (!username || !email) {
-                showToast('Ошибка', 'Заполните все поля', 'error');
-                return;
-            }
-
-            document.getElementById('profileName').textContent = username;
-            document.getElementById('profileEmail').textContent = email;
-            document.getElementById('miniName').textContent = username;
-
-            localStorage.setItem('cherryUsername', username);
-            localStorage.setItem('cherryEmail', email);
-
-            showToast('Успешно!', 'Данные профиля обновлены');
+        // ===== КОШЕЛЕК =====
+        function updateBalance() {
+            const formatted = data.balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('balanceAmount').innerHTML = formatted + ' <span>₽</span>';
         }
 
-        // Загрузка сохраненных данных
-        window.addEventListener('load', () => {
-            const savedName = localStorage.getItem('cherryUsername');
-            const savedEmail = localStorage.getItem('cherryEmail');
-            if (savedName) {
-                document.getElementById('username').value = savedName;
-                document.getElementById('profileName').textContent = savedName;
-                document.getElementById('miniName').textContent = savedName;
-            }
-            if (savedEmail) {
-                document.getElementById('email').value = savedEmail;
-                document.getElementById('profileEmail').textContent = savedEmail;
-            }
-        });
-
-        // ===== КОШЕЛЕК =====
         function openTopUp() {
             const amount = prompt('Введите сумму пополнения (₽):', '100');
             if (amount && !isNaN(amount) && amount > 0) {
-                const balanceEl = document.getElementById('balanceAmount');
-                const currentBalance = parseFloat(balanceEl.textContent.replace(/[^\d.]/g, ''));
-                const newBalance = (currentBalance + parseFloat(amount)).toFixed(2);
-                balanceEl.innerHTML = newBalance.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' <span>₽</span>';
-                
-                // Добавить транзакцию
-                const list = document.getElementById('transactionsList');
-                const now = new Date();
-                const dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-                
-                const item = document.createElement('li');
-                item.className = 'transaction-item';
-                item.style.animation = 'fadeIn 0.5s ease';
-                item.innerHTML = `
-                    <div class="transaction-icon income"><i class="fas fa-arrow-down"></i></div>
-                    <div class="transaction-info">
-                        <h4>Пополнение баланса</h4>
-                        <p>${dateStr}</p>
-                    </div>
-                    <div class="transaction-amount income">+${parseFloat(amount).toFixed(2)} ₽</div>
-                `;
-                list.insertBefore(item, list.firstChild);
-                
-                showToast('Пополнение', `Баланс пополнен на ${amount} ₽`);
+                const val = parseFloat(amount);
+                data.balance += val;
+                data.transactions.unshift({
+                    type: 'income',
+                    title: 'Пополнение баланса',
+                    amount: val,
+                    date: new Date().toISOString()
+                });
+                updateBalance();
+                renderTransactions();
+                saveData();
+                showToast('Пополнение', `Баланс пополнен на ${val.toFixed(2)} ₽`);
+                addNotification('success', 'Баланс пополнен', `На счёт зачислено ${val.toFixed(2)} ₽`);
             }
+        }
+
+        function renderTransactions() {
+            const list = document.getElementById('transactionsList');
+            if (data.transactions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><h3>Нет транзакций</h3></div>';
+                return;
+            }
+            list.innerHTML = data.transactions.map(t => {
+                const date = new Date(t.date);
+                const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const icon = t.type === 'income' ? 'fa-arrow-down' : 'fa-shopping-cart';
+                return `
+                    <li class="transaction-item">
+                        <div class="transaction-icon ${t.type}"><i class="fas ${icon}"></i></div>
+                        <div class="transaction-info">
+                            <h4>${t.title}</h4>
+                            <p>${dateStr}</p>
+                        </div>
+                        <div class="transaction-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} ₽</div>
+                    </li>
+                `;
+            }).join('');
         }
 
         // ===== БЕЗОПАСНОСТЬ =====
-        function openChangePassword() {
-            const oldPass = prompt('Введите текущий пароль:');
-            if (oldPass) {
-                const newPass = prompt('Введите новый пароль:');
-                if (newPass && newPass.length >= 6) {
-                    showToast('Пароль изменен', 'Ваш пароль успешно обновлен');
-                } else if (newPass) {
-                    showToast('Ошибка', 'Пароль должен быть не менее 6 символов', 'error');
+        function renderSessions() {
+            const list = document.getElementById('sessionsList');
+            list.innerHTML = data.sessions.map(s => {
+                const timeAgo = getTimeAgo(s.time);
+                const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt';
+                return `
+                    <div class="session-item ${s.current ? 'current' : ''}">
+                        <div class="session-icon"><i class="fas ${icon}"></i></div>
+                        <div class="session-info">
+                            <h4>${s.device}</h4>
+                            <p>${s.location}</p>
+                            <div class="session-time">${s.current ? 'Сейчас активна' : timeAgo}</div>
+                        </div>
+                        ${s.current ? '<span class="session-status current">Текущая</span>' : 
+                          `<button class="btn btn-outline btn-small" onclick="terminateSession(${s.id})">Завершить</button>`}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startSessionTimer() {
+            setInterval(() => {
+                const currentSession = data.sessions.find(s => s.current);
+                if (currentSession) {
+                    currentSession.time = Date.now();
                 }
-            }
+                renderSessions();
+            }, 60000);
         }
 
-        function toggle2FA(checkbox) {
-            if (checkbox.checked) {
-                showToast('2FA включена', 'Двухфакторная аутентификация активирована');
-            } else {
-                showToast('2FA отключена', 'Двухфакторная аутентификация деактивирована');
-            }
-        }
-
-        function terminateSession(btn) {
-            const item = btn.closest('.session-item');
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(20px)';
-            setTimeout(() => item.remove(), 300);
+        function terminateSession(id) {
+            data.sessions = data.sessions.filter(s => s.id !== id);
+            renderSessions();
+            saveData();
             showToast('Сессия завершена', 'Устройство отключено от аккаунта');
         }
 
         function terminateAllSessions() {
             if (confirm('Завершить все другие сессии?')) {
-                document.querySelectorAll('.session-item:not(.current)').forEach(item => {
-                    item.style.opacity = '0';
-                    setTimeout(() => item.remove(), 300);
-                });
+                data.sessions = data.sessions.filter(s => s.current);
+                renderSessions();
+                saveData();
                 showToast('Готово', 'Все другие сессии завершены');
             }
         }
 
+        function openChangePassword() {
+            const newPass = prompt('Введите новый пароль (мин. 6 символов):');
+            if (newPass && newPass.length >= 6) {
+                data.lastPasswordChange = Date.now();
+                document.getElementById('lastPasswordChange').textContent = 'только что';
+                saveData();
+                showToast('Пароль изменён', 'Ваш пароль успешно обновлён');
+                addNotification('danger', 'Пароль изменён', 'Пароль от аккаунта был успешно изменён');
+            } else if (newPass) {
+                showToast('Ошибка', 'Пароль должен быть не менее 6 символов', 'error');
+            }
+        }
+
+        function toggle2FA(checkbox) {
+            data.settings.twoFA = checkbox.checked;
+            saveData();
+            showToast(checkbox.checked ? '2FA включена' : '2FA отключена', 
+                     checkbox.checked ? 'Двухфакторная аутентификация активирована' : 'Двухфакторная аутентификация деактивирована');
+        }
+
+        function toggleSetting(key, value) {
+            data.settings[key] = value;
+            saveData();
+            showToast('Настройки сохранены', 'Изменения применены');
+        }
+
+        function loadSettings() {
+            document.getElementById('2faToggle').checked = data.settings.twoFA || false;
+            document.getElementById('loginNotifToggle').checked = data.settings.loginNotif !== false;
+        }
+
         // ===== УВЕДОМЛЕНИЯ =====
-        function markRead(btn) {
-            const item = btn.closest('.notification-item');
-            item.classList.remove('unread');
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            if (data.notifications.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3><p>У вас пока нет уведомлений</p></div>';
+                return;
+            }
+            list.innerHTML = data.notifications.map(n => {
+                const icons = { info: 'fa-info-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle', danger: 'fa-shield-alt' };
+                return `
+                    <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}">
+                        <div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div>
+                        <div class="notification-content">
+                            <h4>${n.title}</h4>
+                            <p>${n.text}</p>
+                            <div class="notification-time">${getTimeAgo(n.time)}</div>
+                        </div>
+                        <div class="notification-actions">
+                            ${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})" title="Прочитать"><i class="fas fa-check"></i></button>` : ''}
+                            <button class="notif-btn" onclick="deleteNotification(${n.id})" title="Удалить"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addNotification(type, title, text) {
+            data.notifications.unshift({
+                id: Date.now(),
+                type, title, text,
+                time: Date.now(),
+                read: false
+            });
+            renderNotifications();
             updateNotifCount();
-            showToast('Прочитано', 'Уведомление отмечено как прочитанное');
+            saveData();
+        }
+
+        function markRead(id) {
+            const notif = data.notifications.find(n => n.id === id);
+            if (notif) {
+                notif.read = true;
+                renderNotifications();
+                updateNotifCount();
+                saveData();
+            }
         }
 
         function markAllRead() {
-            document.querySelectorAll('.notification-item.unread').forEach(item => {
-                item.classList.remove('unread');
-            });
+            data.notifications.forEach(n => n.read = true);
+            renderNotifications();
             updateNotifCount();
+            saveData();
             showToast('Готово', 'Все уведомления отмечены как прочитанные');
         }
 
-        function deleteNotification(btn) {
-            const item = btn.closest('.notification-item');
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(-20px)';
-            setTimeout(() => {
-                item.remove();
-                updateNotifCount();
-                checkEmpty();
-            }, 300);
+        function deleteNotification(id) {
+            data.notifications = data.notifications.filter(n => n.id !== id);
+            renderNotifications();
+            updateNotifCount();
+            saveData();
         }
 
         function clearNotifications() {
             if (confirm('Удалить все уведомления?')) {
-                const list = document.getElementById('notificationsList');
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-bell-slash"></i>
-                        <h3>Нет уведомлений</h3>
-                        <p>У вас пока нет уведомлений</p>
-                    </div>
-                `;
+                data.notifications = [];
+                renderNotifications();
                 updateNotifCount();
+                saveData();
             }
         }
 
         function updateNotifCount() {
-            const count = document.querySelectorAll('.notification-item.unread').length;
+            const count = data.notifications.filter(n => !n.read).length;
             const badge = document.getElementById('notifCount');
             badge.textContent = count;
             badge.style.display = count > 0 ? 'inline' : 'none';
         }
 
-        function checkEmpty() {
-            const list = document.getElementById('notificationsList');
-            if (list.children.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-bell-slash"></i>
-                        <h3>Нет уведомлений</h3>
-                        <p>У вас пока нет уведомлений</p>
-                    </div>
-                `;
-            }
+        // Симуляция уведомлений в реальном времени
+        function startNotificationSimulator() {
+            const messages = [
+                { type: 'info', title: 'Новое событие', text: 'Кто-то просмотрел ваш профиль' },
+                { type: 'success', title: 'Награда получена', text: 'Вам начислено 50 бонусных очков' },
+                { type: 'warning', title: 'Напоминание', text: 'Не забудьте продлить подписку' },
+                { type: 'info', title: 'Обновление', text: 'Доступны новые функции клиента' }
+            ];
+
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const msg = messages[Math.floor(Math.random() * messages.length)];
+                    addNotification(msg.type, msg.title, msg.text);
+                    showToast('Новое уведомление', msg.title);
+                }
+            }, 30000);
         }
 
-        // ===== TOAST =====
+        // ===== УТИЛИТЫ =====
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return 'только что';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} мин. назад`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} ч. назад`;
+            const days = Math.floor(hours / 24);
+            return `${days} дн. назад`;
+        }
+
         function showToast(title, message, type = 'success') {
             const toast = document.getElementById('toast');
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastMessage').textContent = message;
             
             const icon = document.getElementById('toastIcon');
+            const iconBox = document.getElementById('toastIconBox');
+            
             if (type === 'error') {
                 icon.className = 'fas fa-exclamation';
+                iconBox.style.background = 'rgba(255, 23, 68, 0.2)';
+                iconBox.style.color = 'var(--danger)';
                 toast.style.borderLeftColor = 'var(--danger)';
-                toast.querySelector('.toast-icon').style.background = 'rgba(255, 23, 68, 0.2)';
-                toast.querySelector('.toast-icon').style.color = 'var(--danger)';
             } else {
                 icon.className = 'fas fa-check';
+                iconBox.style.background = 'rgba(255, 0, 110, 0.2)';
+                iconBox.style.color = 'var(--primary)';
                 toast.style.borderLeftColor = 'var(--primary)';
-                toast.querySelector('.toast-icon').style.background = 'rgba(255, 0, 110, 0.2)';
-                toast.querySelector('.toast-icon').style.color = 'var(--primary)';
             }
 
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ===== ВЫХОД =====
-        function logout() {
-            if (confirm('Вы уверены, что хотите выйти?')) {
-                showToast('До свидания!', 'Вы вышли из аккаунта');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            }
-        }
-
-        // ===== АНИМАЦИЯ ЦИФР =====
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-num');
             const speed = 100;
-
             counters.forEach(counter => {
                 const target = +counter.getAttribute('data-target');
                 const isDecimal = counter.getAttribute('data-decimal') === "true";
                 let count = 0;
                 const inc = target / speed;
-
                 const update = () => {
                     count += inc;
                     if (count < target) {
@@ -1538,6 +1955,39 @@
                 update();
             });
         }
+
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                showToast('До свидания!', 'Вы вышли из аккаунта');
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cherry-client-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Экспорт', 'Данные сохранены в файл');
+        }
+
+        function resetData() {
+            if (confirm('Вы уверены? Все данные будут удалены!')) {
+                localStorage.removeItem('cherryData');
+                location.reload();
+            }
+        }
+
+        // Закрытие модалки по клику вне
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>
