@@ -497,4 +497,432 @@
 
             // Синхронизация ника
             if (userObj.name && userObj.name !== data.username) {
-                data
+                data.username = userObj.name;
+                changed = true;
+            }
+
+            // Синхронизация email
+            if (userObj.email && userObj.email !== data.email) {
+                data.email = userObj.email;
+                changed = true;
+            }
+
+            // Синхронизация префикса (если админ выдал)
+            if (userObj.prefix && !data.ownedPrefixes.includes(userObj.prefix.toLowerCase())) {
+                const prefixMap = { 'VIP': 'vip', 'PRO': 'pro', 'ELITE': 'elite', 'LEGEND': 'legend', 'CRYSTAL': 'crystal', 'ADMIN': 'vip', 'cherry': 'vip' };
+                const prefixId = prefixMap[userObj.prefix];
+                if (prefixId && !data.ownedPrefixes.includes(prefixId)) {
+                    data.ownedPrefixes.push(prefixId);
+                    data.activePrefix = prefixId;
+                    changed = true;
+                }
+            }
+
+            if (changed) saveData();
+            return changed;
+        }
+
+        // ===== ПРОВЕРКА БАНА =====
+        function checkBan() {
+            const currentUser = localStorage.getItem('cherry_user');
+            if (!currentUser) { window.location.href = 'index.html'; return false; }
+            const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
+            if (userObj && userObj.status === 'banned') {
+                alert('Ваш аккаунт заблокирован администратором.');
+                localStorage.removeItem('cherry_user');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        document.querySelectorAll('.menu-link[data-page]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + page).classList.add('active');
+                if (page === 'wallet') { updateBalance(); renderTransactions(); }
+                if (page === 'shop') { renderPrefixes(); updateHwidDisplay(); }
+                if (page === 'purchases') renderPurchases();
+                if (page === 'reviews') renderMyReviews();
+                if (page === 'security') renderSessions();
+                if (page === 'notifications') renderNotifications();
+                if (page === 'settings') { renderBannerSelectors(); updateBgSelector(); }
+            });
+        });
+
+        window.addEventListener('load', () => {
+            if (!checkBan()) return;
+            syncFromAdmin();
+            applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
+            updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
+            renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
+        });
+
+        // ===== ЖИВАЯ СИНХРОНИЗАЦИЯ МЕЖДУ ВКЛАДКАМИ =====
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cherry_all_users' || e.key === 'cherryData') {
+                const changed = syncFromAdmin();
+                if (changed) {
+                    applyAvatar(data.avatar); applyPrefix(data.activePrefix);
+                    updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
+                    showToast('🔄 Обновлено', 'Администратор изменил ваш аккаунт');
+                }
+            }
+        });
+
+        // Автообновление каждые 5 секунд (если админка открыта в другой вкладке)
+        setInterval(() => {
+            const changed = syncFromAdmin();
+            if (changed) {
+                applyAvatar(data.avatar); applyPrefix(data.activePrefix);
+                updateProfileDisplay(); updateBalance(); renderPurchases();
+            }
+        }, 5000);
+
+        function getAllReviews() { return JSON.parse(localStorage.getItem('cherryReviews') || '[]'); }
+        function saveAllReviews(reviews) { localStorage.setItem('cherryReviews', JSON.stringify(reviews)); }
+
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            const rating = data.selectedRating;
+            if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
+            if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
+            const allReviews = getAllReviews();
+            const newReview = { id: Date.now(), user: data.username, avatar: data.avatar || data.username.charAt(0).toUpperCase(), rating: rating, text: text, product: 'Cherry Client', date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), status: 'pending', verified: true };
+            allReviews.unshift(newReview); saveAllReviews(allReviews);
+            data.myReviews.push({ id: newReview.id, name: data.username, rating, text, date: newReview.date }); saveData();
+            document.getElementById('reviewText').value = ''; data.selectedRating = 0;
+            document.querySelectorAll('#starRating i').forEach(s => s.className = 'far fa-star');
+            renderMyReviews();
+            showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации администратором');
+        }
+
+        function renderMyReviews() {
+            const list = document.getElementById('myReviewsList');
+            const allReviews = getAllReviews();
+            const myReviews = allReviews.filter(r => r.user === data.username);
+            if (myReviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>У вас пока нет отзывов</h3><p>Напишите первый отзыв выше!</p></div>'; return; }
+            list.innerHTML = myReviews.map(r => {
+                const statusText = r.status === 'approved' ? '✓ Одобрено' : r.status === 'pending' ? '⏳ На модерации' : '✗ Отклонено';
+                const statusClass = r.status === 'approved' ? 'active' : r.status === 'pending' ? 'pending' : 'expired';
+                return `<div class="my-review"><div class="my-review-header"><div><strong>${r.name}</strong><span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span></div><span class="purchase-status ${statusClass}" style="margin-left: 10px;">${statusText}</span></div><div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div><p style="margin-top: 10px;">${r.text}</p><p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">${r.date}</p></div>`;
+            }).join('');
+        }
+
+        function initStarRating() {
+            document.querySelectorAll('#starRating i').forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    data.selectedRating = rating;
+                    document.querySelectorAll('#starRating i').forEach((s, i) => { s.className = i < rating ? 'fas fa-star active' : 'far fa-star'; });
+                });
+            });
+        }
+
+        function changeBackground(bg) { data.background = bg; applyBackground(bg); updateBgSelector(); saveData(); showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`); }
+        function applyBackground(bg) { document.body.className = document.body.className.replace(/bg-\w+/g, '').trim(); document.body.classList.add('bg-' + bg); }
+        function updateBgSelector() { document.querySelectorAll('.bg-option').forEach(opt => { opt.classList.toggle('active', opt.dataset.bg === data.background); }); }
+        function getBgName(bg) { const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' }; return names[bg] || bg; }
+
+        function changeBanner(banner) { data.banner = banner; applyBanner(banner); saveData(); showToast('Баннер изменён', 'Новый баннер применён'); }
+        function applyBanner(banner) {
+            const cover = document.getElementById('profileCover');
+            const b = banners.find(x => x.id === banner);
+            cover.className = 'profile-cover ' + (b ? b.class : 'banner-default');
+            const selector = document.createElement('div');
+            selector.className = 'banner-selector';
+            selector.innerHTML = '<i class="fas fa-palette"></i> Сменить баннер';
+            cover.appendChild(selector);
+            document.querySelectorAll('.banner-option').forEach(opt => opt.classList.toggle('active', opt.dataset.banner === banner));
+        }
+        function openBannerSelector() { document.getElementById('bannerModal').classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function renderBannerSelectors() {
+            const html = banners.map(b => `<div class="banner-option ${b.class}" data-banner="${b.id}" onclick="changeBanner('${b.id}'); closeModal('bannerModal')"><span class="banner-option-name">${b.name}</span></div>`).join('');
+            document.getElementById('bannerSelectorGrid').innerHTML = html;
+            document.getElementById('bannerModalGrid').innerHTML = html;
+        }
+
+        document.getElementById('avatarInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) { showToast('Ошибка', 'Файл слишком большой (макс. 2MB)', 'error'); return; }
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    data.avatar = event.target.result;
+                    applyAvatar(data.avatar);
+                    saveData();
+                    localStorage.setItem('cherry_avatar', data.avatar);
+                    const currentUser = localStorage.getItem('cherry_user');
+                    if (currentUser) {
+                        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                        let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+                        if (idx !== -1) { allUsers[idx].avatar = data.avatar; localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); }
+                    }
+                    showToast('Аватар обновлён', 'Ваша аватарка применена везде');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function applyAvatar(imgData) { const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤'; document.getElementById('bigAvatar').innerHTML = imgHTML; document.getElementById('miniAvatar').innerHTML = imgHTML; }
+
+        function applyPrefix(prefixId) {
+            const prefixEl = document.getElementById('activePrefix');
+            const miniPrefix = document.getElementById('miniPrefix');
+            if (!prefixId) { prefixEl.style.display = 'none'; miniPrefix.textContent = 'Без префикса'; return; }
+            const prefix = prefixes.find(p => p.id === prefixId);
+            if (prefix) { prefixEl.style.display = 'inline-flex'; prefixEl.className = 'prefix ' + prefix.class; prefixEl.innerHTML = `${prefix.icon} ${prefix.name}`; miniPrefix.textContent = prefix.name; miniPrefix.style.color = '#fff'; }
+        }
+
+        function buyPrefix(prefixId) {
+            const prefix = prefixes.find(p => p.id === prefixId);
+            if (!prefix) return;
+            if (data.ownedPrefixes.includes(prefixId)) { 
+                data.activePrefix = prefixId; 
+                applyPrefix(prefixId); 
+                saveData(); 
+                renderPrefixes(); 
+                showToast('Префикс активирован', `${prefix.name} теперь отображается`); 
+                return; 
+            }
+            if (data.balance < prefix.price) { 
+                showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
+                return; 
+            }
+            if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
+                data.balance -= prefix.price; 
+                data.ownedPrefixes.push(prefixId); 
+                data.activePrefix = prefixId;
+                data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
+                data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
+                applyPrefix(prefixId); 
+                updateBalance(); 
+                renderTransactions(); 
+                renderPrefixes(); 
+                renderPurchases(); 
+                saveData();
+                // Синхронизация с cherry_all_users
+                const currentUser = localStorage.getItem('cherry_user');
+                if (currentUser) {
+                    let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                    let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+                    if (idx !== -1) { 
+                        allUsers[idx].balance = data.balance;
+                        allUsers[idx].prefix = prefix.name;
+                        if (!allUsers[idx].ownedPrefixes) allUsers[idx].ownedPrefixes = [];
+                        if (!allUsers[idx].ownedPrefixes.includes(prefix.name)) allUsers[idx].ownedPrefixes.push(prefix.name);
+                        localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); 
+                    }
+                }
+                showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
+            }
+        }
+
+        function renderPrefixes() {
+            const grid = document.getElementById('prefixesGrid');
+            grid.innerHTML = prefixes.map(p => {
+                const owned = data.ownedPrefixes.includes(p.id); 
+                const active = data.activePrefix === p.id;
+                return `<div class="prefix-card ${owned ? 'owned' : ''}"><div class="prefix-preview ${p.class}">${p.icon} ${p.name}</div><div class="prefix-name">${p.name}</div><div class="prefix-desc">${p.desc}</div><div class="prefix-price">${owned ? (active ? 'АКТИВЕН' : 'КУПЛЕНО') : p.price + ' ₽'}</div><button class="btn ${owned ? (active ? 'btn-outline' : 'btn-success') : ''} btn-small" onclick="buyPrefix('${p.id}')" style="width: 100%; justify-content: center;">${owned ? (active ? '<i class="fas fa-check"></i> Активен' : '<i class="fas fa-play"></i> Активировать') : '<i class="fas fa-shopping-cart"></i> Купить'}</button></div>`;
+            }).join('');
+        }
+
+        // ===== ОБНОВЛЁННОЕ ОТОБРАЖЕНИЕ ПРОФИЛЯ С VIP/ADMIN/PREMIUM =====
+        function updateProfileDisplay() {
+            document.getElementById('profileName').textContent = data.username;
+            document.getElementById('profileEmail').textContent = data.email;
+            document.getElementById('miniName').textContent = data.username;
+            document.getElementById('username').value = data.username;
+            document.getElementById('email').value = data.email;
+            document.getElementById('regDate').textContent = data.regDate || '—';
+
+            const premiumBadge = document.getElementById('premiumBadge');
+            const adminBadge = document.getElementById('adminBadge');
+            const vipBadge = document.getElementById('vipBadge');
+            const licenseText = document.getElementById('licenseText');
+            const apiKeyCard = document.getElementById('apiKeyCard');
+            const premiumDownloadCard = document.getElementById('premiumDownloadCard');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+
+            // Бейджи (скрываем все, показываем нужные)
+            premiumBadge.style.display = 'none';
+            adminBadge.style.display = 'none';
+            vipBadge.style.display = 'none';
+
+            if (data.role === 'admin') {
+                adminBadge.style.display = 'inline-flex';
+            } else if (data.role === 'vip' && !data.isPremium) {
+                vipBadge.style.display = 'inline-flex';
+            }
+
+            // Premium (отдельно от роли!)
+            if (data.isPremium) {
+                premiumBadge.style.display = 'inline-flex';
+                licenseText.textContent = 'Premium до 26.11.2026';
+                licenseText.style.color = 'var(--success)';
+                apiKeyCard.style.display = 'block';
+                premiumDownloadCard.style.display = 'block';
+                if (data.apiKey) apiKeyInput.value = data.apiKey;
+            } else {
+                licenseText.textContent = data.role === 'vip' ? 'VIP Basic' : 'Basic';
+                licenseText.style.color = data.role === 'vip' ? '#ffd700' : 'var(--text-main)';
+                apiKeyCard.style.display = 'none';
+                premiumDownloadCard.style.display = 'none';
+            }
+        }
+
+        function saveProfile() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            if (!username || !email) { showToast('Ошибка', 'Заполните все поля', 'error'); return; }
+            data.username = username; data.email = email; updateProfileDisplay(); saveData();
+            showToast('Успешно!', 'Данные профиля обновлены');
+        }
+        function copyKey() { 
+            const copyText = document.getElementById("apiKeyInput"); 
+            if (!copyText.value) { showToast('Ошибка', 'API ключ не найден. Обратитесь к администратору.', 'error'); return; }
+            copyText.select(); 
+            navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); 
+        }
+        function downloadPremium() {
+            const adminData = JSON.parse(localStorage.getItem('cherryAdminData') || '{}');
+            const files = adminData.files || [];
+            if (files.length > 0) {
+                const latestFile = files[files.length - 1];
+                const a = document.createElement('a');
+                a.href = latestFile.data;
+                a.download = latestFile.name;
+                a.click();
+                showToast('Скачивание', `Началась загрузка ${latestFile.name}`);
+            } else {
+                showToast('Ошибка', 'Файл премиум-версии ещё не загружен администратором', 'error');
+            }
+        }
+
+        function updateBalance() { const formatted = data.balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); document.getElementById('balanceAmount').innerHTML = formatted + ' <span>₽</span>'; }
+        function openTopUp() {
+            const currentUser = localStorage.getItem('cherry_user');
+            const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
+            if (!userObj || userObj.role !== 'admin') {
+                showToast('Ошибка', 'Пополнение баланса доступно только администраторам', 'error');
+                return;
+            }
+            const amount = prompt('Введите сумму пополнения (₽):', '100');
+            if (amount && !isNaN(amount) && amount > 0) {
+                const val = parseFloat(amount);
+                data.balance += val;
+                data.transactions.unshift({ type: 'income', title: 'Пополнение баланса', amount: val, date: new Date().toISOString() });
+                data.purchases.unshift({ id: Date.now(), name: 'Пополнение баланса', date: new Date().toISOString().split('T')[0], amount: val, status: 'active', icon: 'fa-wallet' });
+                // Синхронизация с cherry_all_users
+                if (currentUser) {
+                    let allU = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                    let idx = allU.findIndex(u => u.name === currentUser || u.email === currentUser);
+                    if (idx !== -1) { allU[idx].balance = data.balance; localStorage.setItem('cherry_all_users', JSON.stringify(allU)); }
+                }
+                updateBalance(); renderTransactions(); renderPurchases(); saveData();
+                showToast('Пополнение', `Баланс пополнен на ${val.toFixed(2)} ₽`);
+            }
+        }
+        function renderTransactions() {
+            const list = document.getElementById('transactionsList');
+            if (data.transactions.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><h3>Нет транзакций</h3></div>'; return; }
+            list.innerHTML = data.transactions.map(t => {
+                const date = new Date(t.date);
+                const dateStr = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const icon = t.type === 'income' ? 'fa-arrow-down' : 'fa-shopping-cart';
+                return `<li class="transaction-item"><div class="transaction-icon ${t.type}"><i class="fas ${icon}"></i></div><div class="transaction-info"><h4>${t.title}</h4><p>${dateStr}</p></div><div class="transaction-amount ${t.type}">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)} ₽</div></li>`;
+            }).join('');
+        }
+
+        function updateHwidDisplay() {
+            document.getElementById('currentHwid').textContent = data.hwid;
+            document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidResetsWarning').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidLastReset').textContent = data.hwidLastReset ? formatLastReset(data.hwidLastReset) : '—';
+        }
+        function formatLastReset(timestamp) { if (!timestamp) return '—'; const diff = Date.now() - timestamp; const hours = Math.floor(diff / 3600000); if (hours < 1) return 'Только что'; if (hours < 24) return hours + 'ч назад'; return Math.floor(hours/24) + 'д назад'; }
+        function generateNewHwid() { const chars = 'ABCDEF0123456789'; const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join(''); return `${gen()}-${gen()}-${gen()}-${gen()}`; }
+        function resetHwid() {
+            if (data.hwidResetsLeft <= 0) {
+                if (data.balance < 150) { showToast('Недостаточно средств', 'Нужно 150 ₽ для платного сброса HWID', 'error'); return; }
+                if (!confirm('Платный сброс HWID стоит 150 ₽. Списать с баланса?')) return;
+                data.balance -= 150;
+                data.transactions.unshift({ type: 'expense', title: 'Платный сброс HWID', amount: 150, date: new Date().toISOString() });
+            } else { if (!confirm('Сбросить HWID? Бесплатных сбросов осталось: ' + data.hwidResetsLeft)) return; data.hwidResetsLeft--; }
+            const oldHwid = data.hwid; data.hwid = generateNewHwid(); data.hwidLastReset = Date.now();
+            data.purchases.unshift({ id: Date.now(), name: 'Сброс HWID', date: new Date().toISOString().split('T')[0], amount: data.hwidResetsLeft >= 0 ? 0 : 150, status: 'active', icon: 'fa-microchip' });
+            saveData(); updateHwidDisplay(); updateBalance(); renderTransactions(); renderPurchases();
+            showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
+        }
+
+        function renderPurchases() {
+            const list = document.getElementById('purchasesList');
+            const subList = document.getElementById('activeSubscriptions');
+            if (data.isPremium) {
+                subList.innerHTML = `<div class="purchase-item"><div class="purchase-icon"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>Premium подписка</h4><p>Активна до 26 ноября 2026 • Осталось 7 дней</p></div><span class="purchase-status active">Активна</span></div>`;
+            } else if (data.role === 'vip') {
+                subList.innerHTML = `<div class="purchase-item"><div class="purchase-icon" style="background: rgba(255, 215, 0, 0.15); color: #ffd700;"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>VIP статус</h4><p>Выдан администратором</p></div><span class="purchase-status active">Активен</span></div>`;
+            } else {
+                subList.innerHTML = `<div class="purchase-item"><div class="purchase-icon"><i class="fas fa-key"></i></div><div class="purchase-info"><h4>Базовая лицензия</h4><p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p></div><span class="purchase-status active">Активна</span></div>`;
+            }
+            if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
+            list.innerHTML = data.purchases.map(p => { const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`; }).join('');
+        }
+
+        function renderSessions() {
+            const list = document.getElementById('sessionsList');
+            list.innerHTML = data.sessions.map(s => { const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt'; return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p></div>${s.current ? '<span class="session-status current">Текущая</span>' : ''}</div>`; }).join('');
+        }
+
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
+            list.innerHTML = data.notifications.map(n => { const icons = { info: 'fa-info-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle', danger: 'fa-shield-alt' }; return `<div class="notification-item ${n.read ? '' : 'unread'}"><div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div><div class="notification-content"><h4>${n.title}</h4><p>${n.text}</p><div class="notification-time">${getTimeAgo(n.time)}</div></div><div class="notification-actions">${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})"><i class="fas fa-check"></i></button>` : ''}<button class="notif-btn" onclick="deleteNotification(${n.id})"><i class="fas fa-times"></i></button></div></div>`; }).join('');
+        }
+        function addNotification(type, title, text) { data.notifications.unshift({ id: Date.now(), type, title, text, time: Date.now(), read: false }); renderNotifications(); updateNotifCount(); saveData(); }
+        function markRead(id) { const n = data.notifications.find(n => n.id === id); if (n) { n.read = true; renderNotifications(); updateNotifCount(); saveData(); } }
+        function markAllRead() { data.notifications.forEach(n => n.read = true); renderNotifications(); updateNotifCount(); saveData(); showToast('Готово', 'Все уведомления отмечены как прочитанные'); }
+        function deleteNotification(id) { data.notifications = data.notifications.filter(n => n.id !== id); renderNotifications(); updateNotifCount(); saveData(); }
+        function clearNotifications() { if (confirm('Удалить все уведомления?')) { data.notifications = []; renderNotifications(); updateNotifCount(); saveData(); } }
+        function updateNotifCount() { const count = data.notifications.filter(n => !n.read).length; const badge = document.getElementById('notifCount'); badge.textContent = count; badge.style.display = count > 0 ? 'inline' : 'none'; }
+        function getTimeAgo(timestamp) { const seconds = Math.floor((Date.now() - timestamp) / 1000); if (seconds < 60) return 'только что'; const minutes = Math.floor(seconds / 60); if (minutes < 60) return `${minutes} мин. назад`; const hours = Math.floor(minutes / 60); if (hours < 24) return `${hours} ч. назад`; const days = Math.floor(hours / 24); return `${days} дн. назад`; }
+
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            const icon = document.getElementById('toastIcon'); const iconBox = document.getElementById('toastIconBox');
+            if (type === 'error') { icon.className = 'fas fa-exclamation'; iconBox.style.background = 'rgba(255, 23, 68, 0.2)'; iconBox.style.color = 'var(--danger)'; toast.style.borderLeftColor = 'var(--danger)'; }
+            else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
+            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                if (data.avatar) {
+                    localStorage.setItem('cherry_avatar', data.avatar);
+                    const currentUser = localStorage.getItem('cherry_user');
+                    if (currentUser) {
+                        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                        let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+                        if (idx !== -1) { allUsers[idx].avatar = data.avatar; localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); }
+                    }
+                }
+                localStorage.removeItem('cherry_user');
+                localStorage.removeItem('cherry_premium');
+                showToast('До свидания!', 'Вы вышли из аккаунта');
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+            }
+        }
+        
+        document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
+    </script>
+</body>
+</html>
