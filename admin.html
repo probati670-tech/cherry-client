@@ -392,7 +392,66 @@
         let currentKey = null;
         let editingUserId = null;
 
-        function loadData() { const saved = localStorage.getItem('cherryAdminData'); if (saved) { try { return { ...defaultData, ...JSON.parse(saved) }; } catch(e) { return { ...defaultData }; } } return { ...defaultData }; }
+        function loadData() {
+    const saved = localStorage.getItem('cherryAdminData');
+    const registeredUsers = JSON.parse(localStorage.getItem('cherry_all_users') || '[]');
+    
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            // Объединяем: берём админ-данные, но пользователей подтягиваем из регистрации
+            const mergedUsers = [...parsed.users];
+            
+            // Добавляем пользователей из регистрации, которых нет в админке
+            registeredUsers.forEach(regUser => {
+                if (!mergedUsers.find(u => u.id === regUser.id || u.name === regUser.name)) {
+                    mergedUsers.push({
+                        id: regUser.id,
+                        name: regUser.name,
+                        email: regUser.email || regUser.name,
+                        role: regUser.role || 'user',
+                        prefix: regUser.prefix || null,
+                        balance: 0,
+                        status: regUser.status || 'active',
+                        date: new Date(regUser.id).toLocaleDateString('ru-RU') || new Date().toLocaleDateString('ru-RU'),
+                        avatar: regUser.avatar || null,
+                        sub: regUser.sub || 'free'
+                    });
+                }
+            });
+            
+            parsed.users = mergedUsers;
+            return { ...defaultData, ...parsed };
+        } catch(e) {
+            return { ...defaultData, users: registeredUsers.length > 0 ? registeredUsers.map(u => ({...u, balance: 0, date: new Date().toLocaleDateString('ru-RU')})) : defaultData.users };
+        }
+    }
+    
+    // Если админ-данных нет — используем зарегистрированных
+    return { 
+        ...defaultData, 
+        users: registeredUsers.length > 0 
+            ? registeredUsers.map(u => ({...u, balance: 0, date: new Date().toLocaleDateString('ru-RU')})) 
+            : defaultData.users 
+    };
+}
+
+function saveData() {
+    localStorage.setItem('cherryAdminData', JSON.stringify(data));
+    // Синхронизируем обратно в cherry_all_users
+    localStorage.setItem('cherry_all_users', JSON.stringify(data.users.map(u => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        sub: u.sub || 'free',
+        pass: u.pass || 'default123',
+        status: u.status,
+        prefix: u.prefix,
+        ownedPrefixes: u.ownedPrefixes || [],
+        avatar: u.avatar
+    }))));
+}
         function saveData() { localStorage.setItem('cherryAdminData', JSON.stringify(data)); }
 
         const pageTitles = { dashboard: { title: 'Дашборд', subtitle: 'Обзор системы Cherry Client' }, users: { title: 'Управление пользователями', subtitle: 'Редактирование, бан, роли' }, licenses: { title: 'Лицензии', subtitle: 'Ключи и активации' }, reviews: { title: 'Отзывы', subtitle: 'Модерация отзывов' }, products: { title: 'Товары', subtitle: 'Магазин префиксов и услуг' }, downloads: { title: 'Загрузки', subtitle: 'Управление ссылками' }, notifications: { title: 'Уведомления', subtitle: 'Системные события' }, settings: { title: 'Настройки', subtitle: 'Конфигурация системы' } };
