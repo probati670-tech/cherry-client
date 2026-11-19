@@ -466,3 +466,299 @@
     </script>
 </body>
 </html>
+
+<!-- Секция отзывов -->
+<section class="reviews-section" id="reviews">
+    <div class="reviews-container">
+        <h2 class="reviews-title">Отзывы игроков</h2>
+        <p class="reviews-subtitle">Что говорят о нас пользователи Cherry Client</p>
+
+        <div class="reviews-grid">
+            <!-- Отзыв 1 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #ff6b9d, #c44569);">
+                        🍒
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">xNightmare</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Лучший клиент для DDNet! Интерфейс просто огонь, всё интуитивно понятно. 
+                    Производительность выросла в разы по сравнению с обычным клиентом.
+                </p>
+                <span class="review-date">15 ноября 2026</span>
+            </div>
+
+            <!-- Отзыв 2 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                        ⚡
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">ProGamer2026</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Наконец-то нормальный клиент с админ-панелью! Удобно управлять сервером 
+                    и отслеживать статистику. Рекомендую всем!
+                </p>
+                <span class="review-date">12 ноября 2026</span>
+            </div>
+
+            <!-- Отзыв 3 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                        🎮
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">CherryFan</h4>
+                        <div class="review-stars">★★★★☆</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Отличный клиент, играю уже неделю. Единственное — хотелось бы больше 
+                    кастомизации скинов. А так всё супер, FPS стабильный!
+                </p>
+                <span class="review-date">10 ноября 2026</span>
+            </div>
+
+            <!-- Отзыв 4 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        🔥
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">DDNetMaster</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Перешёл с ванильного клиента и не жалею. Чат работает отлично, 
+                    сравнение версий очень полезная фича. Спасибо разработчикам!
+                </p>
+                <span class="review-date">8 ноября 2026</span>
+            </div>
+
+            <!-- Отзыв 5 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        💎
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">SpeedRunner</h4>
+                        <div class="review-stars">★★★★★</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Для спидранов — идеально. Минимальная задержка, плавная анимация, 
+                    все таймеры на месте. Cherry Client стал моим основным клиентом.
+                </p>
+                <span class="review-date">5 ноября 2026</span>
+            </div>
+
+            <!-- Отзыв 6 -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+                        🌸
+                    </div>
+                    <div class="review-info">
+                        <h4 class="review-name">CasualPlayer</h4>
+                        <div class="review-stars">★★★★☆</div>
+                    </div>
+                </div>
+                <p class="review-text">
+                    Красивый дизайн, приятные цвета. Играю с друзьями на серверах — 
+                    всё работает стабильно. Поддержка отвечает быстро в Telegram.
+                </p>
+                <span class="review-date">1 ноября 2026</span>
+            </div>
+        </div>
+
+        <!-- Кнопка оставить отзыв -->
+        <div class="reviews-cta">
+            <a href="#" class="btn-review">✍️ Оставить отзыв</a>
+        </div>
+    </div>
+</section>
+/* ===== СЕКЦИЯ ОТЗЫВОВ ===== */
+.reviews-section {
+    padding: 80px 20px;
+    background: #0a0a0f;
+    border-top: 1px solid rgba(255, 107, 157, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.reviews-section::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 107, 157, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.reviews-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.reviews-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.reviews-title span {
+    background: linear-gradient(135deg, #ff6b9d, #ff2d78);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.reviews-subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 1.1rem;
+    margin-bottom: 50px;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+.review-card {
+    background: linear-gradient(145deg, #12121a, #1a1a2e);
+    border: 1px solid rgba(255, 107, 157, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff6b9d, #ff2d78, #ff6b9d);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 107, 157, 0.3);
+    box-shadow: 0 20px 40px rgba(255, 45, 120, 0.1);
+}
+
+.review-card:hover::before {
+    opacity: 1;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.review-info {
+    flex: 1;
+}
+
+.review-name {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.review-stars {
+    color: #ff6b9d;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+.review-text {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.review-date {
+    color: #555;
+    font-size: 0.8rem;
+}
+
+.reviews-cta {
+    text-align: center;
+}
+
+.btn-review {
+    display: inline-block;
+    padding: 14px 36px;
+    background: linear-gradient(135deg, #ff6b9d, #ff2d78);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-review:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 45, 120, 0.4);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .reviews-title {
+        font-size: 1.8rem;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reviews-section {
+        padding: 50px 16px;
+    }
+}
