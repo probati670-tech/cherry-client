@@ -665,6 +665,14 @@
      }
    }
         function renderPrefixes() {
+            const prefixes = [
+    { id: 'premium', name: 'Premium подписка', price: 299, class: 'prefix-elite', icon: '⭐', desc: 'API ключ + Premium ZIP + все функции на 30 дней' },
+    { id: 'vip', name: 'VIP', price: 299, class: 'prefix-vip', icon: '👑', desc: 'Золотой префикс с сиянием' },
+    { id: 'pro', name: 'PRO', price: 499, class: 'prefix-pro', icon: '⚡', desc: 'Пульсирующий префикс профи' },
+    { id: 'elite', name: 'ELITE', price: 799, class: 'prefix-elite', icon: '💎', desc: 'Элитный статус с свечением' },
+    { id: 'legend', name: 'LEGEND', price: 999, class: 'prefix-legend', icon: '🔥', desc: 'Легендарный с градиентом' },
+    { id: 'crystal', name: 'CRYSTAL', price: 1799, class: 'prefix-crystal', icon: '💠', desc: 'Кристальный с прозрачностью' }
+];
             const grid = document.getElementById('prefixesGrid');
             grid.innerHTML = prefixes.map(p => {
                 const owned = data.ownedPrefixes.includes(p.id); const active = data.activePrefix === p.id;
