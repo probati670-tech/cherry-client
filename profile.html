@@ -587,19 +587,83 @@
             const prefix = prefixes.find(p => p.id === prefixId);
             if (prefix) { prefixEl.style.display = 'inline-flex'; prefixEl.className = 'prefix ' + prefix.class; prefixEl.innerHTML = `${prefix.icon} ${prefix.name}`; miniPrefix.textContent = prefix.name; miniPrefix.style.color = '#fff'; }
         }
-        function buyPrefix(prefixId) {
-            const prefix = prefixes.find(p => p.id === prefixId);
-            if (!prefix) return;
-            if (data.ownedPrefixes.includes(prefixId)) { data.activePrefix = prefixId; applyPrefix(prefixId); saveData(); renderPrefixes(); showToast('Префикс активирован', `${prefix.name} теперь отображается`); return; }
-            if (data.balance < prefix.price) { showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); return; }
-            if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
-                data.balance -= prefix.price; data.ownedPrefixes.push(prefixId); data.activePrefix = prefixId;
-                data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
-                data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
-                applyPrefix(prefixId); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases(); saveData();
-                showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
+        function function buyPrefix(prefixId) {
+    const prefix = prefixes.find(p => p.id === prefixId);
+    if (!prefix) return;
+    
+    // Если это Premium подписка — выдаём премиум
+    if (prefix.name === 'Premium подписка') {
+        if (data.balance < prefix.price) { 
+            showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
+            return; 
+        }
+        if (!confirm(`Купить Premium подписку за ${prefix.price} ₽?\n\nВы получите:\n• API ключ для входа в клиент\n• Возможность скачать Premium ZIP\n• Все премиум-функции на 30 дней`)) return;
+        
+        data.balance -= prefix.price;
+        data.isPremium = true; // ⭐ ГЛАВНОЕ: включаем премиум
+        
+        // Генерируем уникальный API ключ
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+        const newApiKey = `CHERRY-${gen()}-${gen()}-${gen()}`;
+        
+        // Сохраняем ключ в профиль
+        document.getElementById('apiKeyInput').value = newApiKey;
+        
+        data.transactions.unshift({ type: 'expense', title: 'Покупка Premium подписки', amount: prefix.price, date: new Date().toISOString() });
+        data.purchases.unshift({ id: Date.now(), name: 'Premium подписка', date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-crown' });
+        
+        // Синхронизируем с cherry_all_users (чтобы админ видел)
+        const currentUser = localStorage.getItem('cherry_user');
+        if (currentUser) {
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+            if (idx !== -1) { 
+                allUsers[idx].sub = 'premium'; 
+                allUsers[idx].role = 'premium';
+                allUsers[idx].apiKey = newApiKey;
+                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); 
             }
         }
+        
+        updateProfileDisplay();
+        updateBalance(); 
+        renderTransactions(); 
+        renderPurchases(); 
+        saveData();
+        
+        showToast('🎉 Premium активирован!', `Ваш API ключ: ${newApiKey}`);
+        return;
+    }
+    
+    // Обычная логика для префиксов
+    if (data.ownedPrefixes.includes(prefixId)) { 
+        data.activePrefix = prefixId; 
+        applyPrefix(prefixId); 
+        saveData(); 
+        renderPrefixes(); 
+        showToast('Префикс активирован', `${prefix.name} теперь отображается`); 
+        return; 
+    }
+    if (data.balance < prefix.price) { 
+        showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
+        return; 
+    }
+    if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
+        data.balance -= prefix.price; 
+        data.ownedPrefixes.push(prefixId); 
+        data.activePrefix = prefixId;
+        data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
+        data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
+        applyPrefix(prefixId); 
+        updateBalance(); 
+        renderTransactions(); 
+        renderPrefixes(); 
+        renderPurchases(); 
+        saveData();
+        showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
+     }
+   }
         function renderPrefixes() {
             const grid = document.getElementById('prefixesGrid');
             grid.innerHTML = prefixes.map(p => {
