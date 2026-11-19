@@ -290,12 +290,12 @@
                 <div class="profile-body">
                     <div class="avatar-wrapper"><div class="big-avatar" id="bigAvatar">👤</div><div class="avatar-upload" onclick="event.stopPropagation(); document.getElementById('avatarInput').click()"><i class="fas fa-camera"></i></div></div>
                     <div class="profile-info">
-                        <div class="name-row"><h2 id="profileName">Nick_Name</h2><span class="prefix" id="activePrefix" style="display:none;"></span><div class="badge"><i class="fas fa-star"></i> Premium</div></div>
+                        <div class="name-row"><h2 id="profileName">Nick_Name</h2><span class="prefix" id="activePrefix" style="display:none;"></span><div class="badge" id="premiumBadge" style="display:none;"><i class="fas fa-star"></i> Premium</div></div>
                         <p class="email" id="profileEmail">example@mail.com</p>
                         <div class="status-bar">
-                            <div class="status-item"><i class="fas fa-calendar"></i><span>Регистрация:</span><strong>19.11.2026</strong></div>
+                            <div class="status-item"><i class="fas fa-calendar"></i><span>Регистрация:</span><strong id="regDate">—</strong></div>
                             <div class="status-item"><i class="fas fa-circle" style="color: var(--success); font-size: 10px;"></i><span>Статус:</span><strong style="color: var(--success);">Онлайн</strong></div>
-                            <div class="status-item"><i class="fas fa-key"></i><span>Лицензия:</span><strong>Premium до 26.11.2026</strong></div>
+                            <div class="status-item" id="licenseStatusItem"><i class="fas fa-key"></i><span>Лицензия:</span><strong id="licenseText">Basic</strong></div>
                         </div>
                     </div>
                 </div>
@@ -315,16 +315,13 @@
 
         <div class="page" id="page-purchases">
             <div class="header"><h1>Мои покупки</h1><p>История ваших покупок и активных подписок</p></div>
-            <div class="card"><div class="card-content"><h3 class="section-title">Активные подписки</h3>
-                <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>Premium подписка</h4><p>Активна до 26 ноября 2026 • Осталось 7 дней</p></div><span class="purchase-status active">Активна</span></div>
-                <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-key"></i></div><div class="purchase-info"><h4>Базовая лицензия</h4><p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p></div><span class="purchase-status active">Активна</span></div>
-            </div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">Активные подписки</h3><div id="activeSubscriptions"></div></div></div>
             <div class="card"><div class="card-content"><h3 class="section-title">История покупок</h3><div id="purchasesList"></div></div></div>
         </div>
 
         <div class="page" id="page-wallet">
             <div class="header"><h1>Кошелек</h1><p>Управляйте балансом и историей транзакций</p></div>
-            <div class="balance-card"><div class="balance-label">Ваш баланс</div><div class="balance-amount" id="balanceAmount">1,250.00 <span>₽</span></div><div class="balance-actions"><button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button></div></div>
+            <div class="balance-card"><div class="balance-label">Ваш баланс</div><div class="balance-amount" id="balanceAmount">0.00 <span>₽</span></div><div class="balance-actions"><button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button></div></div>
             <div class="card"><div class="card-content"><h3 class="section-title">История транзакций</h3><ul class="transactions-list" id="transactionsList"></ul></div></div>
         </div>
 
@@ -400,13 +397,11 @@
     <script>
         const defaultData = {
             username: 'Nick_Name', email: 'example@mail.com', avatar: null, banner: 'default', background: 'default',
-            balance: 1250.00, activePrefix: null, ownedPrefixes: [],
-            hwid: 'A7F3-B9D2-E4C1-8F5A', hwidResetsLeft: 2, hwidLastReset: null,
-            transactions: [{ type: 'income', title: 'Пополнение баланса', amount: 500, date: '2026-11-19T14:32:00' }, { type: 'expense', title: 'Покупка Premium', amount: 299, date: '2026-11-15T09:15:00' }],
-            purchases: [{ id: 1, name: 'Premium подписка', date: '2026-11-15', amount: 299, status: 'active', icon: 'fa-crown' }, { id: 2, name: 'Базовая лицензия', date: '2026-10-01', amount: 499, status: 'active', icon: 'fa-key' }],
+            balance: 0, activePrefix: null, ownedPrefixes: [], isPremium: false,
+            hwid: 'A7F3-B9D2-E4C1-8F5A', hwidResetsLeft: 2, hwidLastReset: null, regDate: new Date().toLocaleDateString('ru-RU'),
+            transactions: [], purchases: [],
             sessions: [{ id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true }],
-            notifications: [{ id: 1, type: 'success', title: 'Платеж успешно обработан', text: 'Ваш баланс пополнен на 500.00 ₽', time: Date.now() - 7200000, read: false }, { id: 2, type: 'warning', title: 'Подписка истекает через 7 дней', text: 'Ваша Premium подписка закончится 26 ноября 2026', time: Date.now() - 18000000, read: false }],
-            myReviews: [], selectedRating: 0
+            notifications: [], myReviews: [], selectedRating: 0
         };
         const prefixes = [
             { id: 'vip', name: 'VIP', price: 299, class: 'prefix-vip', icon: '👑', desc: 'Золотой префикс с сиянием' },
@@ -421,18 +416,23 @@
         function loadData() {
             const saved = localStorage.getItem('cherryData');
             const currentUser = localStorage.getItem('cherry_user');
-            if (saved) {
+            
+            if (saved && currentUser) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (parsed.username === currentUser || !currentUser) {
+                    // Загружаем данные только если ник совпадает с текущим пользователем
+                    if (parsed.username === currentUser) {
                         return { ...defaultData, ...parsed };
                     }
                 } catch(e) {}
             }
+            
+            // Для нового пользователя создаём чистые данные
             const freshData = { ...defaultData };
             if (currentUser) {
                 freshData.username = currentUser;
                 freshData.email = currentUser.includes('@') ? currentUser : '';
+                freshData.regDate = new Date().toLocaleDateString('ru-RU');
             }
             return freshData;
         }
@@ -457,9 +457,6 @@
         });
 
         window.addEventListener('load', () => {
-            let sharedAvatar = localStorage.getItem('cherry_avatar');
-            if (sharedAvatar && sharedAvatar !== data.avatar) { data.avatar = sharedAvatar; saveData(); }
-
             applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
             updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
             renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
@@ -538,6 +535,7 @@
                     data.avatar = event.target.result;
                     applyAvatar(data.avatar);
                     saveData();
+                    // Синхронизация с главной страницей
                     localStorage.setItem('cherry_avatar', data.avatar);
                     let cu = localStorage.getItem('cherry_user');
                     if (cu) {
@@ -587,6 +585,20 @@
             document.getElementById('miniName').textContent = data.username;
             document.getElementById('username').value = data.username;
             document.getElementById('email').value = data.email;
+            document.getElementById('regDate').textContent = data.regDate || '—';
+            
+            // Обновление статуса лицензии и бейджа
+            const badge = document.getElementById('premiumBadge');
+            const licenseText = document.getElementById('licenseText');
+            if (data.isPremium) {
+                badge.style.display = 'inline-flex';
+                licenseText.textContent = 'Premium до 26.11.2026';
+                licenseText.style.color = 'var(--success)';
+            } else {
+                badge.style.display = 'none';
+                licenseText.textContent = 'Basic';
+                licenseText.style.color = 'var(--text-main)';
+            }
         }
         function saveProfile() {
             const username = document.getElementById('username').value.trim();
@@ -643,6 +655,16 @@
 
         function renderPurchases() {
             const list = document.getElementById('purchasesList');
+            const subList = document.getElementById('activeSubscriptions');
+            
+            // Рендер активных подписок
+            if (data.isPremium) {
+                subList.innerHTML = `<div class="purchase-item"><div class="purchase-icon"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>Premium подписка</h4><p>Активна до 26 ноября 2026 • Осталось 7 дней</p></div><span class="purchase-status active">Активна</span></div>`;
+            } else {
+                subList.innerHTML = `<div class="purchase-item"><div class="purchase-icon"><i class="fas fa-key"></i></div><div class="purchase-info"><h4>Базовая лицензия</h4><p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p></div><span class="purchase-status active">Активна</span></div>`;
+            }
+
+            // Рендер истории покупок
             if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
             list.innerHTML = data.purchases.map(p => { const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`; }).join('');
         }
@@ -680,9 +702,7 @@
                 localStorage.removeItem('cherry_user');
                 localStorage.removeItem('cherry_premium');
                 showToast('До свидания!', 'Вы вышли из аккаунта');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             }
         }
         
