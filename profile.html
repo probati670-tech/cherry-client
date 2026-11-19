@@ -257,6 +257,11 @@
         .toast-content h4 { font-size: 14px; margin-bottom: 2px; }
         .toast-content p { font-size: 12px; color: var(--text-muted); }
         #avatarInput { display: none; }
+        .premium-download { background: linear-gradient(135deg, rgba(0, 230, 118, 0.1), rgba(0, 230, 118, 0.05)); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 12px; padding: 20px; margin-top: 15px; display: flex; align-items: center; gap: 15px; }
+        .premium-download i { font-size: 32px; color: var(--success); }
+        .premium-download-text { flex: 1; }
+        .premium-download-text h4 { margin-bottom: 5px; color: var(--success); }
+        .premium-download-text p { font-size: 13px; color: var(--text-muted); margin: 0; }
         @media (max-width: 768px) { .sidebar { width: 70px; } .brand-text, .menu-link span, .mini-info, .badge-count { display: none; } .brand { justify-content: center; padding: 20px 0; } .menu-link { justify-content: center; padding: 15px 0; } .main { margin-left: 70px; padding: 20px; } .profile-info { margin-left: 0; margin-top: 80px; } .api-wrapper { flex-direction: column; } }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-dark); } ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
     </style>
@@ -300,10 +305,22 @@
                     </div>
                 </div>
             </div>
-            <div class="card"><div class="card-content">
+            <div class="card" id="apiKeyCard" style="display:none;"><div class="card-content">
                 <h3 class="section-title">🔑 API Ключ (Лицензия)</h3>
                 <p class="section-desc">Используйте этот ключ для входа в клиент. Никому его не передавайте.</p>
                 <div class="api-wrapper"><input type="text" class="api-key-text" value="CHERRY-ND3C-DPFV-IQX9" readonly id="apiKeyInput"><button class="btn" onclick="copyKey()"><i class="fas fa-copy"></i> Копировать</button></div>
+            </div></div>
+            <div class="card" id="premiumDownloadCard" style="display:none;"><div class="card-content">
+                <h3 class="section-title">📦 Premium загрузка</h3>
+                <p class="section-desc">Скачайте полную версию Cherry Client с премиум-функциями</p>
+                <div class="premium-download">
+                    <i class="fas fa-file-archive"></i>
+                    <div class="premium-download-text">
+                        <h4>CherryClient-Premium.zip</h4>
+                        <p>Последняя версия • 45 MB • Обновлено: сегодня</p>
+                    </div>
+                    <button class="btn btn-success" onclick="downloadPremium()"><i class="fas fa-download"></i> Скачать</button>
+                </div>
             </div></div>
             <div class="card"><div class="card-content">
                 <h3 class="section-title">Личные данные</h3>
@@ -419,9 +436,7 @@
             if (saved && currentUser) {
                 try {
                     const parsed = JSON.parse(saved);
-                    if (parsed.username === currentUser) {
-                        return { ...defaultData, ...parsed };
-                    }
+                    if (parsed.username === currentUser) return { ...defaultData, ...parsed };
                 } catch(e) {}
             }
             const freshData = { ...defaultData };
@@ -429,6 +444,13 @@
                 freshData.username = currentUser;
                 freshData.email = currentUser.includes('@') ? currentUser : '';
                 freshData.regDate = new Date().toLocaleDateString('ru-RU');
+                // Проверяем роль в cherry_all_users
+                const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
+                if (userObj) {
+                    if (userObj.sub === 'premium' || userObj.role === 'admin') freshData.isPremium = true;
+                    if (userObj.avatar) freshData.avatar = userObj.avatar;
+                }
             }
             return freshData;
         }
@@ -453,31 +475,33 @@
         });
 
         window.addEventListener('load', () => {
-            // === СИНХРОНИЗАЦИЯ АВАТАРКИ ===
             const currentUser = localStorage.getItem('cherry_user');
-            if (currentUser) {
-                const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-                const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
-                if (userObj && userObj.avatar) {
-                    data.avatar = userObj.avatar;
-                    saveData();
-                }
+            if (!currentUser) { window.location.href = 'index.html'; return; }
+            const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
+            if (userObj && userObj.status === 'banned') {
+                alert('Ваш аккаунт заблокирован администратором.');
+                localStorage.removeItem('cherry_user');
+                window.location.href = 'index.html';
+                return;
             }
+            if (userObj && userObj.avatar && userObj.avatar !== data.avatar) { data.avatar = userObj.avatar; saveData(); }
+            if (userObj && (userObj.sub === 'premium' || userObj.role === 'admin') && !data.isPremium) { data.isPremium = true; saveData(); }
             applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
             updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
             renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
         });
 
-        // ===== ОТЗЫВЫ =====
         function getAllReviews() { return JSON.parse(localStorage.getItem('cherryReviews') || '[]'); }
         function saveAllReviews(reviews) { localStorage.setItem('cherryReviews', JSON.stringify(reviews)); }
+
         function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
             const rating = data.selectedRating;
             if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
             if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
             const allReviews = getAllReviews();
-            const newReview = { id: Date.now(), user: data.username, avatar: data.username.charAt(0).toUpperCase(), rating: rating, text: text, product: 'Cherry Client', date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), status: 'pending', verified: true };
+            const newReview = { id: Date.now(), user: data.username, avatar: data.avatar || data.username.charAt(0).toUpperCase(), rating: rating, text: text, product: 'Cherry Client', date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), status: 'pending', verified: true };
             allReviews.unshift(newReview); saveAllReviews(allReviews);
             data.myReviews.push({ id: newReview.id, name: data.username, rating, text, date: newReview.date }); saveData();
             document.getElementById('reviewText').value = ''; data.selectedRating = 0;
@@ -485,6 +509,7 @@
             renderMyReviews();
             showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации администратором');
         }
+
         function renderMyReviews() {
             const list = document.getElementById('myReviewsList');
             const allReviews = getAllReviews();
@@ -496,6 +521,7 @@
                 return `<div class="my-review"><div class="my-review-header"><div><strong>${r.name}</strong><span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span></div><span class="purchase-status ${statusClass}" style="margin-left: 10px;">${statusText}</span></div><div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div><p style="margin-top: 10px;">${r.text}</p><p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">${r.date}</p></div>`;
             }).join('');
         }
+
         function initStarRating() {
             document.querySelectorAll('#starRating i').forEach(star => {
                 star.addEventListener('click', () => {
@@ -506,13 +532,11 @@
             });
         }
 
-        // ===== ФОН =====
         function changeBackground(bg) { data.background = bg; applyBackground(bg); updateBgSelector(); saveData(); showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`); }
         function applyBackground(bg) { document.body.className = document.body.className.replace(/bg-\w+/g, '').trim(); document.body.classList.add('bg-' + bg); }
         function updateBgSelector() { document.querySelectorAll('.bg-option').forEach(opt => { opt.classList.toggle('active', opt.dataset.bg === data.background); }); }
         function getBgName(bg) { const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' }; return names[bg] || bg; }
 
-        // ===== БАННЕР =====
         function changeBanner(banner) { data.banner = banner; applyBanner(banner); saveData(); showToast('Баннер изменён', 'Новый баннер применён'); }
         function applyBanner(banner) {
             const cover = document.getElementById('profileCover');
@@ -532,7 +556,6 @@
             document.getElementById('bannerModalGrid').innerHTML = html;
         }
 
-        // ===== АВАТАР =====
         document.getElementById('avatarInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -542,7 +565,6 @@
                     data.avatar = event.target.result;
                     applyAvatar(data.avatar);
                     saveData();
-                    // Синхронизация с главной и админкой
                     localStorage.setItem('cherry_avatar', data.avatar);
                     const currentUser = localStorage.getItem('cherry_user');
                     if (currentUser) {
@@ -558,7 +580,6 @@
 
         function applyAvatar(imgData) { const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤'; document.getElementById('bigAvatar').innerHTML = imgHTML; document.getElementById('miniAvatar').innerHTML = imgHTML; }
 
-        // ===== ПРЕФИКСЫ =====
         function applyPrefix(prefixId) {
             const prefixEl = document.getElementById('activePrefix');
             const miniPrefix = document.getElementById('miniPrefix');
@@ -587,7 +608,6 @@
             }).join('');
         }
 
-        // ===== ПРОФИЛЬ =====
         function updateProfileDisplay() {
             document.getElementById('profileName').textContent = data.username;
             document.getElementById('profileEmail').textContent = data.email;
@@ -597,14 +617,20 @@
             document.getElementById('regDate').textContent = data.regDate || '—';
             const badge = document.getElementById('premiumBadge');
             const licenseText = document.getElementById('licenseText');
+            const apiKeyCard = document.getElementById('apiKeyCard');
+            const premiumDownloadCard = document.getElementById('premiumDownloadCard');
             if (data.isPremium) {
                 badge.style.display = 'inline-flex';
                 licenseText.textContent = 'Premium до 26.11.2026';
                 licenseText.style.color = 'var(--success)';
+                apiKeyCard.style.display = 'block';
+                premiumDownloadCard.style.display = 'block';
             } else {
                 badge.style.display = 'none';
                 licenseText.textContent = 'Basic';
                 licenseText.style.color = 'var(--text-main)';
+                apiKeyCard.style.display = 'none';
+                premiumDownloadCard.style.display = 'none';
             }
         }
         function saveProfile() {
@@ -615,8 +641,21 @@
             showToast('Успешно!', 'Данные профиля обновлены');
         }
         function copyKey() { const copyText = document.getElementById("apiKeyInput"); copyText.select(); navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); }
+        function downloadPremium() {
+            const adminData = JSON.parse(localStorage.getItem('cherryAdminData') || '{}');
+            const files = adminData.files || [];
+            if (files.length > 0) {
+                const latestFile = files[files.length - 1];
+                const a = document.createElement('a');
+                a.href = latestFile.data;
+                a.download = latestFile.name;
+                a.click();
+                showToast('Скачивание', `Началась загрузка ${latestFile.name}`);
+            } else {
+                showToast('Ошибка', 'Файл премиум-версии ещё не загружен администратором', 'error');
+            }
+        }
 
-        // ===== КОШЕЛЕК (только для админов) =====
         function updateBalance() { const formatted = data.balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); document.getElementById('balanceAmount').innerHTML = formatted + ' <span>₽</span>'; }
         function openTopUp() {
             const currentUser = localStorage.getItem('cherry_user');
@@ -647,7 +686,6 @@
             }).join('');
         }
 
-        // ===== HWID =====
         function updateHwidDisplay() {
             document.getElementById('currentHwid').textContent = data.hwid;
             document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
@@ -669,7 +707,6 @@
             showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
         }
 
-        // ===== ПОКУПКИ =====
         function renderPurchases() {
             const list = document.getElementById('purchasesList');
             const subList = document.getElementById('activeSubscriptions');
@@ -682,13 +719,11 @@
             list.innerHTML = data.purchases.map(p => { const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`; }).join('');
         }
 
-        // ===== БЕЗОПАСНОСТЬ =====
         function renderSessions() {
             const list = document.getElementById('sessionsList');
             list.innerHTML = data.sessions.map(s => { const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt'; return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p></div>${s.current ? '<span class="session-status current">Текущая</span>' : ''}</div>`; }).join('');
         }
 
-        // ===== УВЕДОМЛЕНИЯ =====
         function renderNotifications() {
             const list = document.getElementById('notificationsList');
             if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
@@ -711,12 +746,17 @@
             else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         }
-        
+
         function logout() {
             if (confirm('Вы уверены, что хотите выйти?')) {
-                // Сохраняем аватарку перед выходом
                 if (data.avatar) {
                     localStorage.setItem('cherry_avatar', data.avatar);
+                    const currentUser = localStorage.getItem('cherry_user');
+                    if (currentUser) {
+                        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                        let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+                        if (idx !== -1) { allUsers[idx].avatar = data.avatar; localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); }
+                    }
                 }
                 localStorage.removeItem('cherry_user');
                 localStorage.removeItem('cherry_premium');
@@ -724,7 +764,7 @@
                 setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             }
         }
-        
+
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
 </body>
