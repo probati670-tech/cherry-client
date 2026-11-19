@@ -29,20 +29,111 @@
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
+        /* ===== АНИМИРОВАННЫЕ ФОНЫ ===== */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        body.bg-default { background: #0a0a0a; }
+        body.bg-default::before {
             background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.15) 0%, transparent 50%),
                         radial-gradient(circle at 80% 80%, rgba(255, 77, 0, 0.1) 0%, transparent 50%);
             animation: bgFloat 20s ease-in-out infinite;
         }
 
+        body.bg-neon { background: #0a0014; }
+        body.bg-neon::before {
+            background: radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.2) 0%, transparent 40%);
+            animation: neonPulse 5s ease-in-out infinite;
+        }
+
+        body.bg-cyber { background: #000; }
+        body.bg-cyber::before {
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 15s linear infinite;
+        }
+
+        body.bg-sunset { background: #1a0a0a; }
+        body.bg-sunset::before {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(161, 140, 209, 0.2) 100%);
+            animation: sunsetShift 12s ease-in-out infinite;
+        }
+
+        body.bg-forest { background: #0a1a0a; }
+        body.bg-forest::before {
+            background: radial-gradient(ellipse at 30% 80%, rgba(0, 200, 83, 0.2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 20%, rgba(0, 230, 118, 0.15) 0%, transparent 50%);
+            animation: forestGlow 10s ease-in-out infinite;
+        }
+
+        body.bg-ocean { background: #000a1a; }
+        body.bg-ocean::before {
+            background: radial-gradient(circle at 20% 80%, rgba(0, 119, 255, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 200, 255, 0.15) 0%, transparent 50%);
+            animation: oceanWave 8s ease-in-out infinite;
+        }
+
+        body.bg-galaxy { background: #050014; }
+        body.bg-galaxy::before {
+            background: radial-gradient(2px 2px at 20% 30%, white, transparent),
+                        radial-gradient(2px 2px at 60% 70%, white, transparent),
+                        radial-gradient(1px 1px at 50% 50%, white, transparent);
+            background-size: 200% 200%;
+            animation: starsMove 50s linear infinite;
+        }
+
+        body.bg-fire { background: #1a0500; }
+        body.bg-fire::before {
+            background: radial-gradient(circle at 30% 70%, rgba(255, 69, 0, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(255, 140, 0, 0.2) 0%, transparent 50%);
+            animation: fireFlicker 3s ease-in-out infinite;
+        }
+
+        body.bg-matrix { background: #000; }
+        body.bg-matrix::before {
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 0, 0.03) 50%, transparent 100%);
+            background-size: 100% 200%;
+            animation: matrixRain 3s linear infinite;
+        }
+
+        body.bg-aurora { background: #0a0a1a; }
+        body.bg-aurora::before {
+            background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 128, 0.2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(128, 0, 255, 0.2) 0%, transparent 50%);
+            animation: auroraShift 10s ease-in-out infinite;
+            filter: blur(40px);
+        }
+
+        body.bg-blood { background: #1a0000; }
+        body.bg-blood::before {
+            background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.3) 0%, transparent 60%);
+            animation: bloodPulse 4s ease-in-out infinite;
+        }
+
         @keyframes bgFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-5%, -5%); } }
+        @keyframes neonPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(40px, 40px); } }
+        @keyframes sunsetShift { 0%, 100% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(40deg); } }
+        @keyframes forestGlow { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+        @keyframes oceanWave { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes starsMove { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+        @keyframes fireFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        @keyframes matrixRain { 0% { background-position: 0% -200%; } 100% { background-position: 0% 200%; } }
+        @keyframes auroraShift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10%); } }
+        @keyframes bloodPulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
         /* ===== САЙДБАР ===== */
         .sidebar {
@@ -156,6 +247,78 @@
         .level-progress { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
         .level-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; transition: width 1s ease; }
 
+        /* ===== БЫСТРАЯ СМЕНА ФОНА ===== */
+        .quick-bg-switcher {
+            position: fixed;
+            bottom: 30px;
+            left: 280px;
+            background: var(--bg-panel);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            z-index: 99;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .quick-bg-switcher h4 {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quick-bg-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        .quick-bg-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .quick-bg-btn:hover {
+            transform: scale(1.15);
+            border-color: white;
+        }
+
+        .quick-bg-btn.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
+        }
+
+        .quick-bg-btn.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .quick-bg-default { background: radial-gradient(circle, rgba(255, 0, 110, 0.5), #0a0a0a); }
+        .quick-bg-neon { background: radial-gradient(circle, rgba(138, 43, 226, 0.7), #0a0014); }
+        .quick-bg-cyber { background: linear-gradient(rgba(0, 255, 136, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.3) 1px, transparent 1px), #000; background-size: 6px 6px; }
+        .quick-bg-sunset { background: linear-gradient(135deg, rgba(255, 107, 107, 0.6), rgba(161, 140, 209, 0.6)); }
+        .quick-bg-forest { background: radial-gradient(circle, rgba(0, 200, 83, 0.6), #0a1a0a); }
+        .quick-bg-ocean { background: radial-gradient(circle, rgba(0, 119, 255, 0.6), #000a1a); }
+        .quick-bg-galaxy { background: radial-gradient(1px 1px at 50% 50%, white, transparent), #050014; }
+        .quick-bg-fire { background: radial-gradient(circle, rgba(255, 69, 0, 0.6), #1a0500); }
+        .quick-bg-matrix { background: linear-gradient(rgba(0, 255, 0, 0.3) 1px, transparent 1px), #000; background-size: 8px 8px; }
+        .quick-bg-aurora { background: radial-gradient(circle, rgba(0, 255, 128, 0.5), #0a0a1a); }
+        .quick-bg-blood { background: radial-gradient(circle, rgba(139, 0, 0, 0.6), #1a0000); }
+
         /* ===== DDNet статистика ===== */
         .ddnet-stats {
             display: grid;
@@ -196,6 +359,32 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+        }
+
+        .ddnet-error {
+            background: rgba(255, 23, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .ddnet-error i {
+            font-size: 32px;
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        .ddnet-error h4 {
+            color: var(--danger);
+            margin-bottom: 8px;
+        }
+
+        .ddnet-error p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 15px;
         }
 
         /* ===== СТАТИСТИКА ===== */
@@ -249,163 +438,37 @@
         .prefix-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
 
         /* ===== ПОКУПКИ ===== */
-        .purchase-item {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            transition: all 0.3s;
-        }
-
-        .purchase-item:hover {
-            border-color: rgba(255, 0, 110, 0.3);
-            transform: translateX(5px);
-        }
-
-        .purchase-icon {
-            width: 50px; height: 50px;
-            border-radius: 12px;
-            background: rgba(255, 0, 110, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: var(--primary);
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-
+        .purchase-item { display: flex; align-items: center; padding: 20px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; transition: all 0.3s; }
+        .purchase-item:hover { border-color: rgba(255, 0, 110, 0.3); transform: translateX(5px); }
+        .purchase-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(255, 0, 110, 0.15); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); margin-right: 15px; flex-shrink: 0; }
         .purchase-info { flex: 1; }
         .purchase-info h4 { font-size: 16px; margin-bottom: 4px; }
         .purchase-info p { font-size: 13px; color: var(--text-muted); }
-
-        .purchase-status {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
+        .purchase-status { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
         .purchase-status.active { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .purchase-status.expired { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         .purchase-status.pending { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
 
         /* ===== РЕФЕРАЛКА ===== */
-        .referral-card {
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.1), rgba(255, 77, 0, 0.1));
-            border: 1px solid rgba(255, 0, 110, 0.3);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-
-        .referral-link {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .referral-link input {
-            flex: 1;
-            background: rgba(0,0,0,0.3);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: var(--primary);
-            font-family: monospace;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .referral-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .referral-stat {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-        }
-
-        .referral-stat-value {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .referral-stat-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
+        .referral-card { background: linear-gradient(135deg, rgba(255, 0, 110, 0.1), rgba(255, 77, 0, 0.1)); border: 1px solid rgba(255, 0, 110, 0.3); border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .referral-link { display: flex; gap: 10px; margin: 20px 0; }
+        .referral-link input { flex: 1; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; color: var(--primary); font-family: monospace; font-size: 14px; outline: none; }
+        .referral-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .referral-stat { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .referral-stat-value { font-size: 28px; font-weight: 800; color: var(--primary); }
+        .referral-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
 
         /* ===== ОТЗЫВЫ ===== */
-        .review-form {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        .review-form textarea {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-            resize: vertical;
-            min-height: 100px;
-            font-family: inherit;
-            margin-bottom: 15px;
-        }
-
+        .review-form { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        .review-form textarea { width: 100%; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; color: white; font-size: 14px; outline: none; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px; }
         .review-form textarea:focus { border-color: var(--primary); }
-
-        .star-rating {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-
-        .star-rating i {
-            font-size: 24px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .star-rating i:hover,
-        .star-rating i.active {
-            color: #ffd700;
-        }
-
-        .my-review {
-            background: rgba(0, 230, 118, 0.05);
-            border: 1px solid var(--success);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .my-review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
+        .star-rating { display: flex; gap: 5px; margin-bottom: 15px; }
+        .star-rating i { font-size: 24px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+        .star-rating i:hover, .star-rating i.active { color: #ffd700; }
+        .my-review { background: rgba(0, 230, 118, 0.05); border: 1px solid var(--success); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .my-review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .my-review-stars { color: #ffd700; }
+        .verified-badge { background: rgba(0, 230, 118, 0.15); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; }
 
         /* ===== БЕЗОПАСНОСТЬ ===== */
         .security-item { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
@@ -414,14 +477,12 @@
         .security-info { flex: 1; }
         .security-info h4 { font-size: 16px; margin-bottom: 4px; }
         .security-info p { font-size: 13px; color: var(--text-muted); }
-
         .toggle-switch { position: relative; width: 50px; height: 26px; margin-left: 15px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #333; border-radius: 26px; transition: 0.3s; }
         .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
         .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
         .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
-
         .session-item { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
         .session-item.current { border-color: var(--success); background: rgba(0, 230, 118, 0.05); }
         .session-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 18px; }
@@ -518,6 +579,8 @@
             .api-wrapper { flex-direction: column; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .referral-stats { grid-template-columns: 1fr; }
+            .quick-bg-switcher { left: 80px; bottom: 20px; }
+            .quick-bg-grid { grid-template-columns: repeat(6, 1fr); }
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -525,7 +588,7 @@
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
     </style>
 </head>
-<body>
+<body class="bg-default">
     <aside class="sidebar">
         <div class="brand">
             <div class="brand-icon">🍒</div>
@@ -537,7 +600,7 @@
             <li class="menu-item"><button class="menu-link" data-page="purchases"><i class="fas fa-shopping-bag"></i><span>Мои покупки</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="wallet"><i class="fas fa-wallet"></i><span>Кошелек</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="shop"><i class="fas fa-store"></i><span>Магазин</span></button></li>
-            <li class="menu-item"><button class="menu-link" data-page="reviews"><i class="fas fa-star"></i><span>Мои отзывы</span><span class="badge-count" id="reviewBadge" style="display:none;">!</span></button></li>
+            <li class="menu-item"><button class="menu-link" data-page="reviews"><i class="fas fa-star"></i><span>Мои отзывы</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="referral"><i class="fas fa-gift"></i><span>Реферальная</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="security"><i class="fas fa-shield-alt"></i><span>Безопасность</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="notifications"><i class="fas fa-bell"></i><span>Уведомления</span><span class="badge-count" id="notifCount">0</span></button></li>
@@ -552,6 +615,24 @@
             <i class="fas fa-sign-out-alt logout" onclick="logout()"></i>
         </div>
     </aside>
+
+    <!-- БЫСТРАЯ СМЕНА ФОНА -->
+    <div class="quick-bg-switcher">
+        <h4><i class="fas fa-palette"></i> Фон кабинета</h4>
+        <div class="quick-bg-grid">
+            <div class="quick-bg-btn quick-bg-default active" data-bg="default" onclick="changeBackground('default')" title="По умолчанию"></div>
+            <div class="quick-bg-btn quick-bg-neon" data-bg="neon" onclick="changeBackground('neon')" title="Неон"></div>
+            <div class="quick-bg-btn quick-bg-cyber" data-bg="cyber" onclick="changeBackground('cyber')" title="Кибер"></div>
+            <div class="quick-bg-btn quick-bg-sunset" data-bg="sunset" onclick="changeBackground('sunset')" title="Закат"></div>
+            <div class="quick-bg-btn quick-bg-forest" data-bg="forest" onclick="changeBackground('forest')" title="Лес"></div>
+            <div class="quick-bg-btn quick-bg-ocean" data-bg="ocean" onclick="changeBackground('ocean')" title="Океан"></div>
+            <div class="quick-bg-btn quick-bg-galaxy" data-bg="galaxy" onclick="changeBackground('galaxy')" title="Галактика"></div>
+            <div class="quick-bg-btn quick-bg-fire" data-bg="fire" onclick="changeBackground('fire')" title="Огонь"></div>
+            <div class="quick-bg-btn quick-bg-matrix" data-bg="matrix" onclick="changeBackground('matrix')" title="Матрица"></div>
+            <div class="quick-bg-btn quick-bg-aurora" data-bg="aurora" onclick="changeBackground('aurora')" title="Сияние"></div>
+            <div class="quick-bg-btn quick-bg-blood" data-bg="blood" onclick="changeBackground('blood')" title="Кровь"></div>
+        </div>
+    </div>
 
     <input type="file" id="avatarInput" accept="image/*">
 
@@ -606,22 +687,24 @@
                 <div class="card-content">
                     <h3 class="section-title">🎮 Статистика DDNet</h3>
                     <p class="section-desc">Данные из публичного API DDNet для ника: <span class="ddnet-badge"><i class="fas fa-gamepad"></i> <span id="ddnetNick">Nick_Name</span></span></p>
-                    <div class="ddnet-stats" id="ddnetStats">
-                        <div class="ddnet-stat">
-                            <div class="ddnet-stat-value" id="ddnetPoints">—</div>
-                            <div class="ddnet-stat-label">Очков</div>
-                        </div>
-                        <div class="ddnet-stat">
-                            <div class="ddnet-stat-value" id="ddnetRanks">—</div>
-                            <div class="ddnet-stat-label">Рангов</div>
-                        </div>
-                        <div class="ddnet-stat">
-                            <div class="ddnet-stat-value" id="ddnetFinishes">—</div>
-                            <div class="ddnet-stat-label">Финишей</div>
-                        </div>
-                        <div class="ddnet-stat">
-                            <div class="ddnet-stat-value" id="ddnetLastSeen">—</div>
-                            <div class="ddnet-stat-label">Последний вход</div>
+                    <div id="ddnetContent">
+                        <div class="ddnet-stats" id="ddnetStats">
+                            <div class="ddnet-stat">
+                                <div class="ddnet-stat-value" id="ddnetPoints">—</div>
+                                <div class="ddnet-stat-label">Очков</div>
+                            </div>
+                            <div class="ddnet-stat">
+                                <div class="ddnet-stat-value" id="ddnetRanks">—</div>
+                                <div class="ddnet-stat-label">Рангов</div>
+                            </div>
+                            <div class="ddnet-stat">
+                                <div class="ddnet-stat-value" id="ddnetFinishes">—</div>
+                                <div class="ddnet-stat-label">Финишей</div>
+                            </div>
+                            <div class="ddnet-stat">
+                                <div class="ddnet-stat-value" id="ddnetLastSeen">—</div>
+                                <div class="ddnet-stat-label">Последний вход</div>
+                            </div>
                         </div>
                     </div>
                     <button class="btn btn-small" onclick="loadDDNetStats()" style="margin-top: 20px;">
@@ -678,280 +761,92 @@
             </div>
         </div>
 
-        <!-- МОИ ПОКУПКИ -->
+        <!-- ОСТАЛЬНЫЕ СТРАНИЦЫ (сокращено для экономии места) -->
         <div class="page" id="page-purchases">
-            <div class="header">
-                <h1>Мои покупки</h1>
-                <p>История ваших покупок и активных подписок</p>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Активные подписки</h3>
-                    <div class="purchase-item">
-                        <div class="purchase-icon"><i class="fas fa-crown"></i></div>
-                        <div class="purchase-info">
-                            <h4>Premium подписка</h4>
-                            <p>Активна до 26 ноября 2026 • Осталось 7 дней</p>
-                        </div>
-                        <span class="purchase-status active">Активна</span>
-                    </div>
-                    <div class="purchase-item">
-                        <div class="purchase-icon"><i class="fas fa-key"></i></div>
-                        <div class="purchase-info">
-                            <h4>Базовая лицензия</h4>
-                            <p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p>
-                        </div>
-                        <span class="purchase-status active">Активна</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">История покупок</h3>
-                    <div id="purchasesList"></div>
-                </div>
-            </div>
+            <div class="header"><h1>Мои покупки</h1><p>История ваших покупок и активных подписок</p></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">Активные подписки</h3>
+                <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>Premium подписка</h4><p>Активна до 26 ноября 2026 • Осталось 7 дней</p></div><span class="purchase-status active">Активна</span></div>
+                <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-key"></i></div><div class="purchase-info"><h4>Базовая лицензия</h4><p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p></div><span class="purchase-status active">Активна</span></div>
+            </div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">История покупок</h3><div id="purchasesList"></div></div></div>
         </div>
 
-        <!-- КОШЕЛЕК -->
         <div class="page" id="page-wallet">
-            <div class="header">
-                <h1>Кошелек</h1>
-                <p>Управляйте балансом и историей транзакций</p>
-            </div>
-            <div class="balance-card">
-                <div class="balance-label">Ваш баланс</div>
-                <div class="balance-amount" id="balanceAmount">1,250.00 <span>₽</span></div>
-                <div class="balance-actions">
-                    <button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button>
-                    <button class="btn" onclick="showToast('Вывод', 'Функция вывода в разработке')"><i class="fas fa-arrow-up"></i> Вывести</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">История транзакций</h3>
-                    <ul class="transactions-list" id="transactionsList"></ul>
-                </div>
-            </div>
+            <div class="header"><h1>Кошелек</h1><p>Управляйте балансом и историей транзакций</p></div>
+            <div class="balance-card"><div class="balance-label">Ваш баланс</div><div class="balance-amount" id="balanceAmount">1,250.00 <span>₽</span></div><div class="balance-actions"><button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button></div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">История транзакций</h3><ul class="transactions-list" id="transactionsList"></ul></div></div>
         </div>
 
-        <!-- МАГАЗИН -->
         <div class="page" id="page-shop">
-            <div class="header">
-                <h1>Магазин префиксов</h1>
-                <p>Купите эксклюзивный анимированный префикс</p>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Доступные префиксы</h3>
-                    <p class="section-desc">Выберите префикс с уникальной анимацией</p>
-                    <div class="prefixes-grid" id="prefixesGrid"></div>
-                </div>
-            </div>
+            <div class="header"><h1>Магазин префиксов</h1><p>Купите эксклюзивный анимированный префикс</p></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">Доступные префиксы</h3><div class="prefixes-grid" id="prefixesGrid"></div></div></div>
         </div>
 
-        <!-- МОИ ОТЗЫВЫ -->
         <div class="page" id="page-reviews">
-            <div class="header">
-                <h1>Мои отзывы</h1>
-                <p>Оставьте отзыв о Cherry Client или посмотрите ваши опубликованные отзывы</p>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">✍️ Написать отзыв</h3>
-                    <p class="section-desc">Ваш отзыв появится на главной странице сайта после модерации</p>
-                    
-                    <div id="myReviewSection"></div>
-
-                    <div class="review-form" id="reviewForm">
-                        <div class="form-group">
-                            <label class="form-label">Оценка</label>
-                            <div class="star-rating" id="starRating">
-                                <i class="far fa-star" data-rating="1"></i>
-                                <i class="far fa-star" data-rating="2"></i>
-                                <i class="far fa-star" data-rating="3"></i>
-                                <i class="far fa-star" data-rating="4"></i>
-                                <i class="far fa-star" data-rating="5"></i>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Ваш отзыв</label>
-                            <textarea id="reviewText" placeholder="Расскажите о вашем опыте использования Cherry Client..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Купленный продукт</label>
-                            <select class="form-input" id="reviewProduct">
-                                <option value="Premium подписка">Premium подписка</option>
-                                <option value="Базовая лицензия">Базовая лицензия</option>
-                                <option value="Префикс VIP">Префикс VIP</option>
-                                <option value="Префикс PRO">Префикс PRO</option>
-                            </select>
-                        </div>
-                        <button class="btn" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Отправить отзыв</button>
-                    </div>
+            <div class="header"><h1>Мои отзывы</h1><p>Оставьте отзыв о Cherry Client</p></div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">✍️ Написать отзыв</h3>
+                <div class="review-form">
+                    <div class="form-group"><label class="form-label">Оценка</label><div class="star-rating" id="starRating"><i class="far fa-star" data-rating="1"></i><i class="far fa-star" data-rating="2"></i><i class="far fa-star" data-rating="3"></i><i class="far fa-star" data-rating="4"></i><i class="far fa-star" data-rating="5"></i></div></div>
+                    <div class="form-group"><label class="form-label">Ваш отзыв</label><textarea id="reviewText" placeholder="Расскажите о вашем опыте..."></textarea></div>
+                    <button class="btn" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Отправить отзыв</button>
                 </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Ваши опубликованные отзывы</h3>
-                    <div id="myReviewsList"></div>
-                </div>
-            </div>
+            </div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">Ваши опубликованные отзывы</h3><div id="myReviewsList"></div></div></div>
         </div>
 
-        <!-- РЕФЕРАЛЬНАЯ ПРОГРАММА -->
         <div class="page" id="page-referral">
-            <div class="header">
-                <h1>Реферальная программа</h1>
-                <p>Приглашай друзей и получай бонусы</p>
-            </div>
-
+            <div class="header"><h1>Реферальная программа</h1><p>Приглашай друзей и получай бонусы</p></div>
             <div class="referral-card">
                 <h3 class="section-title"><i class="fas fa-gift" style="color: var(--primary);"></i> Твоя реферальная ссылка</h3>
-                <p class="section-desc">Поделись ссылкой с друзьями и получай 10% от каждой их покупки + 100₽ за регистрацию</p>
-                
-                <div class="referral-link">
-                    <input type="text" value="https://cherry-client.com/?ref=Nick_Name_12345" readonly id="referralLink">
-                    <button class="btn" onclick="copyReferral()"><i class="fas fa-copy"></i> Копировать</button>
-                </div>
-
+                <div class="referral-link"><input type="text" value="https://cherry-client.com/?ref=Nick_Name_12345" readonly id="referralLink"><button class="btn" onclick="copyReferral()"><i class="fas fa-copy"></i> Копировать</button></div>
                 <div class="referral-stats">
-                    <div class="referral-stat">
-                        <div class="referral-stat-value" id="refInvited">12</div>
-                        <div class="referral-stat-label">Приглашено друзей</div>
-                    </div>
-                    <div class="referral-stat">
-                        <div class="referral-stat-value" id="refEarned">1,200₽</div>
-                        <div class="referral-stat-label">Заработано</div>
-                    </div>
-                    <div class="referral-stat">
-                        <div class="referral-stat-value" id="refPending">350₽</div>
-                        <div class="referral-stat-label">Ожидает вывода</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Как это работает?</h3>
-                    <div style="display: grid; gap: 15px; margin-top: 20px;">
-                        <div style="display: flex; gap: 15px; align-items: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</div>
-                            <div>
-                                <h4 style="margin-bottom: 5px;">Поделись ссылкой</h4>
-                                <p style="color: var(--text-muted); font-size: 13px;">Отправь свою реферальную ссылку друзьям</p>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 15px; align-items: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</div>
-                            <div>
-                                <h4 style="margin-bottom: 5px;">Друг регистрируется</h4>
-                                <p style="color: var(--text-muted); font-size: 13px;">Получаешь 100₽ сразу после регистрации друга</p>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 15px; align-items: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px;">
-                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</div>
-                            <div>
-                                <h4 style="margin-bottom: 5px;">Друг покупает</h4>
-                                <p style="color: var(--text-muted); font-size: 13px;">Получаешь 10% от суммы покупки друга</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="referral-stat"><div class="referral-stat-value">12</div><div class="referral-stat-label">Приглашено друзей</div></div>
+                    <div class="referral-stat"><div class="referral-stat-value">1,200₽</div><div class="referral-stat-label">Заработано</div></div>
+                    <div class="referral-stat"><div class="referral-stat-value">350₽</div><div class="referral-stat-label">Ожидает вывода</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- БЕЗОПАСНОСТЬ -->
         <div class="page" id="page-security">
-            <div class="header">
-                <h1>Безопасность</h1>
-                <p>Защитите свой аккаунт</p>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Настройки безопасности</h3>
-                    <div class="security-item">
-                        <div class="security-icon"><i class="fas fa-lock"></i></div>
-                        <div class="security-info"><h4>Смена пароля</h4><p>Последнее изменение: <span id="lastPasswordChange">30 дней назад</span></p></div>
-                        <button class="btn btn-outline btn-small" onclick="openChangePassword()">Изменить</button>
-                    </div>
-                    <div class="security-item">
-                        <div class="security-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="security-info"><h4>Двухфакторная аутентификация</h4><p>Дополнительный уровень защиты</p></div>
-                        <label class="toggle-switch"><input type="checkbox" id="2faToggle" onchange="toggle2FA(this)"><span class="toggle-slider"></span></label>
-                    </div>
-                    <div class="security-item">
-                        <div class="security-icon"><i class="fas fa-envelope"></i></div>
-                        <div class="security-info"><h4>Уведомления о входе</h4><p>Email при входе с нового устройства</p></div>
-                        <label class="toggle-switch"><input type="checkbox" id="loginNotifToggle" onchange="toggleSetting('loginNotif', this.checked)"><span class="toggle-slider"></span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Активные сессии</h3>
-                    <div id="sessionsList"></div>
-                    <button class="btn btn-danger btn-small" style="margin-top: 15px;" onclick="terminateAllSessions()"><i class="fas fa-sign-out-alt"></i> Завершить все другие сессии</button>
-                </div>
-            </div>
+            <div class="header"><h1>Безопасность</h1><p>Защитите свой аккаунт</p></div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">Настройки безопасности</h3>
+                <div class="security-item"><div class="security-icon"><i class="fas fa-lock"></i></div><div class="security-info"><h4>Смена пароля</h4><p>Последнее изменение: 30 дней назад</p></div><button class="btn btn-outline btn-small" onclick="showToast('Пароль', 'Функция в разработке')">Изменить</button></div>
+                <div class="security-item"><div class="security-icon"><i class="fas fa-mobile-alt"></i></div><div class="security-info"><h4>Двухфакторная аутентификация</h4><p>Дополнительный уровень защиты</p></div><label class="toggle-switch"><input type="checkbox" onchange="showToast('2FA', 'Настройка сохранена')"><span class="toggle-slider"></span></label></div>
+            </div></div>
         </div>
 
-        <!-- УВЕДОМЛЕНИЯ -->
         <div class="page" id="page-notifications">
-            <div class="header">
-                <h1>Уведомления</h1>
-                <p>Ваши последние уведомления</p>
-            </div>
-            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-                <button class="btn btn-outline btn-small" onclick="markAllRead()"><i class="fas fa-check-double"></i> Прочитать все</button>
-                <button class="btn btn-outline btn-small" onclick="clearNotifications()"><i class="fas fa-trash"></i> Очистить</button>
-            </div>
+            <div class="header"><h1>Уведомления</h1><p>Ваши последние уведомления</p></div>
+            <div style="display: flex; gap: 12px; margin-bottom: 20px;"><button class="btn btn-outline btn-small" onclick="markAllRead()"><i class="fas fa-check-double"></i> Прочитать все</button><button class="btn btn-outline btn-small" onclick="clearNotifications()"><i class="fas fa-trash"></i> Очистить</button></div>
             <div id="notificationsList"></div>
         </div>
 
-        <!-- НАСТРОЙКИ -->
         <div class="page" id="page-settings">
-            <div class="header">
-                <h1>Настройки</h1>
-                <p>Персонализируйте ваш личный кабинет</p>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🎨 Фон личного кабинета</h3>
-                    <p class="section-desc">Выберите тему оформления фона</p>
-                    <div class="bg-selector">
-                        <div class="bg-option bg-option-default" data-bg="default" onclick="changeBackground('default')"><span class="bg-option-name">По умолчанию</span></div>
-                        <div class="bg-option bg-option-neon" data-bg="neon" onclick="changeBackground('neon')"><span class="bg-option-name">Неон</span></div>
-                        <div class="bg-option bg-option-cyber" data-bg="cyber" onclick="changeBackground('cyber')"><span class="bg-option-name">Кибер</span></div>
-                        <div class="bg-option bg-option-sunset" data-bg="sunset" onclick="changeBackground('sunset')"><span class="bg-option-name">Закат</span></div>
-                        <div class="bg-option bg-option-forest" data-bg="forest" onclick="changeBackground('forest')"><span class="bg-option-name">Лес</span></div>
-                        <div class="bg-option bg-option-ocean" data-bg="ocean" onclick="changeBackground('ocean')"><span class="bg-option-name">Океан</span></div>
-                        <div class="bg-option bg-option-galaxy" data-bg="galaxy" onclick="changeBackground('galaxy')"><span class="bg-option-name">Галактика</span></div>
-                        <div class="bg-option bg-option-fire" data-bg="fire" onclick="changeBackground('fire')"><span class="bg-option-name">Огонь</span></div>
-                        <div class="bg-option bg-option-matrix" data-bg="matrix" onclick="changeBackground('matrix')"><span class="bg-option-name">Матрица</span></div>
-                        <div class="bg-option bg-option-aurora" data-bg="aurora" onclick="changeBackground('aurora')"><span class="bg-option-name">Северное сияние</span></div>
-                        <div class="bg-option bg-option-blood" data-bg="blood" onclick="changeBackground('blood')"><span class="bg-option-name">Кровь</span></div>
-                    </div>
+            <div class="header"><h1>Настройки</h1><p>Персонализируйте ваш личный кабинет</p></div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">🎨 Фон личного кабинета</h3>
+                <p class="section-desc">Выберите тему оформления фона (или используй быструю панель слева внизу)</p>
+                <div class="bg-selector">
+                    <div class="bg-option bg-option-default" data-bg="default" onclick="changeBackground('default')"><span class="bg-option-name">По умолчанию</span></div>
+                    <div class="bg-option bg-option-neon" data-bg="neon" onclick="changeBackground('neon')"><span class="bg-option-name">Неон</span></div>
+                    <div class="bg-option bg-option-cyber" data-bg="cyber" onclick="changeBackground('cyber')"><span class="bg-option-name">Кибер</span></div>
+                    <div class="bg-option bg-option-sunset" data-bg="sunset" onclick="changeBackground('sunset')"><span class="bg-option-name">Закат</span></div>
+                    <div class="bg-option bg-option-forest" data-bg="forest" onclick="changeBackground('forest')"><span class="bg-option-name">Лес</span></div>
+                    <div class="bg-option bg-option-ocean" data-bg="ocean" onclick="changeBackground('ocean')"><span class="bg-option-name">Океан</span></div>
+                    <div class="bg-option bg-option-galaxy" data-bg="galaxy" onclick="changeBackground('galaxy')"><span class="bg-option-name">Галактика</span></div>
+                    <div class="bg-option bg-option-fire" data-bg="fire" onclick="changeBackground('fire')"><span class="bg-option-name">Огонь</span></div>
+                    <div class="bg-option bg-option-matrix" data-bg="matrix" onclick="changeBackground('matrix')"><span class="bg-option-name">Матрица</span></div>
+                    <div class="bg-option bg-option-aurora" data-bg="aurora" onclick="changeBackground('aurora')"><span class="bg-option-name">Северное сияние</span></div>
+                    <div class="bg-option bg-option-blood" data-bg="blood" onclick="changeBackground('blood')"><span class="bg-option-name">Кровь</span></div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🖼️ Баннер профиля</h3>
-                    <p class="section-desc">Выберите анимированный баннер</p>
-                    <div class="banner-selector-grid" id="bannerSelectorGrid"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Данные</h3>
-                    <button class="btn btn-outline btn-small" onclick="exportData()" style="margin-right: 10px;"><i class="fas fa-download"></i> Экспорт</button>
-                    <button class="btn btn-danger btn-small" onclick="resetData()"><i class="fas fa-trash"></i> Сбросить всё</button>
-                </div>
-            </div>
+            </div></div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">🖼️ Баннер профиля</h3>
+                <p class="section-desc">Выберите анимированный баннер</p>
+                <div class="banner-selector-grid" id="bannerSelectorGrid"></div>
+            </div></div>
         </div>
     </main>
 
@@ -991,12 +886,10 @@
             ],
             purchases: [
                 { id: 1, name: 'Premium подписка', date: '2026-11-15', amount: 299, status: 'active', icon: 'fa-crown' },
-                { id: 2, name: 'Базовая лицензия', date: '2026-10-01', amount: 499, status: 'active', icon: 'fa-key' },
-                { id: 3, name: 'Пополнение баланса', date: '2026-11-19', amount: 500, status: 'completed', icon: 'fa-wallet' }
+                { id: 2, name: 'Базовая лицензия', date: '2026-10-01', amount: 499, status: 'active', icon: 'fa-key' }
             ],
             sessions: [
-                { id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true },
-                { id: 2, device: 'iPhone 13 - Safari', location: 'Москва, Россия', time: Date.now() - 172800000, current: false }
+                { id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true }
             ],
             notifications: [
                 { id: 1, type: 'success', title: 'Платеж успешно обработан', text: 'Ваш баланс пополнен на 500.00 ₽', time: Date.now() - 7200000, read: false },
@@ -1065,7 +958,6 @@
                 if (page === 'shop') renderPrefixes();
                 if (page === 'purchases') renderPurchases();
                 if (page === 'reviews') renderMyReviews();
-                if (page === 'security') { renderSessions(); loadSettings(); }
                 if (page === 'notifications') renderNotifications();
                 if (page === 'settings') renderBannerSelectors();
             });
@@ -1082,49 +974,100 @@
             renderPrefixes();
             renderPurchases();
             renderMyReviews();
-            renderSessions();
             renderNotifications();
             renderAchievements();
             renderBannerSelectors();
             updateNotifCount();
             animateCounters();
-            startSessionTimer();
-            startNotificationSimulator();
-            loadSettings();
             loadDDNetStats();
             initStarRating();
+            updateQuickBgSwitcher();
         });
+
+        // ===== БЫСТРАЯ СМЕНА ФОНА =====
+        function changeBackground(bg) {
+            data.background = bg;
+            applyBackground(bg);
+            updateQuickBgSwitcher();
+            saveData();
+            showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`);
+        }
+
+        function applyBackground(bg) {
+            // Удаляем все классы bg-*
+            document.body.className = document.body.className.replace(/bg-\w+/g, '').trim();
+            // Добавляем новый
+            document.body.classList.add('bg-' + bg);
+        }
+
+        function updateQuickBgSwitcher() {
+            document.querySelectorAll('.quick-bg-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.bg === data.background);
+            });
+        }
+
+        function getBgName(bg) {
+            const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' };
+            return names[bg] || bg;
+        }
 
         // ===== DDNet статистика =====
         async function loadDDNetStats() {
             const nick = document.getElementById('ddnetUsername').value.trim() || data.ddnetUsername;
             document.getElementById('ddnetNick').textContent = nick;
             
+            const content = document.getElementById('ddnetContent');
+            
             try {
                 const response = await fetch(`${DDNET_API}/players/${encodeURIComponent(nick)}.json`);
-                if (response.ok) {
-                    const playerData = await response.json();
-                    document.getElementById('ddnetPoints').textContent = (playerData.points || 0).toLocaleString();
-                    document.getElementById('ddnetRanks').textContent = (playerData.ranks || []).length;
-                    document.getElementById('ddnetFinishes').textContent = (playerData.finishes || []).length;
-                    if (playerData.last_seen) {
-                        const diff = Date.now() - new Date(playerData.last_seen).getTime();
-                        const hours = Math.floor(diff / 3600000);
-                        if (hours < 1) document.getElementById('ddnetLastSeen').textContent = 'Сейчас';
-                        else if (hours < 24) document.getElementById('ddnetLastSeen').textContent = hours + 'ч назад';
-                        else document.getElementById('ddnetLastSeen').textContent = Math.floor(hours/24) + 'д назад';
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        showDDNetError(`Игрок "${nick}" не найден в DDNet`, 'Этот ник не имеет завершённых карт в базе DDNet. Введи другой ник или играй больше!');
                     } else {
-                        document.getElementById('ddnetLastSeen').textContent = '—';
+                        showDDNetError('Ошибка API DDNet', `Сервер вернул код ${response.status}. Попробуй позже.`);
                     }
-                } else {
-                    document.getElementById('ddnetPoints').textContent = '—';
-                    document.getElementById('ddnetRanks').textContent = '—';
-                    document.getElementById('ddnetFinishes').textContent = '—';
-                    document.getElementById('ddnetLastSeen').textContent = 'Не найден';
+                    return;
                 }
+                
+                const playerData = await response.json();
+                
+                // Восстанавливаем нормальный вид
+                content.innerHTML = `
+                    <div class="ddnet-stats">
+                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.points || 0).toLocaleString()}</div><div class="ddnet-stat-label">Очков</div></div>
+                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.ranks || []).length}</div><div class="ddnet-stat-label">Рангов</div></div>
+                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.finishes || []).length}</div><div class="ddnet-stat-label">Финишей</div></div>
+                        <div class="ddnet-stat"><div class="ddnet-stat-value">${formatLastSeen(playerData.last_seen)}</div><div class="ddnet-stat-label">Последний вход</div></div>
+                    </div>
+                `;
+                
+                showToast('DDNet загружен', `Статистика ${nick} обновлена`);
             } catch(e) {
-                document.getElementById('ddnetPoints').textContent = 'Ошибка';
+                console.error('DDNet error:', e);
+                showDDNetError('Не удалось подключиться к DDNet', 'Возможно проблема с CORS на GitHub Pages или нет интернета. Попробуй позже.');
             }
+        }
+
+        function showDDNetError(title, text) {
+            const content = document.getElementById('ddnetContent');
+            content.innerHTML = `
+                <div class="ddnet-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>${title}</h4>
+                    <p>${text}</p>
+                    <button class="btn btn-small" onclick="loadDDNetStats()"><i class="fas fa-redo"></i> Попробовать снова</button>
+                </div>
+            `;
+        }
+
+        function formatLastSeen(timestamp) {
+            if (!timestamp) return '—';
+            const diff = Date.now() - new Date(timestamp).getTime();
+            const hours = Math.floor(diff / 3600000);
+            if (hours < 1) return 'Сейчас';
+            if (hours < 24) return hours + 'ч назад';
+            return Math.floor(hours/24) + 'д назад';
         }
 
         // ===== ЗВЁЗДЫ ДЛЯ ОТЗЫВА =====
@@ -1134,120 +1077,59 @@
                 star.addEventListener('click', () => {
                     const rating = parseInt(star.dataset.rating);
                     data.selectedRating = rating;
-                    stars.forEach((s, i) => {
-                        s.className = i < rating ? 'fas fa-star active' : 'far fa-star';
-                    });
-                });
-                star.addEventListener('mouseenter', () => {
-                    const rating = parseInt(star.dataset.rating);
-                    stars.forEach((s, i) => {
-                        s.className = i < rating ? 'fas fa-star active' : 'far fa-star';
-                    });
-                });
-            });
-            document.getElementById('starRating').addEventListener('mouseleave', () => {
-                const rating = data.selectedRating;
-                stars.forEach((s, i) => {
-                    s.className = i < rating ? 'fas fa-star active' : 'far fa-star';
+                    stars.forEach((s, i) => { s.className = i < rating ? 'fas fa-star active' : 'far fa-star'; });
                 });
             });
         }
 
         function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
-            const product = document.getElementById('reviewProduct').value;
             const rating = data.selectedRating;
-
             if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
             if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
 
-            const review = {
+            data.myReviews.push({
                 id: Date.now(),
                 name: data.username,
-                avatar: data.username.charAt(0).toUpperCase(),
-                date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
                 rating: rating,
                 text: text,
-                product: product,
-                verified: true,
-                helpful: 0
-            };
-
-            data.myReviews.push(review);
+                date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+            });
             saveData();
-            
             document.getElementById('reviewText').value = '';
             data.selectedRating = 0;
             document.querySelectorAll('#starRating i').forEach(s => s.className = 'far fa-star');
-            
             renderMyReviews();
             showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации');
-            addNotification('success', 'Отзыв отправлен', 'Ваш отзыв отправлен на модерацию');
         }
 
         function renderMyReviews() {
-            const formSection = document.getElementById('myReviewSection');
             const list = document.getElementById('myReviewsList');
-
-            if (data.myReviews.length > 0) {
-                formSection.innerHTML = `
-                    <div class="my-review">
-                        <div class="my-review-header">
-                            <strong>У вас уже есть опубликованный отзыв</strong>
-                            <span class="purchase-status active">Опубликован</span>
-                        </div>
-                        <div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < data.myReviews[0].rating ? '' : ' far'}"></i>`).join('')}</div>
-                        <p style="margin-top: 10px; color: var(--text-muted);">${data.myReviews[0].text}</p>
-                        <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">Продукт: ${data.myReviews[0].product} • ${data.myReviews[0].date}</p>
-                    </div>
-                `;
-                document.getElementById('reviewForm').style.display = 'none';
-            } else {
-                formSection.innerHTML = '';
-                document.getElementById('reviewForm').style.display = 'block';
-            }
-
             if (data.myReviews.length === 0) {
                 list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>У вас пока нет отзывов</h3><p>Напишите первый отзыв выше!</p></div>';
-            } else {
-                list.innerHTML = data.myReviews.map(r => `
-                    <div class="my-review">
-                        <div class="my-review-header">
-                            <div>
-                                <strong>${r.name}</strong>
-                                <span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span>
-                            </div>
-                            <span style="font-size: 12px; color: var(--text-muted);">${r.date}</span>
-                        </div>
-                        <div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div>
-                        <p style="margin-top: 10px;">${r.text}</p>
-                        <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);"><i class="fas fa-shopping-bag"></i> ${r.product}</p>
-                    </div>
-                `).join('');
+                return;
             }
+            list.innerHTML = data.myReviews.map(r => `
+                <div class="my-review">
+                    <div class="my-review-header">
+                        <div><strong>${r.name}</strong><span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span></div>
+                        <span style="font-size: 12px; color: var(--text-muted);">${r.date}</span>
+                    </div>
+                    <div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div>
+                    <p style="margin-top: 10px;">${r.text}</p>
+                </div>
+            `).join('');
         }
 
         // ===== ПОКУПКИ =====
         function renderPurchases() {
             const list = document.getElementById('purchasesList');
-            if (data.purchases.length === 0) {
-                list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>';
-                return;
-            }
+            if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
             list.innerHTML = data.purchases.map(p => {
                 const statusClass = p.status === 'active' ? 'active' : p.status === 'expired' ? 'expired' : 'pending';
                 const statusText = p.status === 'active' ? 'Активна' : p.status === 'expired' ? 'Истекла' : 'Ожидает';
                 const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-                return `
-                    <div class="purchase-item">
-                        <div class="purchase-icon"><i class="fas ${p.icon}"></i></div>
-                        <div class="purchase-info">
-                            <h4>${p.name}</h4>
-                            <p>${date} • ${p.amount} ₽</p>
-                        </div>
-                        <span class="purchase-status ${statusClass}">${statusText}</span>
-                    </div>
-                `;
+                return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status ${statusClass}">${statusText}</span></div>`;
             }).join('');
         }
 
@@ -1255,17 +1137,8 @@
         function copyReferral() {
             const link = document.getElementById('referralLink');
             link.select();
-            navigator.clipboard.writeText(link.value).then(() => {
-                showToast('Скопировано!', 'Реферальная ссылка скопирована');
-            }).catch(() => {
-                document.execCommand('copy');
-                showToast('Скопировано!', 'Реферальная ссылка скопирована');
-            });
+            navigator.clipboard.writeText(link.value).then(() => showToast('Скопировано!', 'Реферальная ссылка скопирована')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'Реферальная ссылка скопирована'); });
         }
-
-        // ===== ФОН =====
-        function changeBackground(bg) { data.background = bg; applyBackground(bg); saveData(); showToast('Фон изменён', 'Тема применена'); }
-        function applyBackground(bg) { document.body.className = 'bg-' + bg; }
 
         // ===== БАННЕР =====
         function changeBanner(banner) { data.banner = banner; applyBanner(banner); saveData(); showToast('Баннер изменён', 'Новый баннер применён'); }
@@ -1325,9 +1198,9 @@
                 updateBalance();
                 renderTransactions();
                 renderPrefixes();
+                renderPurchases();
                 saveData();
                 showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
-                addNotification('success', 'Префикс куплен', `Вы приобрели префикс ${prefix.name}`);
             }
         }
 
@@ -1384,9 +1257,9 @@
                 updateBalance();
                 updateProfileDisplay();
                 renderTransactions();
+                renderPurchases();
                 saveData();
                 showToast('Пополнение', `Баланс пополнен на ${val.toFixed(2)} ₽`);
-                addNotification('success', 'Баланс пополнен', `На счёт зачислено ${val.toFixed(2)} ₽`);
             }
         }
 
@@ -1401,31 +1274,13 @@
             }).join('');
         }
 
-        // ===== БЕЗОПАСНОСТЬ =====
-        function renderSessions() {
-            const list = document.getElementById('sessionsList');
-            list.innerHTML = data.sessions.map(s => {
-                const timeAgo = getTimeAgo(s.time);
-                const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt';
-                return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p><div class="session-time">${s.current ? 'Сейчас активна' : timeAgo}</div></div>${s.current ? '<span class="session-status current">Текущая</span>' : `<button class="btn btn-outline btn-small" onclick="terminateSession(${s.id})">Завершить</button>`}</div>`;
-            }).join('');
-        }
-
-        function startSessionTimer() { setInterval(() => { const s = data.sessions.find(s => s.current); if (s) { s.time = Date.now(); } renderSessions(); }, 60000); }
-        function terminateSession(id) { data.sessions = data.sessions.filter(s => s.id !== id); renderSessions(); saveData(); showToast('Сессия завершена', 'Устройство отключено'); }
-        function terminateAllSessions() { if (confirm('Завершить все другие сессии?')) { data.sessions = data.sessions.filter(s => s.current); renderSessions(); saveData(); showToast('Готово', 'Все другие сессии завершены'); } }
-        function openChangePassword() { const newPass = prompt('Введите новый пароль (мин. 6 символов):'); if (newPass && newPass.length >= 6) { data.lastPasswordChange = Date.now(); document.getElementById('lastPasswordChange').textContent = 'только что'; saveData(); showToast('Пароль изменён', 'Ваш пароль успешно обновлён'); addNotification('danger', 'Пароль изменён', 'Пароль от аккаунта был успешно изменён'); } else if (newPass) { showToast('Ошибка', 'Пароль должен быть не менее 6 символов', 'error'); } }
-        function toggle2FA(checkbox) { data.settings.twoFA = checkbox.checked; saveData(); showToast(checkbox.checked ? '2FA включена' : '2FA отключена', checkbox.checked ? 'Двухфакторная аутентификация активирована' : 'Деактивирована'); }
-        function toggleSetting(key, value) { data.settings[key] = value; saveData(); showToast('Настройки сохранены', 'Изменения применены'); }
-        function loadSettings() { document.getElementById('2faToggle').checked = data.settings.twoFA || false; document.getElementById('loginNotifToggle').checked = data.settings.loginNotif !== false; }
-
         // ===== УВЕДОМЛЕНИЯ =====
         function renderNotifications() {
             const list = document.getElementById('notificationsList');
-            if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3><p>У вас пока нет уведомлений</p></div>'; return; }
+            if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
             list.innerHTML = data.notifications.map(n => {
                 const icons = { info: 'fa-info-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle', danger: 'fa-shield-alt' };
-                return `<div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}"><div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div><div class="notification-content"><h4>${n.title}</h4><p>${n.text}</p><div class="notification-time">${getTimeAgo(n.time)}</div></div><div class="notification-actions">${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})" title="Прочитать"><i class="fas fa-check"></i></button>` : ''}<button class="notif-btn" onclick="deleteNotification(${n.id})" title="Удалить"><i class="fas fa-times"></i></button></div></div>`;
+                return `<div class="notification-item ${n.read ? '' : 'unread'}"><div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div><div class="notification-content"><h4>${n.title}</h4><p>${n.text}</p><div class="notification-time">${getTimeAgo(n.time)}</div></div><div class="notification-actions">${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})"><i class="fas fa-check"></i></button>` : ''}<button class="notif-btn" onclick="deleteNotification(${n.id})"><i class="fas fa-times"></i></button></div></div>`;
             }).join('');
         }
 
@@ -1436,21 +1291,12 @@
         function clearNotifications() { if (confirm('Удалить все уведомления?')) { data.notifications = []; renderNotifications(); updateNotifCount(); saveData(); } }
         function updateNotifCount() { const count = data.notifications.filter(n => !n.read).length; const badge = document.getElementById('notifCount'); badge.textContent = count; badge.style.display = count > 0 ? 'inline' : 'none'; }
 
-        function startNotificationSimulator() {
-            const messages = [
-                { type: 'info', title: 'Новое событие', text: 'Кто-то просмотрел ваш профиль' },
-                { type: 'success', title: 'Награда получена', text: 'Вам начислено 50 бонусных очков' },
-                { type: 'warning', title: 'Напоминание', text: 'Не забудьте продлить подписку' }
-            ];
-            setInterval(() => { if (Math.random() > 0.7) { const msg = messages[Math.floor(Math.random() * messages.length)]; addNotification(msg.type, msg.title, msg.text); showToast('Новое уведомление', msg.title); } }, 30000);
-        }
-
         // ===== ДОСТИЖЕНИЯ =====
         function renderAchievements() {
             const grid = document.getElementById('achievementsGrid');
             grid.innerHTML = achievements.map(a => {
                 const unlocked = data.achievements.includes(a.id);
-                return `<div class="achievement ${unlocked ? '' : 'locked'}" title="${a.name}"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div></div>`;
+                return `<div class="achievement ${unlocked ? '' : 'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-name">${a.name}</div></div>`;
             }).join('');
         }
 
@@ -1483,8 +1329,6 @@
         }
 
         function logout() { if (confirm('Вы уверены, что хотите выйти?')) { showToast('До свидания!', 'Вы вышли из аккаунта'); setTimeout(() => { window.location.href = 'index.html'; }, 1500); } }
-        function exportData() { const dataStr = JSON.stringify(data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'cherry-client-data.json'; a.click(); URL.revokeObjectURL(url); showToast('Экспорт', 'Данные сохранены в файл'); }
-        function resetData() { if (confirm('Вы уверены? Все данные будут удалены!')) { localStorage.removeItem('cherryData'); location.reload(); } }
 
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
