@@ -7,118 +7,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --primary: #ff006e;
-            --secondary: #ff4d00;
-            --bg-dark: #0a0a0a;
-            --bg-panel: rgba(17, 17, 17, 0.85);
-            --text-main: #ffffff;
-            --text-muted: #888888;
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #00e676;
-            --warning: #ffab00;
-            --danger: #ff1744;
+            --primary: #ff006e; --secondary: #ff4d00; --bg-dark: #0a0a0a;
+            --bg-panel: rgba(17, 17, 17, 0.85); --text-main: #ffffff; --text-muted: #888888;
+            --border: rgba(255, 255, 255, 0.1); --success: #00e676; --warning: #ffab00; --danger: #ff1744;
         }
-
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: background 0.5s ease;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            transition: all 0.5s ease;
-        }
-
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; transition: background 0.5s ease; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; transition: all 0.5s ease; }
         body.bg-default { background: #0a0a0a; }
-        body.bg-default::before {
-            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 77, 0, 0.1) 0%, transparent 50%);
-            animation: bgFloat 20s ease-in-out infinite;
-        }
-
+        body.bg-default::before { background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 77, 0, 0.1) 0%, transparent 50%); animation: bgFloat 20s ease-in-out infinite; }
         body.bg-neon { background: #0a0014; }
-        body.bg-neon::before {
-            background: radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.2) 0%, transparent 40%);
-            animation: neonPulse 5s ease-in-out infinite;
-        }
-
+        body.bg-neon::before { background: radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.3) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.2) 0%, transparent 40%); animation: neonPulse 5s ease-in-out infinite; }
         body.bg-cyber { background: #000; }
-        body.bg-cyber::before {
-            background-image: linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 15s linear infinite;
-        }
-
+        body.bg-cyber::before { background-image: linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px); background-size: 40px 40px; animation: gridMove 15s linear infinite; }
         body.bg-sunset { background: #1a0a0a; }
-        body.bg-sunset::before {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(161, 140, 209, 0.2) 100%);
-            animation: sunsetShift 12s ease-in-out infinite;
-        }
-
+        body.bg-sunset::before { background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(161, 140, 209, 0.2) 100%); animation: sunsetShift 12s ease-in-out infinite; }
         body.bg-forest { background: #0a1a0a; }
-        body.bg-forest::before {
-            background: radial-gradient(ellipse at 30% 80%, rgba(0, 200, 83, 0.2) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 20%, rgba(0, 230, 118, 0.15) 0%, transparent 50%);
-            animation: forestGlow 10s ease-in-out infinite;
-        }
-
+        body.bg-forest::before { background: radial-gradient(ellipse at 30% 80%, rgba(0, 200, 83, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 70% 20%, rgba(0, 230, 118, 0.15) 0%, transparent 50%); animation: forestGlow 10s ease-in-out infinite; }
         body.bg-ocean { background: #000a1a; }
-        body.bg-ocean::before {
-            background: radial-gradient(circle at 20% 80%, rgba(0, 119, 255, 0.2) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(0, 200, 255, 0.15) 0%, transparent 50%);
-            animation: oceanWave 8s ease-in-out infinite;
-        }
-
+        body.bg-ocean::before { background: radial-gradient(circle at 20% 80%, rgba(0, 119, 255, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(0, 200, 255, 0.15) 0%, transparent 50%); animation: oceanWave 8s ease-in-out infinite; }
         body.bg-galaxy { background: #050014; }
-        body.bg-galaxy::before {
-            background: radial-gradient(2px 2px at 20% 30%, white, transparent),
-                        radial-gradient(2px 2px at 60% 70%, white, transparent),
-                        radial-gradient(1px 1px at 50% 50%, white, transparent);
-            background-size: 200% 200%;
-            animation: starsMove 50s linear infinite;
-        }
-
+        body.bg-galaxy::before { background: radial-gradient(2px 2px at 20% 30%, white, transparent), radial-gradient(2px 2px at 60% 70%, white, transparent), radial-gradient(1px 1px at 50% 50%, white, transparent); background-size: 200% 200%; animation: starsMove 50s linear infinite; }
         body.bg-fire { background: #1a0500; }
-        body.bg-fire::before {
-            background: radial-gradient(circle at 30% 70%, rgba(255, 69, 0, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 30%, rgba(255, 140, 0, 0.2) 0%, transparent 50%);
-            animation: fireFlicker 3s ease-in-out infinite;
-        }
-
+        body.bg-fire::before { background: radial-gradient(circle at 30% 70%, rgba(255, 69, 0, 0.3) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(255, 140, 0, 0.2) 0%, transparent 50%); animation: fireFlicker 3s ease-in-out infinite; }
         body.bg-matrix { background: #000; }
-        body.bg-matrix::before {
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 0, 0.03) 50%, transparent 100%);
-            background-size: 100% 200%;
-            animation: matrixRain 3s linear infinite;
-        }
-
+        body.bg-matrix::before { background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 0, 0.03) 50%, transparent 100%); background-size: 100% 200%; animation: matrixRain 3s linear infinite; }
         body.bg-aurora { background: #0a0a1a; }
-        body.bg-aurora::before {
-            background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 128, 0.2) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 50%, rgba(128, 0, 255, 0.2) 0%, transparent 50%);
-            animation: auroraShift 10s ease-in-out infinite;
-            filter: blur(40px);
-        }
-
+        body.bg-aurora::before { background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 128, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(128, 0, 255, 0.2) 0%, transparent 50%); animation: auroraShift 10s ease-in-out infinite; filter: blur(40px); }
         body.bg-blood { background: #1a0000; }
-        body.bg-blood::before {
-            background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.3) 0%, transparent 60%);
-            animation: bloodPulse 4s ease-in-out infinite;
-        }
-
+        body.bg-blood::before { background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.3) 0%, transparent 60%); animation: bloodPulse 4s ease-in-out infinite; }
         @keyframes bgFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-5%, -5%); } }
         @keyframes neonPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
         @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(40px, 40px); } }
@@ -131,22 +48,10 @@
         @keyframes auroraShift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10%); } }
         @keyframes bloodPulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-        .sidebar {
-            width: 260px;
-            background: var(--bg-panel);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border);
-            position: fixed;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
+        .sidebar { width: 260px; background: var(--bg-panel); backdrop-filter: blur(20px); border-right: 1px solid var(--border); position: fixed; height: 100vh; display: flex; flex-direction: column; z-index: 100; }
         .brand { padding: 25px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
-        .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 5px 20px rgba(255, 0, 110, 0.4); }
+        .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .brand-text { font-size: 20px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .menu { list-style: none; flex: 1; padding: 20px 15px; overflow-y: auto; }
         .menu-item { margin-bottom: 6px; }
         .menu-link { display: flex; align-items: center; padding: 13px 18px; color: var(--text-muted); text-decoration: none; border-radius: 12px; transition: all 0.3s; font-weight: 500; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-size: 14px; }
@@ -154,9 +59,7 @@
         .menu-link:hover { background: rgba(255, 0, 110, 0.1); color: white; transform: translateX(5px); }
         .menu-link:hover i { transform: scale(1.2); }
         .menu-link.active { background: linear-gradient(90deg, rgba(255, 0, 110, 0.2), transparent); color: var(--primary); border-left: 3px solid var(--primary); }
-
         .badge-count { margin-left: auto; background: var(--primary); color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
-
         .user-profile-mini { padding: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
         .mini-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #333, #555); display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid var(--border); overflow: hidden; }
         .mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -170,11 +73,9 @@
         .page { display: none; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
         .header { margin-bottom: 35px; }
         .header h1 { font-size: 32px; margin-bottom: 8px; background: linear-gradient(135deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .header p { color: var(--text-muted); font-size: 14px; }
-
         .card { background: var(--bg-panel); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 25px; transition: all 0.3s ease; }
         .card:hover { border-color: rgba(255, 0, 110, 0.3); box-shadow: 0 10px 40px rgba(255, 0, 110, 0.1); }
         .card-content { padding: 30px; }
@@ -192,14 +93,11 @@
         .banner-cyber::before { content: 'CHERRY CLIENT'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; font-weight: 900; color: rgba(0, 255, 136, 0.3); text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); letter-spacing: 10px; }
         .banner-galaxy { background: linear-gradient(135deg, #1a0033, #330066, #660099); background-size: 200% 200%; animation: gradientShift 8s ease infinite; }
         .banner-rainbow { background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 400% 400%; animation: rainbowShift 8s ease infinite; }
-
         @keyframes slide { 0% { transform: translate(0, 0); } 100% { transform: translate(-50%, -50%); } }
         @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
         .banner-selector { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 15px; border-radius: 20px; font-size: 12px; color: white; display: flex; align-items: center; gap: 8px; opacity: 0; transition: opacity 0.3s; z-index: 10; }
         .profile-cover:hover .banner-selector { opacity: 1; }
-
         .profile-body { padding: 0 30px 30px; position: relative; }
         .avatar-wrapper { position: relative; display: inline-block; }
         .big-avatar { width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--bg-dark); position: absolute; top: -60px; left: 0; background: linear-gradient(135deg, #333, #555); display: flex; align-items: center; justify-content: center; font-size: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; cursor: pointer; transition: transform 0.3s; }
@@ -208,26 +106,18 @@
         .avatar-upload { position: absolute; top: -60px; left: 0; width: 120px; height: 120px; border-radius: 50%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; cursor: pointer; z-index: 10; }
         .avatar-wrapper:hover .avatar-upload { opacity: 1; }
         .avatar-upload i { color: white; font-size: 30px; }
-
         .profile-info { margin-top: 70px; margin-left: 140px; }
         .name-row { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; flex-wrap: wrap; }
         .name-row h2 { font-size: 28px; font-weight: 800; }
-
         .prefix { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 1px; }
-        .prefix-vip { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; animation: vipShine 2s ease-in-out infinite; }
-        @keyframes vipShine { 0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.9); } }
-        .prefix-pro { background: linear-gradient(135deg, #00e676, #00bfa5); color: #000; animation: proPulse 1.5s ease-in-out infinite; }
-        @keyframes proPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .prefix-elite { background: linear-gradient(135deg, #ff006e, #ff4d00); color: #fff; animation: eliteGlow 2s ease-in-out infinite; }
-        @keyframes eliteGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 110, 0.6); } 50% { box-shadow: 0 0 30px rgba(255, 0, 110, 1); } }
+        .prefix-vip { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; }
+        .prefix-pro { background: linear-gradient(135deg, #00e676, #00bfa5); color: #000; }
+        .prefix-elite { background: linear-gradient(135deg, #ff006e, #ff4d00); color: #fff; }
         .prefix-legend { background: linear-gradient(135deg, #9c27b0, #e91e63, #9c27b0); background-size: 200% 200%; color: #fff; animation: legendShift 3s ease infinite; }
         @keyframes legendShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        .prefix-crystal { background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.5); animation: crystalShine 3s ease-in-out infinite; }
-        @keyframes crystalShine { 0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); } 50% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.7); } }
-
+        .prefix-crystal { background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); color: #00ffff; border: 1px solid rgba(0, 255, 255, 0.5); }
         .badge { background: rgba(255, 215, 0, 0.15); color: #ffd700; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid rgba(255, 215, 0, 0.3); display: inline-flex; align-items: center; gap: 6px; }
         .email { color: var(--text-muted); font-size: 14px; }
-
         .status-bar { display: flex; align-items: center; gap: 15px; margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; flex-wrap: wrap; }
         .status-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
         .status-item i { color: var(--primary); }
@@ -251,7 +141,6 @@
         .balance-actions { display: flex; gap: 12px; flex-wrap: wrap; }
         .balance-actions .btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
         .balance-actions .btn:hover { background: rgba(255,255,255,0.3); }
-
         .transactions-list { list-style: none; }
         .transaction-item { display: flex; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--border); transition: all 0.3s; }
         .transaction-item:hover { padding-left: 10px; }
@@ -276,105 +165,19 @@
         .prefix-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; min-height: 40px; }
         .prefix-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
 
-        /* ===== СБРОС HWID ===== */
-        .hwid-card {
-            background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(255, 77, 0, 0.1));
-            border: 1px solid rgba(255, 23, 68, 0.3);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .hwid-card h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .hwid-card { background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(255, 77, 0, 0.1)); border: 1px solid rgba(255, 23, 68, 0.3); border-radius: 16px; padding: 30px; margin-bottom: 30px; }
+        .hwid-card h3 { font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
         .hwid-card h3 i { color: var(--danger); }
-
-        .hwid-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .hwid-value {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--text-muted);
-            word-break: break-all;
-            flex: 1;
-        }
-
-        .hwid-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-        }
-
-        .hwid-status .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-        }
-
-        .hwid-status.active .dot { background: var(--success); }
-        .hwid-status.expired .dot { background: var(--danger); }
-
-        .hwid-reset-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .hwid-reset-stat {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-        }
-
-        .hwid-reset-stat-value {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .hwid-reset-stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .hwid-warning {
-            background: rgba(255, 171, 0, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 13px;
-            color: var(--warning);
-        }
-
-        .hwid-warning i {
-            font-size: 18px;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
+        .hwid-info { display: flex; align-items: center; gap: 15px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 20px 0; flex-wrap: wrap; }
+        .hwid-value { font-family: 'Courier New', monospace; font-size: 14px; color: var(--text-muted); word-break: break-all; flex: 1; }
+        .hwid-status { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .hwid-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+        .hwid-reset-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .hwid-reset-stat { text-align: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .hwid-reset-stat-value { font-size: 24px; font-weight: 800; color: var(--primary); }
+        .hwid-reset-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+        .hwid-warning { background: rgba(255, 171, 0, 0.1); border: 1px solid var(--warning); border-radius: 10px; padding: 15px; margin: 20px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--warning); }
+        .hwid-warning i { font-size: 18px; margin-top: 2px; flex-shrink: 0; }
 
         .review-form { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
         .review-form textarea { width: 100%; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; color: white; font-size: 14px; outline: none; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px; }
@@ -399,7 +202,6 @@
         .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
         .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
         .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
-
         .session-item { display: flex; align-items: center; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
         .session-item.current { border-color: var(--success); background: rgba(0, 230, 118, 0.05); }
         .session-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 18px; }
@@ -425,7 +227,6 @@
         .notification-actions { display: flex; gap: 8px; margin-left: 10px; }
         .notif-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
         .notif-btn:hover { background: rgba(255, 0, 110, 0.2); color: var(--primary); }
-
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 60px; margin-bottom: 20px; opacity: 0.3; }
 
@@ -435,7 +236,6 @@
         .bg-option.active, .banner-option.active { border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 0, 110, 0.4); }
         .bg-option.active::after, .banner-option.active::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .bg-option-name, .banner-option-name { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); white-space: nowrap; }
-
         .bg-option-default { background: radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.3), transparent), #0a0a0a; }
         .bg-option-neon { background: radial-gradient(circle at 30% 50%, rgba(138, 43, 226, 0.5), transparent), #0a0014; }
         .bg-option-cyber { background: linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px), #000; background-size: 10px 10px; }
@@ -450,47 +250,30 @@
 
         .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4); }
-        .btn:active { transform: translateY(0); }
         .btn-outline { background: transparent; border: 2px solid var(--border); }
         .btn-outline:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.1); }
         .btn-success { background: linear-gradient(135deg, #00e676, #00bfa5); }
         .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); }
-        .btn-warning { background: linear-gradient(135deg, #ffab00, #ff8f00); }
         .btn-small { padding: 8px 16px; font-size: 12px; }
-
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 8px; font-weight: 600; }
         .form-input { width: 100%; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 13px 16px; color: white; font-size: 14px; transition: all 0.3s; outline: none; }
         .form-input:focus { border-color: var(--primary); background: rgba(255, 0, 110, 0.05); }
-
         .api-wrapper { display: flex; gap: 12px; align-items: stretch; }
         .api-key-text { flex: 1; background: rgba(0,0,0,0.3); border: 2px dashed rgba(255, 0, 110, 0.3); border-radius: 10px; color: var(--primary); font-family: 'Courier New', monospace; font-size: 16px; padding: 14px 18px; outline: none; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
         .modal-content { background: var(--bg-panel); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; animation: modalPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal h3 { font-size: 24px; margin-bottom: 10px; }
         .modal p { color: var(--text-muted); margin-bottom: 25px; }
-
         .toast { position: fixed; bottom: 30px; right: 30px; background: var(--bg-panel); backdrop-filter: blur(20px); border-left: 4px solid var(--primary); padding: 18px 25px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; transform: translateX(400px); opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000; }
         .toast.show { transform: translateX(0); opacity: 1; }
         .toast-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
         .toast-content h4 { font-size: 14px; margin-bottom: 2px; }
         .toast-content p { font-size: 12px; color: var(--text-muted); }
-
         #avatarInput { display: none; }
-
-        @media (max-width: 768px) {
-            .sidebar { width: 70px; }
-            .brand-text, .menu-link span, .mini-info, .badge-count { display: none; }
-            .brand { justify-content: center; padding: 20px 0; }
-            .menu-link { justify-content: center; padding: 15px 0; }
-            .main { margin-left: 70px; padding: 20px; }
-            .profile-info { margin-left: 0; margin-top: 80px; }
-            .api-wrapper { flex-direction: column; }
-        }
-
+        @media (max-width: 768px) { .sidebar { width: 70px; } .brand-text, .menu-link span, .mini-info, .badge-count { display: none; } .brand { justify-content: center; padding: 20px 0; } .menu-link { justify-content: center; padding: 15px 0; } .main { margin-left: 70px; padding: 20px; } .profile-info { margin-left: 0; margin-top: 80px; } .api-wrapper { flex-direction: column; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
@@ -498,10 +281,7 @@
 </head>
 <body class="bg-default">
     <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-icon">🍒</div>
-            <span class="brand-text">CHERRY CLIENT</span>
-        </div>
+        <div class="brand"><div class="brand-icon">🍒</div><span class="brand-text">CHERRY CLIENT</span></div>
         <ul class="menu">
             <li class="menu-item"><a href="index.html" class="menu-link"><i class="fas fa-home"></i><span>На сайт</span></a></li>
             <li class="menu-item"><button class="menu-link active" data-page="profile"><i class="fas fa-user"></i><span>Профиль</span></button></li>
@@ -515,43 +295,21 @@
         </ul>
         <div class="user-profile-mini">
             <div class="mini-avatar" id="miniAvatar">👤</div>
-            <div class="mini-info">
-                <h4 id="miniName">Nick_Name</h4>
-                <p id="miniPrefix">Без префикса</p>
-            </div>
+            <div class="mini-info"><h4 id="miniName">Nick_Name</h4><p id="miniPrefix">Без префикса</p></div>
             <i class="fas fa-sign-out-alt logout" onclick="logout()"></i>
         </div>
     </aside>
-
     <input type="file" id="avatarInput" accept="image/*">
-
     <main class="main">
-        <!-- ПРОФИЛЬ -->
         <div class="page active" id="page-profile">
-            <div class="header">
-                <h1>Профиль</h1>
-                <p>Управляйте личными данными и лицензией</p>
-            </div>
-
+            <div class="header"><h1>Профиль</h1><p>Управляйте личными данными и лицензией</p></div>
             <div class="card">
-                <div class="profile-cover banner-default" id="profileCover" onclick="openBannerSelector()">
-                    <div class="banner-selector"><i class="fas fa-palette"></i> Сменить баннер</div>
-                </div>
+                <div class="profile-cover banner-default" id="profileCover" onclick="openBannerSelector()"><div class="banner-selector"><i class="fas fa-palette"></i> Сменить баннер</div></div>
                 <div class="profile-body">
-                    <div class="avatar-wrapper">
-                        <div class="big-avatar" id="bigAvatar">👤</div>
-                        <div class="avatar-upload" onclick="event.stopPropagation(); document.getElementById('avatarInput').click()">
-                            <i class="fas fa-camera"></i>
-                        </div>
-                    </div>
+                    <div class="avatar-wrapper"><div class="big-avatar" id="bigAvatar">👤</div><div class="avatar-upload" onclick="event.stopPropagation(); document.getElementById('avatarInput').click()"><i class="fas fa-camera"></i></div></div>
                     <div class="profile-info">
-                        <div class="name-row">
-                            <h2 id="profileName">Nick_Name</h2>
-                            <span class="prefix" id="activePrefix" style="display:none;"></span>
-                            <div class="badge"><i class="fas fa-star"></i> Premium</div>
-                        </div>
+                        <div class="name-row"><h2 id="profileName">Nick_Name</h2><span class="prefix" id="activePrefix" style="display:none;"></span><div class="badge"><i class="fas fa-star"></i> Premium</div></div>
                         <p class="email" id="profileEmail">example@mail.com</p>
-                        
                         <div class="status-bar">
                             <div class="status-item"><i class="fas fa-calendar"></i><span>Регистрация:</span><strong>19.11.2026</strong></div>
                             <div class="status-item"><i class="fas fa-circle" style="color: var(--success); font-size: 10px;"></i><span>Статус:</span><strong style="color: var(--success);">Онлайн</strong></div>
@@ -560,116 +318,51 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🔑 API Ключ (Лицензия)</h3>
-                    <p class="section-desc">Используйте этот ключ для входа в клиент. Никому его не передавайте.</p>
-                    <div class="api-wrapper">
-                        <input type="text" class="api-key-text" value="CHERRY-ND3C-DPFV-IQX9" readonly id="apiKeyInput">
-                        <button class="btn" onclick="copyKey()"><i class="fas fa-copy"></i> Копировать</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">Личные данные</h3>
-                    <div class="form-group">
-                        <label class="form-label">Логин</label>
-                        <input type="text" class="form-input" value="Nick_Name" id="username">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-input" value="example@mail.com" id="email">
-                    </div>
-                    <button class="btn" onclick="saveProfile()"><i class="fas fa-save"></i> Сохранить изменения</button>
-                </div>
-            </div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">🔑 API Ключ (Лицензия)</h3>
+                <p class="section-desc">Используйте этот ключ для входа в клиент. Никому его не передавайте.</p>
+                <div class="api-wrapper"><input type="text" class="api-key-text" value="CHERRY-ND3C-DPFV-IQX9" readonly id="apiKeyInput"><button class="btn" onclick="copyKey()"><i class="fas fa-copy"></i> Копировать</button></div>
+            </div></div>
+            <div class="card"><div class="card-content">
+                <h3 class="section-title">Личные данные</h3>
+                <div class="form-group"><label class="form-label">Логин</label><input type="text" class="form-input" value="Nick_Name" id="username"></div>
+                <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="example@mail.com" id="email"></div>
+                <button class="btn" onclick="saveProfile()"><i class="fas fa-save"></i> Сохранить изменения</button>
+            </div></div>
         </div>
 
-        <!-- ПОКУПКИ -->
         <div class="page" id="page-purchases">
             <div class="header"><h1>Мои покупки</h1><p>История ваших покупок и активных подписок</p></div>
-            <div class="card"><div class="card-content">
-                <h3 class="section-title">Активные подписки</h3>
+            <div class="card"><div class="card-content"><h3 class="section-title">Активные подписки</h3>
                 <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-crown"></i></div><div class="purchase-info"><h4>Premium подписка</h4><p>Активна до 26 ноября 2026 • Осталось 7 дней</p></div><span class="purchase-status active">Активна</span></div>
                 <div class="purchase-item"><div class="purchase-icon"><i class="fas fa-key"></i></div><div class="purchase-info"><h4>Базовая лицензия</h4><p>Ключ: CHERRY-ND3C-DPFV-IQX9 • Бессрочно</p></div><span class="purchase-status active">Активна</span></div>
             </div></div>
             <div class="card"><div class="card-content"><h3 class="section-title">История покупок</h3><div id="purchasesList"></div></div></div>
         </div>
 
-        <!-- КОШЕЛЕК -->
         <div class="page" id="page-wallet">
             <div class="header"><h1>Кошелек</h1><p>Управляйте балансом и историей транзакций</p></div>
-            <div class="balance-card">
-                <div class="balance-label">Ваш баланс</div>
-                <div class="balance-amount" id="balanceAmount">1,250.00 <span>₽</span></div>
-                <div class="balance-actions"><button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button></div>
-            </div>
+            <div class="balance-card"><div class="balance-label">Ваш баланс</div><div class="balance-amount" id="balanceAmount">1,250.00 <span>₽</span></div><div class="balance-actions"><button class="btn" onclick="openTopUp()"><i class="fas fa-plus"></i> Пополнить</button></div></div>
             <div class="card"><div class="card-content"><h3 class="section-title">История транзакций</h3><ul class="transactions-list" id="transactionsList"></ul></div></div>
         </div>
 
-        <!-- МАГАЗИН -->
         <div class="page" id="page-shop">
             <div class="header"><h1>Магазин</h1><p>Префиксы и услуги для вашего аккаунта</p></div>
-
-            <!-- СБРОС HWID -->
             <div class="hwid-card">
                 <h3><i class="fas fa-microchip"></i> Сброс HWID</h3>
                 <p class="section-desc" style="margin-bottom: 0;">Сбросьте привязку оборудования, если вы сменили ПК или компоненты</p>
-
-                <div class="hwid-info">
-                    <div style="flex: 1;">
-                        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Текущий HWID:</div>
-                        <div class="hwid-value" id="currentHwid">A7F3-B9D2-E4C1-8F5A</div>
-                    </div>
-                    <div class="hwid-status active">
-                        <div class="dot"></div>
-                        <span>Активен</span>
-                    </div>
-                </div>
-
+                <div class="hwid-info"><div style="flex: 1;"><div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Текущий HWID:</div><div class="hwid-value" id="currentHwid">A7F3-B9D2-E4C1-8F5A</div></div><div class="hwid-status"><div class="dot"></div><span>Активен</span></div></div>
                 <div class="hwid-reset-info">
-                    <div class="hwid-reset-stat">
-                        <div class="hwid-reset-stat-value" id="hwidResetsLeft">2</div>
-                        <div class="hwid-reset-stat-label">Сбросов осталось</div>
-                    </div>
-                    <div class="hwid-reset-stat">
-                        <div class="hwid-reset-stat-value" id="hwidLastReset">—</div>
-                        <div class="hwid-reset-stat-label">Последний сброс</div>
-                    </div>
-                    <div class="hwid-reset-stat">
-                        <div class="hwid-reset-stat-value">150 ₽</div>
-                        <div class="hwid-reset-stat-label">Стоимость сброса</div>
-                    </div>
+                    <div class="hwid-reset-stat"><div class="hwid-reset-stat-value" id="hwidResetsLeft">2</div><div class="hwid-reset-stat-label">Сбросов осталось</div></div>
+                    <div class="hwid-reset-stat"><div class="hwid-reset-stat-value" id="hwidLastReset">—</div><div class="hwid-reset-stat-label">Последний сброс</div></div>
+                    <div class="hwid-reset-stat"><div class="hwid-reset-stat-value">150 ₽</div><div class="hwid-reset-stat-label">Стоимость сброса</div></div>
                 </div>
-
-                <div class="hwid-warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <strong>Внимание!</strong> После сброса HWID вам потребуется войти в клиент заново. 
-                        У вас осталось <strong id="hwidResetsWarning">2</strong> бесплатных сброса. 
-                        После исчерпания лимита сброс будет платным (150 ₽).
-                    </div>
-                </div>
-
-                <button class="btn btn-danger" onclick="resetHwid()">
-                    <i class="fas fa-redo"></i> Сбросить HWID
-                </button>
+                <div class="hwid-warning"><i class="fas fa-exclamation-triangle"></i><div><strong>Внимание!</strong> После сброса HWID вам потребуется войти в клиент заново. У вас осталось <strong id="hwidResetsWarning">2</strong> бесплатных сброса. После исчерпания лимита сброс будет платным (150 ₽).</div></div>
+                <button class="btn btn-danger" onclick="resetHwid()"><i class="fas fa-redo"></i> Сбросить HWID</button>
             </div>
-
-            <!-- Префиксы -->
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🏷️ Префиксы</h3>
-                    <p class="section-desc">Купите эксклюзивный анимированный префикс</p>
-                    <div class="prefixes-grid" id="prefixesGrid"></div>
-                </div>
-            </div>
+            <div class="card"><div class="card-content"><h3 class="section-title">🏷️ Префиксы</h3><p class="section-desc">Купите эксклюзивный анимированный префикс</p><div class="prefixes-grid" id="prefixesGrid"></div></div></div>
         </div>
 
-        <!-- ОТЗЫВЫ -->
         <div class="page" id="page-reviews">
             <div class="header"><h1>Мои отзывы</h1><p>Оставьте отзыв о Cherry Client</p></div>
             <div class="card"><div class="card-content">
@@ -683,105 +376,56 @@
             <div class="card"><div class="card-content"><h3 class="section-title">Ваши опубликованные отзывы</h3><div id="myReviewsList"></div></div></div>
         </div>
 
-        <!-- БЕЗОПАСНОСТЬ -->
         <div class="page" id="page-security">
             <div class="header"><h1>Безопасность</h1><p>Защитите свой аккаунт</p></div>
-            <div class="card"><div class="card-content">
-                <h3 class="section-title">Настройки безопасности</h3>
+            <div class="card"><div class="card-content"><h3 class="section-title">Настройки безопасности</h3>
                 <div class="security-item"><div class="security-icon"><i class="fas fa-lock"></i></div><div class="security-info"><h4>Смена пароля</h4><p>Последнее изменение: 30 дней назад</p></div><button class="btn btn-outline btn-small" onclick="showToast('Пароль', 'Функция в разработке')">Изменить</button></div>
                 <div class="security-item"><div class="security-icon"><i class="fas fa-mobile-alt"></i></div><div class="security-info"><h4>Двухфакторная аутентификация</h4><p>Дополнительный уровень защиты</p></div><label class="toggle-switch"><input type="checkbox" onchange="showToast('2FA', 'Настройка сохранена')"><span class="toggle-slider"></span></label></div>
             </div></div>
-            <div class="card"><div class="card-content">
-                <h3 class="section-title">Активные сессии</h3>
-                <div id="sessionsList"></div>
-            </div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">Активные сессии</h3><div id="sessionsList"></div></div></div>
         </div>
 
-        <!-- УВЕДОМЛЕНИЯ -->
         <div class="page" id="page-notifications">
             <div class="header"><h1>Уведомления</h1><p>Ваши последние уведомления</p></div>
             <div style="display: flex; gap: 12px; margin-bottom: 20px;"><button class="btn btn-outline btn-small" onclick="markAllRead()"><i class="fas fa-check-double"></i> Прочитать все</button><button class="btn btn-outline btn-small" onclick="clearNotifications()"><i class="fas fa-trash"></i> Очистить</button></div>
             <div id="notificationsList"></div>
         </div>
 
-        <!-- НАСТРОЙКИ -->
         <div class="page" id="page-settings">
             <div class="header"><h1>Настройки</h1><p>Персонализируйте ваш личный кабинет</p></div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🎨 Фон личного кабинета</h3>
-                    <p class="section-desc">Выберите тему оформления фона</p>
-                    <div class="bg-selector" id="bgSelector">
-                        <div class="bg-option bg-option-default" data-bg="default" onclick="changeBackground('default')"><span class="bg-option-name">По умолчанию</span></div>
-                        <div class="bg-option bg-option-neon" data-bg="neon" onclick="changeBackground('neon')"><span class="bg-option-name">Неон</span></div>
-                        <div class="bg-option bg-option-cyber" data-bg="cyber" onclick="changeBackground('cyber')"><span class="bg-option-name">Кибер</span></div>
-                        <div class="bg-option bg-option-sunset" data-bg="sunset" onclick="changeBackground('sunset')"><span class="bg-option-name">Закат</span></div>
-                        <div class="bg-option bg-option-forest" data-bg="forest" onclick="changeBackground('forest')"><span class="bg-option-name">Лес</span></div>
-                        <div class="bg-option bg-option-ocean" data-bg="ocean" onclick="changeBackground('ocean')"><span class="bg-option-name">Океан</span></div>
-                        <div class="bg-option bg-option-galaxy" data-bg="galaxy" onclick="changeBackground('galaxy')"><span class="bg-option-name">Галактика</span></div>
-                        <div class="bg-option bg-option-fire" data-bg="fire" onclick="changeBackground('fire')"><span class="bg-option-name">Огонь</span></div>
-                        <div class="bg-option bg-option-matrix" data-bg="matrix" onclick="changeBackground('matrix')"><span class="bg-option-name">Матрица</span></div>
-                        <div class="bg-option bg-option-aurora" data-bg="aurora" onclick="changeBackground('aurora')"><span class="bg-option-name">Северное сияние</span></div>
-                        <div class="bg-option bg-option-blood" data-bg="blood" onclick="changeBackground('blood')"><span class="bg-option-name">Кровь</span></div>
-                    </div>
+            <div class="card"><div class="card-content"><h3 class="section-title">🎨 Фон личного кабинета</h3><p class="section-desc">Выберите тему оформления фона</p>
+                <div class="bg-selector" id="bgSelector">
+                    <div class="bg-option bg-option-default" data-bg="default" onclick="changeBackground('default')"><span class="bg-option-name">По умолчанию</span></div>
+                    <div class="bg-option bg-option-neon" data-bg="neon" onclick="changeBackground('neon')"><span class="bg-option-name">Неон</span></div>
+                    <div class="bg-option bg-option-cyber" data-bg="cyber" onclick="changeBackground('cyber')"><span class="bg-option-name">Кибер</span></div>
+                    <div class="bg-option bg-option-sunset" data-bg="sunset" onclick="changeBackground('sunset')"><span class="bg-option-name">Закат</span></div>
+                    <div class="bg-option bg-option-forest" data-bg="forest" onclick="changeBackground('forest')"><span class="bg-option-name">Лес</span></div>
+                    <div class="bg-option bg-option-ocean" data-bg="ocean" onclick="changeBackground('ocean')"><span class="bg-option-name">Океан</span></div>
+                    <div class="bg-option bg-option-galaxy" data-bg="galaxy" onclick="changeBackground('galaxy')"><span class="bg-option-name">Галактика</span></div>
+                    <div class="bg-option bg-option-fire" data-bg="fire" onclick="changeBackground('fire')"><span class="bg-option-name">Огонь</span></div>
+                    <div class="bg-option bg-option-matrix" data-bg="matrix" onclick="changeBackground('matrix')"><span class="bg-option-name">Матрица</span></div>
+                    <div class="bg-option bg-option-aurora" data-bg="aurora" onclick="changeBackground('aurora')"><span class="bg-option-name">Северное сияние</span></div>
+                    <div class="bg-option bg-option-blood" data-bg="blood" onclick="changeBackground('blood')"><span class="bg-option-name">Кровь</span></div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🖼️ Баннер профиля</h3>
-                    <p class="section-desc">Выберите анимированный баннер</p>
-                    <div class="banner-selector-grid" id="bannerSelectorGrid"></div>
-                </div>
-            </div>
+            </div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">🖼️ Баннер профиля</h3><p class="section-desc">Выберите анимированный баннер</p><div class="banner-selector-grid" id="bannerSelectorGrid"></div></div></div>
         </div>
     </main>
 
-    <div class="modal" id="bannerModal">
-        <div class="modal-content">
-            <h3>Выберите баннер</h3>
-            <p>Нажмите на баннер, чтобы применить</p>
-            <div class="banner-selector-grid" id="bannerModalGrid" style="margin-bottom: 20px;"></div>
-            <button class="btn btn-outline" onclick="closeModal('bannerModal')">Закрыть</button>
-        </div>
-    </div>
-
-    <div class="toast" id="toast">
-        <div class="toast-icon" id="toastIconBox"><i class="fas fa-check" id="toastIcon"></i></div>
-        <div class="toast-content"><h4 id="toastTitle">Успешно!</h4><p id="toastMessage">Действие выполнено</p></div>
-    </div>
+    <div class="modal" id="bannerModal"><div class="modal-content"><h3>Выберите баннер</h3><p>Нажмите на баннер, чтобы применить</p><div class="banner-selector-grid" id="bannerModalGrid" style="margin-bottom: 20px;"></div><button class="btn btn-outline" onclick="closeModal('bannerModal')">Закрыть</button></div></div>
+    <div class="toast" id="toast"><div class="toast-icon" id="toastIconBox"><i class="fas fa-check" id="toastIcon"></i></div><div class="toast-content"><h4 id="toastTitle">Успешно!</h4><p id="toastMessage">Действие выполнено</p></div></div>
 
     <script>
         const defaultData = {
-            username: 'Nick_Name',
-            email: 'example@mail.com',
-            avatar: null,
-            banner: 'default',
-            background: 'default',
-            balance: 1250.00,
-            activePrefix: null,
-            ownedPrefixes: [],
-            hwid: 'A7F3-B9D2-E4C1-8F5A',
-            hwidResetsLeft: 2,
-            hwidLastReset: null,
-            transactions: [
-                { type: 'income', title: 'Пополнение баланса', amount: 500, date: '2026-11-19T14:32:00' },
-                { type: 'expense', title: 'Покупка Premium', amount: 299, date: '2026-11-15T09:15:00' }
-            ],
-            purchases: [
-                { id: 1, name: 'Premium подписка', date: '2026-11-15', amount: 299, status: 'active', icon: 'fa-crown' },
-                { id: 2, name: 'Базовая лицензия', date: '2026-10-01', amount: 499, status: 'active', icon: 'fa-key' }
-            ],
-            sessions: [
-                { id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true }
-            ],
-            notifications: [
-                { id: 1, type: 'success', title: 'Платеж успешно обработан', text: 'Ваш баланс пополнен на 500.00 ₽', time: Date.now() - 7200000, read: false },
-                { id: 2, type: 'warning', title: 'Подписка истекает через 7 дней', text: 'Ваша Premium подписка закончится 26 ноября 2026', time: Date.now() - 18000000, read: false }
-            ],
-            myReviews: [],
-            selectedRating: 0
+            username: 'Nick_Name', email: 'example@mail.com', avatar: null, banner: 'default', background: 'default',
+            balance: 1250.00, activePrefix: null, ownedPrefixes: [],
+            hwid: 'A7F3-B9D2-E4C1-8F5A', hwidResetsLeft: 2, hwidLastReset: null,
+            transactions: [{ type: 'income', title: 'Пополнение баланса', amount: 500, date: '2026-11-19T14:32:00' }, { type: 'expense', title: 'Покупка Premium', amount: 299, date: '2026-11-15T09:15:00' }],
+            purchases: [{ id: 1, name: 'Premium подписка', date: '2026-11-15', amount: 299, status: 'active', icon: 'fa-crown' }, { id: 2, name: 'Базовая лицензия', date: '2026-10-01', amount: 499, status: 'active', icon: 'fa-key' }],
+            sessions: [{ id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true }],
+            notifications: [{ id: 1, type: 'success', title: 'Платеж успешно обработан', text: 'Ваш баланс пополнен на 500.00 ₽', time: Date.now() - 7200000, read: false }, { id: 2, type: 'warning', title: 'Подписка истекает через 7 дней', text: 'Ваша Premium подписка закончится 26 ноября 2026', time: Date.now() - 18000000, read: false }],
+            myReviews: [], selectedRating: 0
         };
-
         const prefixes = [
             { id: 'vip', name: 'VIP', price: 299, class: 'prefix-vip', icon: '👑', desc: 'Золотой префикс с сиянием' },
             { id: 'pro', name: 'PRO', price: 499, class: 'prefix-pro', icon: '⚡', desc: 'Пульсирующий префикс профи' },
@@ -789,26 +433,10 @@
             { id: 'legend', name: 'LEGEND', price: 999, class: 'prefix-legend', icon: '🔥', desc: 'Легендарный с градиентом' },
             { id: 'crystal', name: 'CRYSTAL', price: 1799, class: 'prefix-crystal', icon: '💠', desc: 'Кристальный с прозрачностью' }
         ];
-
-        const banners = [
-            { id: 'default', name: 'Cherry', class: 'banner-default' },
-            { id: 'neon', name: 'Неон', class: 'banner-neon' },
-            { id: 'fire', name: 'Огонь', class: 'banner-fire' },
-            { id: 'ice', name: 'Лёд', class: 'banner-ice' },
-            { id: 'gold', name: 'Золото', class: 'banner-gold' },
-            { id: 'cyber', name: 'Кибер', class: 'banner-cyber' },
-            { id: 'galaxy', name: 'Галактика', class: 'banner-galaxy' },
-            { id: 'rainbow', name: 'Радуга', class: 'banner-rainbow' }
-        ];
+        const banners = [{ id: 'default', name: 'Cherry', class: 'banner-default' }, { id: 'neon', name: 'Неон', class: 'banner-neon' }, { id: 'fire', name: 'Огонь', class: 'banner-fire' }, { id: 'ice', name: 'Лёд', class: 'banner-ice' }, { id: 'gold', name: 'Золото', class: 'banner-gold' }, { id: 'cyber', name: 'Кибер', class: 'banner-cyber' }, { id: 'galaxy', name: 'Галактика', class: 'banner-galaxy' }, { id: 'rainbow', name: 'Радуга', class: 'banner-rainbow' }];
 
         let data = loadData();
-
-        function loadData() {
-            const saved = localStorage.getItem('cherryData');
-            if (saved) { try { return { ...defaultData, ...JSON.parse(saved) }; } catch(e) { return { ...defaultData }; } }
-            return { ...defaultData };
-        }
-
+        function loadData() { const saved = localStorage.getItem('cherryData'); if (saved) { try { return { ...defaultData, ...JSON.parse(saved) }; } catch(e) { return { ...defaultData }; } } return { ...defaultData }; }
         function saveData() { localStorage.setItem('cherryData', JSON.stringify(data)); }
 
         document.querySelectorAll('.menu-link[data-page]').forEach(link => {
@@ -819,7 +447,6 @@
                 link.classList.add('active');
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById('page-' + page).classList.add('active');
-                
                 if (page === 'wallet') { updateBalance(); renderTransactions(); }
                 if (page === 'shop') { renderPrefixes(); updateHwidDisplay(); }
                 if (page === 'purchases') renderPurchases();
@@ -831,107 +458,53 @@
         });
 
         window.addEventListener('load', () => {
-            applyBackground(data.background);
-            applyBanner(data.banner);
-            applyAvatar(data.avatar);
-            applyPrefix(data.activePrefix);
-            updateProfileDisplay();
-            updateBalance();
-            renderTransactions();
-            renderPrefixes();
-            renderPurchases();
-            renderMyReviews();
-            renderSessions();
-            renderNotifications();
-            renderBannerSelectors();
-            updateNotifCount();
-            initStarRating();
+            applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
+            updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
+            renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
         });
 
-        // ===== СБРОС HWID =====
-        function updateHwidDisplay() {
-            document.getElementById('currentHwid').textContent = data.hwid;
-            document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
-            document.getElementById('hwidResetsWarning').textContent = data.hwidResetsLeft;
-            document.getElementById('hwidLastReset').textContent = data.hwidLastReset ? formatLastReset(data.hwidLastReset) : '—';
-        }
+        // ===== ОТЗЫВЫ (общее хранилище) =====
+        function getAllReviews() { return JSON.parse(localStorage.getItem('cherryReviews') || '[]'); }
+        function saveAllReviews(reviews) { localStorage.setItem('cherryReviews', JSON.stringify(reviews)); }
 
-        function formatLastReset(timestamp) {
-            if (!timestamp) return '—';
-            const diff = Date.now() - timestamp;
-            const hours = Math.floor(diff / 3600000);
-            if (hours < 1) return 'Только что';
-            if (hours < 24) return hours + 'ч назад';
-            return Math.floor(hours/24) + 'д назад';
-        }
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            const rating = data.selectedRating;
+            if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
+            if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
 
-        function generateNewHwid() {
-            const chars = 'ABCDEF0123456789';
-            const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
-            return `${gen()}-${gen()}-${gen()}-${gen()}`;
-        }
+            const allReviews = getAllReviews();
+            const newReview = {
+                id: Date.now(), user: data.username, avatar: data.username.charAt(0).toUpperCase(),
+                rating: rating, text: text, product: 'Cherry Client',
+                date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
+                status: 'pending', verified: true
+            };
+            allReviews.unshift(newReview);
+            saveAllReviews(allReviews);
 
-        function resetHwid() {
-            if (data.hwidResetsLeft <= 0) {
-                if (data.balance < 150) {
-                    showToast('Недостаточно средств', 'Нужно 150 ₽ для платного сброса HWID', 'error');
-                    return;
-                }
-                if (!confirm('Платный сброс HWID стоит 150 ₽. Списать с баланса?')) return;
-                data.balance -= 150;
-                data.transactions.unshift({ type: 'expense', title: 'Платный сброс HWID', amount: 150, date: new Date().toISOString() });
-            } else {
-                if (!confirm('Сбросить HWID? Бесплатных сбросов осталось: ' + data.hwidResetsLeft)) return;
-                data.hwidResetsLeft--;
-            }
-
-            const oldHwid = data.hwid;
-            data.hwid = generateNewHwid();
-            data.hwidLastReset = Date.now();
-            data.purchases.unshift({
-                id: Date.now(),
-                name: 'Сброс HWID',
-                date: new Date().toISOString().split('T')[0],
-                amount: data.hwidResetsLeft >= 0 ? 0 : 150,
-                status: 'active',
-                icon: 'fa-microchip'
-            });
-
+            data.myReviews.push({ id: newReview.id, name: data.username, rating, text, date: newReview.date });
             saveData();
-            updateHwidDisplay();
-            updateBalance();
-            renderTransactions();
-            renderPurchases();
-            showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
-            addNotification('success', 'HWID сброшен', `Ваш HWID успешно изменён. Войдите в клиент заново.`);
+            document.getElementById('reviewText').value = '';
+            data.selectedRating = 0;
+            document.querySelectorAll('#starRating i').forEach(s => s.className = 'far fa-star');
+            renderMyReviews();
+            showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации администратором');
         }
 
-        // ===== ФОН =====
-        function changeBackground(bg) {
-            data.background = bg;
-            applyBackground(bg);
-            updateBgSelector();
-            saveData();
-            showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`);
+        function renderMyReviews() {
+            const list = document.getElementById('myReviewsList');
+            const allReviews = getAllReviews();
+            const myReviews = allReviews.filter(r => r.user === data.username);
+
+            if (myReviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>У вас пока нет отзывов</h3><p>Напишите первый отзыв выше!</p></div>'; return; }
+            list.innerHTML = myReviews.map(r => {
+                const statusText = r.status === 'approved' ? '✓ Одобрено' : r.status === 'pending' ? '⏳ На модерации' : '✗ Отклонено';
+                const statusClass = r.status === 'approved' ? 'active' : r.status === 'pending' ? 'pending' : 'expired';
+                return `<div class="my-review"><div class="my-review-header"><div><strong>${r.name}</strong><span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span></div><span class="purchase-status ${statusClass}" style="margin-left: 10px;">${statusText}</span></div><div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div><p style="margin-top: 10px;">${r.text}</p><p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">${r.date}</p></div>`;
+            }).join('');
         }
 
-        function applyBackground(bg) {
-            document.body.className = document.body.className.replace(/bg-\w+/g, '').trim();
-            document.body.classList.add('bg-' + bg);
-        }
-
-        function updateBgSelector() {
-            document.querySelectorAll('.bg-option').forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.bg === data.background);
-            });
-        }
-
-        function getBgName(bg) {
-            const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' };
-            return names[bg] || bg;
-        }
-
-        // ===== ОТЗЫВЫ =====
         function initStarRating() {
             document.querySelectorAll('#starRating i').forEach(star => {
                 star.addEventListener('click', () => {
@@ -942,40 +515,11 @@
             });
         }
 
-        function submitReview() {
-            const text = document.getElementById('reviewText').value.trim();
-            const rating = data.selectedRating;
-            if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
-            if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
-            data.myReviews.push({ id: Date.now(), name: data.username, rating, text, date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) });
-            saveData();
-            document.getElementById('reviewText').value = '';
-            data.selectedRating = 0;
-            document.querySelectorAll('#starRating i').forEach(s => s.className = 'far fa-star');
-            renderMyReviews();
-            showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации');
-        }
-
-        function renderMyReviews() {
-            const list = document.getElementById('myReviewsList');
-            if (data.myReviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>У вас пока нет отзывов</h3></div>'; return; }
-            list.innerHTML = data.myReviews.map(r => `
-                <div class="my-review">
-                    <div class="my-review-header"><div><strong>${r.name}</strong><span class="verified-badge" style="margin-left: 10px;"><i class="fas fa-check-circle"></i> Проверено</span></div><span style="font-size: 12px; color: var(--text-muted);">${r.date}</span></div>
-                    <div class="my-review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div>
-                    <p style="margin-top: 10px;">${r.text}</p>
-                </div>`).join('');
-        }
-
-        // ===== ПОКУПКИ =====
-        function renderPurchases() {
-            const list = document.getElementById('purchasesList');
-            if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
-            list.innerHTML = data.purchases.map(p => {
-                const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-                return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`;
-            }).join('');
-        }
+        // ===== ФОН =====
+        function changeBackground(bg) { data.background = bg; applyBackground(bg); updateBgSelector(); saveData(); showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`); }
+        function applyBackground(bg) { document.body.className = document.body.className.replace(/bg-\w+/g, '').trim(); document.body.classList.add('bg-' + bg); }
+        function updateBgSelector() { document.querySelectorAll('.bg-option').forEach(opt => { opt.classList.toggle('active', opt.dataset.bg === data.background); }); }
+        function getBgName(bg) { const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' }; return names[bg] || bg; }
 
         // ===== БАННЕР =====
         function changeBanner(banner) { data.banner = banner; applyBanner(banner); saveData(); showToast('Баннер изменён', 'Новый баннер применён'); }
@@ -991,7 +535,6 @@
         }
         function openBannerSelector() { document.getElementById('bannerModal').classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
         function renderBannerSelectors() {
             const html = banners.map(b => `<div class="banner-option ${b.class}" data-banner="${b.id}" onclick="changeBanner('${b.id}'); closeModal('bannerModal')"><span class="banner-option-name">${b.name}</span></div>`).join('');
             document.getElementById('bannerSelectorGrid').innerHTML = html;
@@ -1008,7 +551,6 @@
                 reader.readAsDataURL(file);
             }
         });
-
         function applyAvatar(imgData) { const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤'; document.getElementById('bigAvatar').innerHTML = imgHTML; document.getElementById('miniAvatar').innerHTML = imgHTML; }
 
         // ===== ПРЕФИКСЫ =====
@@ -1019,33 +561,23 @@
             const prefix = prefixes.find(p => p.id === prefixId);
             if (prefix) { prefixEl.style.display = 'inline-flex'; prefixEl.className = 'prefix ' + prefix.class; prefixEl.innerHTML = `${prefix.icon} ${prefix.name}`; miniPrefix.textContent = prefix.name; miniPrefix.style.color = '#fff'; }
         }
-
         function buyPrefix(prefixId) {
             const prefix = prefixes.find(p => p.id === prefixId);
             if (!prefix) return;
             if (data.ownedPrefixes.includes(prefixId)) { data.activePrefix = prefixId; applyPrefix(prefixId); saveData(); renderPrefixes(); showToast('Префикс активирован', `${prefix.name} теперь отображается`); return; }
             if (data.balance < prefix.price) { showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); return; }
             if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
-                data.balance -= prefix.price;
-                data.ownedPrefixes.push(prefixId);
-                data.activePrefix = prefixId;
+                data.balance -= prefix.price; data.ownedPrefixes.push(prefixId); data.activePrefix = prefixId;
                 data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
                 data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
-                applyPrefix(prefixId);
-                updateBalance();
-                renderTransactions();
-                renderPrefixes();
-                renderPurchases();
-                saveData();
+                applyPrefix(prefixId); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases(); saveData();
                 showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
             }
         }
-
         function renderPrefixes() {
             const grid = document.getElementById('prefixesGrid');
             grid.innerHTML = prefixes.map(p => {
-                const owned = data.ownedPrefixes.includes(p.id);
-                const active = data.activePrefix === p.id;
+                const owned = data.ownedPrefixes.includes(p.id); const active = data.activePrefix === p.id;
                 return `<div class="prefix-card ${owned ? 'owned' : ''}"><div class="prefix-preview ${p.class}">${p.icon} ${p.name}</div><div class="prefix-name">${p.name}</div><div class="prefix-desc">${p.desc}</div><div class="prefix-price">${owned ? (active ? 'АКТИВЕН' : 'КУПЛЕНО') : p.price + ' ₽'}</div><button class="btn ${owned ? (active ? 'btn-outline' : 'btn-success') : ''} btn-small" onclick="buyPrefix('${p.id}')" style="width: 100%; justify-content: center;">${owned ? (active ? '<i class="fas fa-check"></i> Активен' : '<i class="fas fa-play"></i> Активировать') : '<i class="fas fa-shopping-cart"></i> Купить'}</button></div>`;
             }).join('');
         }
@@ -1058,18 +590,13 @@
             document.getElementById('username').value = data.username;
             document.getElementById('email').value = data.email;
         }
-
         function saveProfile() {
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
             if (!username || !email) { showToast('Ошибка', 'Заполните все поля', 'error'); return; }
-            data.username = username;
-            data.email = email;
-            updateProfileDisplay();
-            saveData();
+            data.username = username; data.email = email; updateProfileDisplay(); saveData();
             showToast('Успешно!', 'Данные профиля обновлены');
         }
-
         function copyKey() { const copyText = document.getElementById("apiKeyInput"); copyText.select(); navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); }
 
         // ===== КОШЕЛЕК =====
@@ -1081,14 +608,10 @@
                 data.balance += val;
                 data.transactions.unshift({ type: 'income', title: 'Пополнение баланса', amount: val, date: new Date().toISOString() });
                 data.purchases.unshift({ id: Date.now(), name: 'Пополнение баланса', date: new Date().toISOString().split('T')[0], amount: val, status: 'active', icon: 'fa-wallet' });
-                updateBalance();
-                renderTransactions();
-                renderPurchases();
-                saveData();
+                updateBalance(); renderTransactions(); renderPurchases(); saveData();
                 showToast('Пополнение', `Баланс пополнен на ${val.toFixed(2)} ₽`);
             }
         }
-
         function renderTransactions() {
             const list = document.getElementById('transactionsList');
             if (data.transactions.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><h3>Нет транзакций</h3></div>'; return; }
@@ -1100,48 +623,65 @@
             }).join('');
         }
 
+        // ===== HWID =====
+        function updateHwidDisplay() {
+            document.getElementById('currentHwid').textContent = data.hwid;
+            document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidResetsWarning').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidLastReset').textContent = data.hwidLastReset ? formatLastReset(data.hwidLastReset) : '—';
+        }
+        function formatLastReset(timestamp) { if (!timestamp) return '—'; const diff = Date.now() - timestamp; const hours = Math.floor(diff / 3600000); if (hours < 1) return 'Только что'; if (hours < 24) return hours + 'ч назад'; return Math.floor(hours/24) + 'д назад'; }
+        function generateNewHwid() { const chars = 'ABCDEF0123456789'; const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join(''); return `${gen()}-${gen()}-${gen()}-${gen()}`; }
+        function resetHwid() {
+            if (data.hwidResetsLeft <= 0) {
+                if (data.balance < 150) { showToast('Недостаточно средств', 'Нужно 150 ₽ для платного сброса HWID', 'error'); return; }
+                if (!confirm('Платный сброс HWID стоит 150 ₽. Списать с баланса?')) return;
+                data.balance -= 150;
+                data.transactions.unshift({ type: 'expense', title: 'Платный сброс HWID', amount: 150, date: new Date().toISOString() });
+            } else { if (!confirm('Сбросить HWID? Бесплатных сбросов осталось: ' + data.hwidResetsLeft)) return; data.hwidResetsLeft--; }
+            const oldHwid = data.hwid; data.hwid = generateNewHwid(); data.hwidLastReset = Date.now();
+            data.purchases.unshift({ id: Date.now(), name: 'Сброс HWID', date: new Date().toISOString().split('T')[0], amount: data.hwidResetsLeft >= 0 ? 0 : 150, status: 'active', icon: 'fa-microchip' });
+            saveData(); updateHwidDisplay(); updateBalance(); renderTransactions(); renderPurchases();
+            showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
+        }
+
+        // ===== ПОКУПКИ =====
+        function renderPurchases() {
+            const list = document.getElementById('purchasesList');
+            if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
+            list.innerHTML = data.purchases.map(p => { const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`; }).join('');
+        }
+
         // ===== БЕЗОПАСНОСТЬ =====
         function renderSessions() {
             const list = document.getElementById('sessionsList');
-            list.innerHTML = data.sessions.map(s => {
-                const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt';
-                return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p></div>${s.current ? '<span class="session-status current">Текущая</span>' : ''}</div>`;
-            }).join('');
+            list.innerHTML = data.sessions.map(s => { const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt'; return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p></div>${s.current ? '<span class="session-status current">Текущая</span>' : ''}</div>`; }).join('');
         }
 
         // ===== УВЕДОМЛЕНИЯ =====
         function renderNotifications() {
             const list = document.getElementById('notificationsList');
             if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
-            list.innerHTML = data.notifications.map(n => {
-                const icons = { info: 'fa-info-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle', danger: 'fa-shield-alt' };
-                return `<div class="notification-item ${n.read ? '' : 'unread'}"><div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div><div class="notification-content"><h4>${n.title}</h4><p>${n.text}</p><div class="notification-time">${getTimeAgo(n.time)}</div></div><div class="notification-actions">${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})"><i class="fas fa-check"></i></button>` : ''}<button class="notif-btn" onclick="deleteNotification(${n.id})"><i class="fas fa-times"></i></button></div></div>`;
-            }).join('');
+            list.innerHTML = data.notifications.map(n => { const icons = { info: 'fa-info-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle', danger: 'fa-shield-alt' }; return `<div class="notification-item ${n.read ? '' : 'unread'}"><div class="notification-icon ${n.type}"><i class="fas ${icons[n.type]}"></i></div><div class="notification-content"><h4>${n.title}</h4><p>${n.text}</p><div class="notification-time">${getTimeAgo(n.time)}</div></div><div class="notification-actions">${!n.read ? `<button class="notif-btn" onclick="markRead(${n.id})"><i class="fas fa-check"></i></button>` : ''}<button class="notif-btn" onclick="deleteNotification(${n.id})"><i class="fas fa-times"></i></button></div></div>`; }).join('');
         }
-
         function addNotification(type, title, text) { data.notifications.unshift({ id: Date.now(), type, title, text, time: Date.now(), read: false }); renderNotifications(); updateNotifCount(); saveData(); }
         function markRead(id) { const n = data.notifications.find(n => n.id === id); if (n) { n.read = true; renderNotifications(); updateNotifCount(); saveData(); } }
         function markAllRead() { data.notifications.forEach(n => n.read = true); renderNotifications(); updateNotifCount(); saveData(); showToast('Готово', 'Все уведомления отмечены как прочитанные'); }
         function deleteNotification(id) { data.notifications = data.notifications.filter(n => n.id !== id); renderNotifications(); updateNotifCount(); saveData(); }
         function clearNotifications() { if (confirm('Удалить все уведомления?')) { data.notifications = []; renderNotifications(); updateNotifCount(); saveData(); } }
         function updateNotifCount() { const count = data.notifications.filter(n => !n.read).length; const badge = document.getElementById('notifCount'); badge.textContent = count; badge.style.display = count > 0 ? 'inline' : 'none'; }
-
         function getTimeAgo(timestamp) { const seconds = Math.floor((Date.now() - timestamp) / 1000); if (seconds < 60) return 'только что'; const minutes = Math.floor(seconds / 60); if (minutes < 60) return `${minutes} мин. назад`; const hours = Math.floor(minutes / 60); if (hours < 24) return `${hours} ч. назад`; const days = Math.floor(hours / 24); return `${days} дн. назад`; }
 
         function showToast(title, message, type = 'success') {
             const toast = document.getElementById('toast');
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastMessage').textContent = message;
-            const icon = document.getElementById('toastIcon');
-            const iconBox = document.getElementById('toastIconBox');
+            const icon = document.getElementById('toastIcon'); const iconBox = document.getElementById('toastIconBox');
             if (type === 'error') { icon.className = 'fas fa-exclamation'; iconBox.style.background = 'rgba(255, 23, 68, 0.2)'; iconBox.style.color = 'var(--danger)'; toast.style.borderLeftColor = 'var(--danger)'; }
             else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         }
-
         function logout() { if (confirm('Вы уверены, что хотите выйти?')) { showToast('До свидания!', 'Вы вышли из аккаунта'); setTimeout(() => { window.location.href = 'index.html'; }, 1500); } }
-
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
 </body>
