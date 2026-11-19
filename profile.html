@@ -7,11 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #ff006e; --secondary: #ff4d00; --bg-dark: #0a0a0a;
-            --bg-panel: rgba(17, 17, 17, 0.85); --text-main: #ffffff; --text-muted: #888888;
-            --border: rgba(255, 255, 255, 0.1); --success: #00e676; --warning: #ffab00; --danger: #ff1744;
-        }
+        :root { --primary: #ff006e; --secondary: #ff4d00; --bg-dark: #0a0a0a; --bg-panel: rgba(17, 17, 17, 0.85); --text-main: #ffffff; --text-muted: #888888; --border: rgba(255, 255, 255, 0.1); --success: #00e676; --warning: #ffab00; --danger: #ff1744; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; transition: background 0.5s ease; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; transition: all 0.5s ease; }
         body.bg-default { background: #0a0a0a; }
@@ -47,7 +43,6 @@
         @keyframes matrixRain { 0% { background-position: 0% -200%; } 100% { background-position: 0% 200%; } }
         @keyframes auroraShift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10%); } }
         @keyframes bloodPulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-
         .sidebar { width: 260px; background: var(--bg-panel); backdrop-filter: blur(20px); border-right: 1px solid var(--border); position: fixed; height: 100vh; display: flex; flex-direction: column; z-index: 100; }
         .brand { padding: 25px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
         .brand-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
@@ -68,7 +63,6 @@
         .mini-info p { font-size: 12px; color: var(--text-muted); }
         .logout { color: var(--text-muted); cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.3s; }
         .logout:hover { color: var(--danger); background: rgba(255, 23, 68, 0.1); }
-
         .main { margin-left: 260px; padding: 40px 50px; min-height: 100vh; }
         .page { display: none; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
@@ -81,7 +75,6 @@
         .card-content { padding: 30px; }
         .section-title { font-size: 20px; margin-bottom: 8px; font-weight: 700; }
         .section-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
-
         .profile-cover { height: 220px; position: relative; overflow: hidden; cursor: pointer; }
         .banner-default { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
         .banner-default::before { content: ''; position: absolute; width: 200%; height: 200%; background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px); animation: slide 20s linear infinite; }
@@ -123,7 +116,6 @@
         .status-item i { color: var(--primary); }
         .status-item span { color: var(--text-muted); }
         .status-item strong { color: var(--text-main); }
-
         .purchase-item { display: flex; align-items: center; padding: 20px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; transition: all 0.3s; }
         .purchase-item:hover { border-color: rgba(255, 0, 110, 0.3); transform: translateX(5px); }
         .purchase-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(255, 0, 110, 0.15); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); margin-right: 15px; flex-shrink: 0; }
@@ -132,7 +124,6 @@
         .purchase-info p { font-size: 13px; color: var(--text-muted); }
         .purchase-status { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
         .purchase-status.active { background: rgba(0, 230, 118, 0.15); color: var(--success); }
-
         .balance-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; padding: 35px; margin-bottom: 25px; position: relative; overflow: hidden; }
         .balance-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
         .balance-label { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
@@ -154,7 +145,6 @@
         .transaction-amount { font-size: 16px; font-weight: bold; font-family: monospace; }
         .transaction-amount.income { color: var(--success); }
         .transaction-amount.expense { color: var(--danger); }
-
         .prefixes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .prefix-card { background: var(--bg-panel); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 25px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .prefix-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 0, 110, 0.2); }
@@ -164,7 +154,6 @@
         .prefix-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .prefix-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; min-height: 40px; }
         .prefix-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
-
         .hwid-card { background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(255, 77, 0, 0.1)); border: 1px solid rgba(255, 23, 68, 0.3); border-radius: 16px; padding: 30px; margin-bottom: 30px; }
         .hwid-card h3 { font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
         .hwid-card h3 i { color: var(--danger); }
@@ -178,7 +167,6 @@
         .hwid-reset-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
         .hwid-warning { background: rgba(255, 171, 0, 0.1); border: 1px solid var(--warning); border-radius: 10px; padding: 15px; margin: 20px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--warning); }
         .hwid-warning i { font-size: 18px; margin-top: 2px; flex-shrink: 0; }
-
         .review-form { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
         .review-form textarea { width: 100%; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; color: white; font-size: 14px; outline: none; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px; }
         .review-form textarea:focus { border-color: var(--primary); }
@@ -189,7 +177,6 @@
         .my-review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .my-review-stars { color: #ffd700; }
         .verified-badge { background: rgba(0, 230, 118, 0.15); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; }
-
         .security-item { display: flex; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
         .security-item:last-child { border-bottom: none; }
         .security-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(255, 0, 110, 0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); margin-right: 18px; flex-shrink: 0; }
@@ -210,7 +197,6 @@
         .session-info p { font-size: 12px; color: var(--text-muted); }
         .session-status { font-size: 11px; padding: 4px 10px; border-radius: 8px; font-weight: 600; }
         .session-status.current { background: rgba(0, 230, 118, 0.15); color: var(--success); }
-
         .notification-item { display: flex; align-items: flex-start; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); transition: all 0.3s; animation: slideIn 0.4s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
         .notification-item:hover { border-color: rgba(255, 0, 110, 0.3); transform: translateX(5px); }
@@ -229,7 +215,6 @@
         .notif-btn:hover { background: rgba(255, 0, 110, 0.2); color: var(--primary); }
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 60px; margin-bottom: 20px; opacity: 0.3; }
-
         .bg-selector, .banner-selector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .bg-option, .banner-option { height: 100px; border-radius: 12px; cursor: pointer; border: 3px solid transparent; transition: all 0.3s; position: relative; overflow: hidden; }
         .bg-option:hover, .banner-option:hover { transform: scale(1.05); }
@@ -247,7 +232,6 @@
         .bg-option-matrix { background: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px), #000; background-size: 20px 20px; }
         .bg-option-aurora { background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 128, 0.3), transparent), #0a0a1a; }
         .bg-option-blood { background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.4), transparent), #1a0000; }
-
         .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 14px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4); }
         .btn-outline { background: transparent; border: 2px solid var(--border); }
@@ -274,9 +258,7 @@
         .toast-content p { font-size: 12px; color: var(--text-muted); }
         #avatarInput { display: none; }
         @media (max-width: 768px) { .sidebar { width: 70px; } .brand-text, .menu-link span, .mini-info, .badge-count { display: none; } .brand { justify-content: center; padding: 20px 0; } .menu-link { justify-content: center; padding: 15px 0; } .main { margin-left: 70px; padding: 20px; } .profile-info { margin-left: 0; margin-top: 80px; } .api-wrapper { flex-direction: column; } }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-dark); } ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
     </style>
 </head>
 <body class="bg-default">
@@ -458,6 +440,10 @@
         });
 
         window.addEventListener('load', () => {
+            // === СИНХРОНИЗАЦИЯ АВАТАРКИ С ГЛАВНОЙ ===
+            let sharedAvatar = localStorage.getItem('cherry_avatar');
+            if (sharedAvatar && sharedAvatar !== data.avatar) { data.avatar = sharedAvatar; saveData(); }
+
             applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
             updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
             renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
@@ -472,21 +458,11 @@
             const rating = data.selectedRating;
             if (!text) { showToast('Ошибка', 'Напишите текст отзыва', 'error'); return; }
             if (rating === 0) { showToast('Ошибка', 'Выберите оценку', 'error'); return; }
-
             const allReviews = getAllReviews();
-            const newReview = {
-                id: Date.now(), user: data.username, avatar: data.username.charAt(0).toUpperCase(),
-                rating: rating, text: text, product: 'Cherry Client',
-                date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
-                status: 'pending', verified: true
-            };
-            allReviews.unshift(newReview);
-            saveAllReviews(allReviews);
-
-            data.myReviews.push({ id: newReview.id, name: data.username, rating, text, date: newReview.date });
-            saveData();
-            document.getElementById('reviewText').value = '';
-            data.selectedRating = 0;
+            const newReview = { id: Date.now(), user: data.username, avatar: data.username.charAt(0).toUpperCase(), rating: rating, text: text, product: 'Cherry Client', date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }), status: 'pending', verified: true };
+            allReviews.unshift(newReview); saveAllReviews(allReviews);
+            data.myReviews.push({ id: newReview.id, name: data.username, rating, text, date: newReview.date }); saveData();
+            document.getElementById('reviewText').value = ''; data.selectedRating = 0;
             document.querySelectorAll('#starRating i').forEach(s => s.className = 'far fa-star');
             renderMyReviews();
             showToast('Отзыв отправлен', 'Ваш отзыв появится после модерации администратором');
@@ -496,7 +472,6 @@
             const list = document.getElementById('myReviewsList');
             const allReviews = getAllReviews();
             const myReviews = allReviews.filter(r => r.user === data.username);
-
             if (myReviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>У вас пока нет отзывов</h3><p>Напишите первый отзыв выше!</p></div>'; return; }
             list.innerHTML = myReviews.map(r => {
                 const statusText = r.status === 'approved' ? '✓ Одобрено' : r.status === 'pending' ? '⏳ На модерации' : '✗ Отклонено';
@@ -541,16 +516,30 @@
             document.getElementById('bannerModalGrid').innerHTML = html;
         }
 
-        // ===== АВАТАР =====
+        // ===== АВАТАР (С СИНХРОНИЗАЦИЕЙ) =====
         document.getElementById('avatarInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 if (file.size > 2 * 1024 * 1024) { showToast('Ошибка', 'Файл слишком большой (макс. 2MB)', 'error'); return; }
                 const reader = new FileReader();
-                reader.onload = (event) => { data.avatar = event.target.result; applyAvatar(data.avatar); saveData(); showToast('Аватар обновлён', 'Ваша новая аватарка сохранена'); };
+                reader.onload = (event) => {
+                    data.avatar = event.target.result;
+                    applyAvatar(data.avatar);
+                    saveData();
+                    // === СИНХРОНИЗАЦИЯ С ГЛАВНОЙ ===
+                    localStorage.setItem('cherry_avatar', data.avatar);
+                    let cu = localStorage.getItem('cherry_user');
+                    if (cu) {
+                        let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                        let idx = allUsers.findIndex(u => u.name === cu || u.email === cu);
+                        if (idx !== -1) { allUsers[idx].avatar = data.avatar; localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); }
+                    }
+                    showToast('Аватар обновлён', 'Ваша аватарка применена везде');
+                };
                 reader.readAsDataURL(file);
             }
         });
+
         function applyAvatar(imgData) { const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤'; document.getElementById('bigAvatar').innerHTML = imgHTML; document.getElementById('miniAvatar').innerHTML = imgHTML; }
 
         // ===== ПРЕФИКСЫ =====
