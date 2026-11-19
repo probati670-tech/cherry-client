@@ -58,11 +58,10 @@
         .stat-icon.green { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .stat-icon.blue { background: rgba(33, 150, 243, 0.15); color: var(--info); }
         .stat-icon.orange { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
-        .stat-icon.red { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         .stat-trend { font-size: 12px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
         .stat-trend.up { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .stat-trend.down { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
-        .stat-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; transition: all 0.5s; }
+        .stat-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
         .stat-label { font-size: 13px; color: var(--text-muted); }
         .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px; }
         .chart-container { position: relative; height: 300px; }
@@ -82,17 +81,20 @@
         .status-badge.banned { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         .status-badge.pending { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
         .status-badge.expired { background: rgba(136, 136, 136, 0.15); color: var(--text-muted); }
+        .status-badge.premium { background: rgba(255, 215, 0, 0.15); color: #ffd700; }
         .action-btns { display: flex; gap: 6px; }
         .action-btn { width: 32px; height: 32px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; font-size: 13px; }
         .action-btn:hover { color: white; border-color: var(--primary); background: rgba(255, 0, 110, 0.15); }
         .action-btn.danger:hover { color: var(--danger); border-color: var(--danger); background: rgba(255, 23, 68, 0.15); }
         .action-btn.success:hover { color: var(--success); border-color: var(--success); background: rgba(0, 230, 118, 0.15); }
+        .action-btn.warning:hover { color: var(--warning); border-color: var(--warning); background: rgba(255, 215, 0, 0.15); }
         .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 0, 110, 0.4); }
         .btn-outline { background: transparent; border: 1px solid var(--border); }
         .btn-outline:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.1); }
         .btn-success { background: linear-gradient(135deg, #00e676, #00bfa5); }
         .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); }
+        .btn-warning { background: linear-gradient(135deg, #ffab00, #ff8f00); }
         .btn-small { padding: 6px 12px; font-size: 12px; }
         .key-generator { background: linear-gradient(135deg, rgba(255, 0, 110, 0.1), rgba(255, 77, 0, 0.1)); border: 1px solid rgba(255, 0, 110, 0.3); border-radius: 14px; padding: 25px; margin-bottom: 20px; }
         .key-display { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255, 0, 110, 0.3); border-radius: 10px; padding: 18px; font-family: 'Courier New', monospace; font-size: 20px; color: var(--primary); text-align: center; letter-spacing: 2px; margin: 15px 0; }
@@ -213,7 +215,7 @@
         <div class="page" id="page-users">
             <div class="card">
                 <div class="card-header">
-                    <div><h3>Управление пользователями</h3><p>Редактирование, бан, роли</p></div>
+                    <div><h3>Управление пользователями</h3><p>Редактирование, бан, роли, Premium</p></div>
                     <div class="bulk-actions">
                         <button class="btn btn-small" onclick="openModal('addUserModal')"><i class="fas fa-user-plus"></i> Добавить</button>
                         <button class="btn btn-small btn-outline" onclick="exportUsers()"><i class="fas fa-file-export"></i> Экспорт</button>
@@ -229,6 +231,7 @@
                                     <th>Пользователь</th>
                                     <th>Роль</th>
                                     <th>Префикс</th>
+                                    <th>Premium</th>
                                     <th>Баланс</th>
                                     <th>Статус</th>
                                     <th>Регистрация</th>
@@ -356,8 +359,8 @@
     <script>
         const defaultData = {
             users: [
-                { id: 1, name: 'Test_Admin', email: 'admin@cherry.io', role: 'admin', sub: 'premium', pass: 'Test123456', prefix: 'cherry', balance: 1250, status: 'active', date: '2026-11-19', avatar: null, ownedPrefixes: ['cherry'] },
-                { id: 5, name: 'Test_Manager', email: 'manager@cherry.io', role: 'user', sub: 'free', pass: 'Test12345', prefix: null, balance: 500, status: 'active', date: '2026-11-15', avatar: null, ownedPrefixes: [] }
+                { id: 1, name: 'Test_Admin', email: 'admin@cherry.io', role: 'admin', sub: 'premium', pass: 'Test123456', prefix: 'cherry', balance: 1250, status: 'active', date: '2026-11-19', avatar: null, ownedPrefixes: ['cherry'], isPremium: true, apiKey: 'CHERRY-TEST-ADMIN-0001' },
+                { id: 5, name: 'Test_Manager', email: 'manager@cherry.io', role: 'user', sub: 'free', pass: 'Test12345', prefix: null, balance: 500, status: 'active', date: '2026-11-15', avatar: null, ownedPrefixes: [], isPremium: false, apiKey: null }
             ],
             licenses: [
                 { id: 1, key: 'CHERRY-ND3C-DPFV-IQX9', owner: 'Test_Admin', type: 'Premium', status: 'active', date: '2026-11-15' },
@@ -410,12 +413,17 @@
                             existing.status = regUser.status || existing.status;
                             existing.role = regUser.role || existing.role;
                             existing.sub = regUser.sub || existing.sub;
+                            existing.isPremium = regUser.isPremium || existing.isPremium || false;
+                            existing.apiKey = regUser.apiKey || existing.apiKey || null;
                         } else {
                             mergedUsers.push({
                                 id: regUser.id, name: regUser.name, email: regUser.email || regUser.name,
                                 role: regUser.role || 'user', sub: regUser.sub || 'free', pass: regUser.pass || 'default123',
                                 prefix: regUser.prefix || null, balance: 0, status: regUser.status || 'active',
-                                date: new Date().toLocaleDateString('ru-RU'), avatar: regUser.avatar || null, ownedPrefixes: regUser.ownedPrefixes || []
+                                date: new Date().toLocaleDateString('ru-RU'), avatar: regUser.avatar || null, 
+                                ownedPrefixes: regUser.ownedPrefixes || [],
+                                isPremium: regUser.isPremium || false,
+                                apiKey: regUser.apiKey || null
                             });
                         }
                     });
@@ -423,7 +431,7 @@
                     return { ...defaultData, ...parsed };
                 } catch(e) {}
             }
-            return { ...defaultData, users: registeredUsers.length > 0 ? registeredUsers.map(u => ({...u, balance: u.balance || 0, date: u.date || new Date().toLocaleDateString('ru-RU')})) : defaultData.users };
+            return { ...defaultData, users: registeredUsers.length > 0 ? registeredUsers.map(u => ({...u, balance: u.balance || 0, date: u.date || new Date().toLocaleDateString('ru-RU'), isPremium: u.isPremium || false, apiKey: u.apiKey || null})) : defaultData.users };
         }
 
         function saveData() {
@@ -431,24 +439,20 @@
             localStorage.setItem('cherry_all_users', JSON.stringify(data.users.map(u => ({
                 id: u.id, name: u.name, email: u.email, role: u.role, sub: u.sub || 'free',
                 pass: u.pass || 'default123', status: u.status, prefix: u.prefix,
-                ownedPrefixes: u.ownedPrefixes || [], avatar: u.avatar || null
+                ownedPrefixes: u.ownedPrefixes || [], avatar: u.avatar || null,
+                isPremium: u.isPremium || false, apiKey: u.apiKey || null
             }))));
         }
 
         function addLog(action, details) {
-            const log = {
-                id: Date.now(),
-                time: new Date().toLocaleString('ru-RU'),
-                action: action,
-                details: details
-            };
+            const log = { id: Date.now(), time: new Date().toLocaleString('ru-RU'), action: action, details: details };
             if (!data.logs) data.logs = [];
             data.logs.unshift(log);
             if (data.logs.length > 100) data.logs = data.logs.slice(0, 100);
             saveData();
         }
 
-        const pageTitles = { dashboard: { title: 'Дашборд', subtitle: 'Обзор системы Cherry Client' }, users: { title: 'Управление пользователями', subtitle: 'Редактирование, бан, роли' }, licenses: { title: 'Лицензии', subtitle: 'Ключи и активации' }, reviews: { title: 'Отзывы', subtitle: 'Модерация отзывов' }, products: { title: 'Товары', subtitle: 'Магазин префиксов и услуг' }, downloads: { title: 'Загрузки', subtitle: 'Управление ссылками' }, files: { title: 'Файлы', subtitle: 'Управление файлами для скачивания' }, notifications: { title: 'Уведомления', subtitle: 'Системные события' }, logs: { title: 'Логи', subtitle: 'История действий' }, settings: { title: 'Настройки', subtitle: 'Конфигурация системы' } };
+        const pageTitles = { dashboard: { title: 'Дашборд', subtitle: 'Обзор системы Cherry Client' }, users: { title: 'Управление пользователями', subtitle: 'Редактирование, бан, роли, Premium' }, licenses: { title: 'Лицензии', subtitle: 'Ключи и активации' }, reviews: { title: 'Отзывы', subtitle: 'Модерация отзывов' }, products: { title: 'Товары', subtitle: 'Магазин префиксов и услуг' }, downloads: { title: 'Загрузки', subtitle: 'Управление ссылками' }, files: { title: 'Файлы', subtitle: 'Управление файлами для скачивания' }, notifications: { title: 'Уведомления', subtitle: 'Системные события' }, logs: { title: 'Логи', subtitle: 'История действий' }, settings: { title: 'Настройки', subtitle: 'Конфигурация системы' } };
 
         document.querySelectorAll('.menu-link[data-page]').forEach(link => {
             link.addEventListener('click', (e) => {
@@ -530,22 +534,67 @@
             }, 5000);
         }
 
+        // ===== ПОЛЬЗОВАТЕЛИ С КНОПКОЙ PREMIUM =====
         function renderUsers(filter = '') {
             const tbody = document.getElementById('usersTable');
             const filtered = data.users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()) || u.email.toLowerCase().includes(filter.toLowerCase()));
-            tbody.innerHTML = filtered.map(u => `<tr>
-                <td><input type="checkbox" class="user-checkbox" data-id="${u.id}"></td>
-                <td><div class="user-cell"><div class="user-avatar">${u.avatar ? `<img src="${u.avatar}" alt="${u.name}">` : u.name.charAt(0).toUpperCase()}</div><div><div class="user-name">${u.name}</div><div class="user-email">${u.email}</div></div></div></td>
-                <td><span class="role-badge ${u.role}">${u.role === 'admin' ? 'Админ' : u.role === 'vip' ? 'VIP' : u.role === 'premium' ? 'Premium' : 'User'}</span></td>
-                <td>${u.prefix ? `<span style="color: var(--primary); font-weight: 600;">${u.prefix}</span>` : '—'}</td>
-                <td>${(u.balance || 0).toLocaleString()} ₽</td>
-                <td><span class="status-badge ${u.status}">${u.status === 'active' ? '● Активен' : '● Забанен'}</span></td>
-                <td style="color: var(--text-muted); font-size: 13px;">${u.date}</td>
-                <td><div class="action-btns"><button class="action-btn" onclick="editUser(${u.id})" title="Редактировать"><i class="fas fa-edit"></i></button><button class="action-btn ${u.status === 'banned' ? 'success' : 'danger'}" onclick="toggleBan(${u.id})" title="${u.status === 'banned' ? 'Разбанить' : 'Забанить'}"><i class="fas fa-${u.status === 'banned' ? 'unlock' : 'ban'}"></i></button><button class="action-btn danger" onclick="deleteUser(${u.id})" title="Удалить"><i class="fas fa-trash"></i></button></div></td>
-            </tr>`).join('');
+            tbody.innerHTML = filtered.map(u => {
+                const isPremium = u.sub === 'premium' || u.isPremium === true;
+                return `<tr>
+                    <td><input type="checkbox" class="user-checkbox" data-id="${u.id}"></td>
+                    <td><div class="user-cell"><div class="user-avatar">${u.avatar ? `<img src="${u.avatar}" alt="${u.name}">` : u.name.charAt(0).toUpperCase()}</div><div><div class="user-name">${u.name}</div><div class="user-email">${u.email}</div></div></div></td>
+                    <td><span class="role-badge ${u.role}">${u.role === 'admin' ? 'Админ' : u.role === 'vip' ? 'VIP' : u.role === 'premium' ? 'Premium' : 'User'}</span></td>
+                    <td>${u.prefix ? `<span style="color: var(--primary); font-weight: 600;">${u.prefix}</span>` : '—'}</td>
+                    <td><span class="status-badge ${isPremium ? 'premium' : 'expired'}">${isPremium ? '⭐ Premium' : '—'}</span></td>
+                    <td>${(u.balance || 0).toLocaleString()} ₽</td>
+                    <td><span class="status-badge ${u.status}">${u.status === 'active' ? '● Активен' : '● Забанен'}</span></td>
+                    <td style="color: var(--text-muted); font-size: 13px;">${u.date}</td>
+                    <td><div class="action-btns">
+                        <button class="action-btn ${isPremium ? 'warning' : 'success'}" onclick="togglePremium(${u.id})" title="${isPremium ? 'Забрать Premium' : 'Выдать Premium'}"><i class="fas fa-star"></i></button>
+                        <button class="action-btn" onclick="editUser(${u.id})" title="Редактировать"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn ${u.status === 'banned' ? 'success' : 'danger'}" onclick="toggleBan(${u.id})" title="${u.status === 'banned' ? 'Разбанить' : 'Забанить'}"><i class="fas fa-${u.status === 'banned' ? 'unlock' : 'ban'}"></i></button>
+                        <button class="action-btn danger" onclick="deleteUser(${u.id})" title="Удалить"><i class="fas fa-trash"></i></button>
+                    </div></td>
+                </tr>`;
+            }).join('');
         }
 
         function toggleSelectAll(checkbox) { document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = checkbox.checked); }
+
+        // ===== ВЫДАТЬ/ЗАБРАТЬ PREMIUM =====
+        function togglePremium(id) {
+            const user = data.users.find(u => u.id === id);
+            if (!user) return;
+            
+            const isPremium = user.sub === 'premium' || user.isPremium === true;
+            
+            if (isPremium) {
+                // Забираем премиум
+                if (!confirm(`Забрать Premium у ${user.name}?\n\nAPI ключ будет деактивирован, доступ к ZIP закрыт.`)) return;
+                user.sub = 'free';
+                user.isPremium = false;
+                user.apiKey = null;
+                addAdminNotification('warning', 'Premium отозван', `У ${user.name} отозвана Premium подписка`);
+                addLog('Отозван Premium', user.name);
+                showToast('Premium отозван', `${user.name} больше не Premium`);
+            } else {
+                // Выдаём премиум
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+                const newApiKey = `CHERRY-${gen()}-${gen()}-${gen()}`;
+                
+                user.sub = 'premium';
+                user.isPremium = true;
+                user.apiKey = newApiKey;
+                addAdminNotification('success', 'Premium выдан', `${user.name} получил Premium. Ключ: ${newApiKey}`);
+                addLog('Выдан Premium', `${user.name} — ключ ${newApiKey}`);
+                showToast('⭐ Premium выдан', `${user.name}\nAPI ключ: ${newApiKey}`);
+            }
+            
+            saveData();
+            renderUsers();
+            updateStats();
+        }
 
         function addUser() {
             const name = document.getElementById('newUserName').value.trim();
@@ -554,8 +603,7 @@
             const role = document.getElementById('newUserRole').value;
             if (!name || !email || !pass) { showToast('Ошибка', 'Заполните все поля', 'error'); return; }
             if (pass.length < 4) { showToast('Ошибка', 'Пароль минимум 4 символа', 'error'); return; }
-            if (data.users.find(u => u.name === name || u.email === email)) { showToast('Ошибка', 'Пользователь уже существует', 'error'); return; }
-            data.users.push({ id: Date.now(), name, email, role, sub: role === 'vip' ? 'vip' : role === 'premium' ? 'premium' : role === 'admin' ? 'premium' : 'free', pass, prefix: role === 'vip' ? 'VIP' : role === 'premium' ? 'PRO' : null, balance: 0, status: 'active', date: new Date().toLocaleDateString('ru-RU'), avatar: null, ownedPrefixes: [] });
+            data.users.push({ id: Date.now(), name, email, role, sub: role === 'vip' ? 'vip' : role === 'premium' ? 'premium' : role === 'admin' ? 'premium' : 'free', pass, prefix: role === 'vip' ? 'VIP' : role === 'premium' ? 'PRO' : null, balance: 0, status: 'active', date: new Date().toLocaleDateString('ru-RU'), avatar: null, ownedPrefixes: [], isPremium: role === 'premium' || role === 'admin', apiKey: null });
             saveData(); renderUsers(); updateStats(); closeModal('addUserModal');
             addAdminNotification('success', 'Новый пользователь', `${name} успешно создан`);
             addLog('Создан пользователь', `${name} (${email})`);
@@ -567,12 +615,13 @@
             const user = data.users.find(u => u.id === id);
             if (!user) return;
             editingUserId = id;
+            const isPremium = user.sub === 'premium' || user.isPremium === true;
             const content = document.getElementById('editUserContent');
             content.innerHTML = `
                 <div class="user-stats-grid">
                     <div class="user-stat-card"><div class="user-stat-value">${(user.balance || 0).toLocaleString()} ₽</div><div class="user-stat-label">Баланс</div></div>
                     <div class="user-stat-card"><div class="user-stat-value">${user.prefix || 'Нет'}</div><div class="user-stat-label">Префикс</div></div>
-                    <div class="user-stat-card"><div class="user-stat-value">${user.role}</div><div class="user-stat-label">Роль</div></div>
+                    <div class="user-stat-card"><div class="user-stat-value">${isPremium ? '⭐ Да' : '—'}</div><div class="user-stat-label">Premium</div></div>
                     <div class="user-stat-card"><div class="user-stat-value">${user.status}</div><div class="user-stat-label">Статус</div></div>
                 </div>
                 <div class="form-group"><label class="form-label">Ник</label><input type="text" class="form-input" id="editUserName" value="${user.name}"></div>
@@ -581,6 +630,7 @@
                 <div class="form-group"><label class="form-label">Баланс (₽)</label><input type="number" class="form-input" id="editUserBalance" value="${user.balance || 0}"></div>
                 <div class="form-group"><label class="form-label">Роль</label><select class="form-select" id="editUserRole"><option value="user" ${user.role==='user'?'selected':''}>Пользователь</option><option value="vip" ${user.role==='vip'?'selected':''}>VIP</option><option value="premium" ${user.role==='premium'?'selected':''}>Premium</option><option value="admin" ${user.role==='admin'?'selected':''}>Администратор</option></select></div>
                 <div class="form-group"><label class="form-label">Префикс</label><select class="form-select" id="editUserPrefix"><option value="">Нет</option><option value="VIP" ${user.prefix==='VIP'?'selected':''}>VIP</option><option value="PRO" ${user.prefix==='PRO'?'selected':''}>PRO</option><option value="ELITE" ${user.prefix==='ELITE'?'selected':''}>ELITE</option><option value="LEGEND" ${user.prefix==='LEGEND'?'selected':''}>LEGEND</option></select></div>
+                <div class="form-group"><label class="form-label">API ключ (только для Premium)</label><input type="text" class="form-input" id="editUserApiKey" value="${user.apiKey || ''}" placeholder="CHERRY-XXXX-XXXX-XXXX"></div>
             `;
             openModal('editUserModal');
         }
@@ -596,6 +646,8 @@
             user.role = document.getElementById('editUserRole').value;
             user.sub = user.role === 'vip' ? 'vip' : user.role === 'premium' ? 'premium' : user.role === 'admin' ? 'premium' : 'free';
             user.prefix = document.getElementById('editUserPrefix').value || null;
+            user.apiKey = document.getElementById('editUserApiKey').value.trim() || null;
+            user.isPremium = user.sub === 'premium' || user.role === 'admin';
             saveData(); renderUsers(); updateStats(); closeModal('editUserModal');
             addAdminNotification('info', 'Пользователь обновлён', `${user.name} данные изменены`);
             addLog('Обновлён пользователь', `${user.name}: баланс ${user.balance} ₽, роль ${user.role}`);
@@ -635,7 +687,7 @@
         }
 
         function exportUsers() {
-            const csv = 'Name,Email,Role,Prefix,Balance,Status,Date\n' + data.users.map(u => `"${u.name}","${u.email}",${u.role},${u.prefix||''},${u.balance},${u.status},${u.date}`).join('\n');
+            const csv = 'Name,Email,Role,Prefix,Premium,Balance,Status,Date,ApiKey\n' + data.users.map(u => `"${u.name}","${u.email}",${u.role},${u.prefix||''},${u.isPremium?'Да':'Нет'},${u.balance},${u.status},${u.date},"${u.apiKey||''}"`).join('\n');
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = 'cherry_users.csv'; a.click();
@@ -661,6 +713,7 @@
             const list = document.getElementById('reviewsList');
             const pendingCount = reviews.filter(r => r.status === 'pending').length;
             document.getElementById('pendingReviews').textContent = pendingCount;
+            updateNotifBadges();
             if (reviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>Нет отзывов</h3></div>'; return; }
             list.innerHTML = reviews.map(r => `<div class="review-item"><div class="review-header"><div class="review-author"><div class="user-avatar" style="width: 36px; height: 36px; font-size: 13px;">${r.avatar && String(r.avatar).startsWith('data:') ? `<img src="${r.avatar}" alt="${r.user}">` : (r.avatar || r.user.charAt(0))}</div><div><div style="font-weight: 600;">${r.user}</div><div class="review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div></div></div><span class="status-badge ${r.status}">${r.status === 'approved' ? '✓ Одобрено' : '⏳ На модерации'}</span></div><div class="review-text">${r.text}</div><div class="review-footer"><span><i class="fas fa-shopping-bag"></i> ${r.product || 'Cherry Client'} • ${r.date}</span><div class="action-btns">${r.status === 'pending' ? `<button class="action-btn success" onclick="approveReview(${r.id})" title="Одобрить"><i class="fas fa-check"></i></button><button class="action-btn danger" onclick="rejectReview(${r.id})" title="Отклонить"><i class="fas fa-times"></i></button>` : `<button class="action-btn danger" onclick="deleteReview(${r.id})" title="Удалить"><i class="fas fa-trash"></i></button>`}</div></div></div>`).join('');
         }
@@ -707,20 +760,12 @@
             if (!file) return;
             if (!file.name.endsWith('.zip')) { showToast('Ошибка', 'Допустим только ZIP формат', 'error'); return; }
             if (file.size > 50 * 1024 * 1024) { showToast('Ошибка', 'Файл слишком большой (макс. 50MB)', 'error'); return; }
-            
             const reader = new FileReader();
             reader.onload = (e) => {
-                const fileData = {
-                    id: Date.now(),
-                    name: file.name,
-                    size: (file.size / 1024 / 1024).toFixed(2),
-                    uploadDate: new Date().toLocaleString('ru-RU'),
-                    data: e.target.result
-                };
+                const fileData = { id: Date.now(), name: file.name, size: (file.size / 1024 / 1024).toFixed(2), uploadDate: new Date().toLocaleString('ru-RU'), data: e.target.result };
                 if (!data.files) data.files = [];
                 data.files.push(fileData);
-                saveData();
-                renderFiles();
+                saveData(); renderFiles();
                 addLog('Загружен файл', `${file.name} (${fileData.size} MB)`);
                 showToast('Файл загружен', `${file.name} готов к скачиванию`);
             };
@@ -730,41 +775,20 @@
         function renderFiles() {
             const info = document.getElementById('fileInfo');
             const list = document.getElementById('filesList');
-            
             if (!data.files || data.files.length === 0) {
                 info.innerHTML = '';
                 list.innerHTML = '<p style="color: var(--text-muted);">Нет загруженных файлов</p>';
                 return;
             }
-            
             const latestFile = data.files[data.files.length - 1];
-            info.innerHTML = `
-                <div class="file-info">
-                    <i class="fas fa-file-archive"></i>
-                    <div style="flex: 1;">
-                        <div style="font-weight: 600;">${latestFile.name}</div>
-                        <div style="font-size: 12px; color: var(--text-muted);">${latestFile.size} MB • Загружен: ${latestFile.uploadDate}</div>
-                    </div>
-                    <button class="btn btn-small btn-danger" onclick="deleteFile(${latestFile.id})"><i class="fas fa-trash"></i></button>
-                </div>
-            `;
-            
-            list.innerHTML = data.files.map(f => `
-                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-weight: 600;">${f.name}</div>
-                        <div style="font-size: 12px; color: var(--text-muted);">${f.size} MB • ${f.uploadDate}</div>
-                    </div>
-                    <button class="btn btn-small btn-danger" onclick="deleteFile(${f.id})"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
+            info.innerHTML = `<div class="file-info"><i class="fas fa-file-archive"></i><div style="flex: 1;"><div style="font-weight: 600;">${latestFile.name}</div><div style="font-size: 12px; color: var(--text-muted);">${latestFile.size} MB • Загружен: ${latestFile.uploadDate}</div></div><button class="btn btn-small btn-danger" onclick="deleteFile(${latestFile.id})"><i class="fas fa-trash"></i></button></div>`;
+            list.innerHTML = data.files.map(f => `<div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;"><div><div style="font-weight: 600;">${f.name}</div><div style="font-size: 12px; color: var(--text-muted);">${f.size} MB • ${f.uploadDate}</div></div><button class="btn btn-small btn-danger" onclick="deleteFile(${f.id})"><i class="fas fa-trash"></i></button></div>`).join('');
         }
 
         function deleteFile(id) {
             if (!confirm('Удалить файл?')) return;
             data.files = data.files.filter(f => f.id !== id);
-            saveData();
-            renderFiles();
+            saveData(); renderFiles();
             addLog('Удалён файл', `ID: ${id}`);
             showToast('Файл удалён', 'Файл удалён из системы');
         }
@@ -806,8 +830,7 @@
         function clearLogs() {
             if (!confirm('Очистить все логи?')) return;
             data.logs = [];
-            saveData();
-            renderLogs();
+            saveData(); renderLogs();
             showToast('Логи очищены', 'История действий удалена');
         }
 
