@@ -670,7 +670,19 @@
             else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         }
-        function logout() { if (confirm('Вы уверены, что хотите выйти?')) { showToast('До свидания!', 'Вы вышли из аккаунта'); setTimeout(() => { window.location.href = 'index.html'; }, 1500); } }
+        function logout() {
+    if (confirm('Вы уверены, что хотите выйти?')) {
+        // Очищаем все данные сессии
+        localStorage.removeItem('cherry_user');
+        localStorage.removeItem('cherry_premium');
+        
+        showToast('До свидания!', 'Вы вышли из аккаунта');
+        
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+    }
+}
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
 </body>
