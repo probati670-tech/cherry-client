@@ -150,6 +150,8 @@
         .prefix-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 0, 110, 0.2); }
         .prefix-card.owned { border-color: var(--success); }
         .prefix-card.owned::after { content: '✓ КУПЛЕНО'; position: absolute; top: 15px; right: -30px; background: var(--success); color: white; padding: 4px 35px; font-size: 10px; font-weight: bold; transform: rotate(45deg); }
+        .prefix-card.premium-card { border: 2px solid var(--warning); background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 77, 0, 0.05)); }
+        .prefix-card.premium-card::before { content: '⭐ ХИТ'; position: absolute; top: 15px; left: -30px; background: var(--warning); color: #000; padding: 4px 35px; font-size: 10px; font-weight: bold; transform: rotate(-45deg); }
         .prefix-preview { font-size: 24px; font-weight: 900; margin-bottom: 15px; padding: 15px; border-radius: 10px; background: rgba(0,0,0,0.3); }
         .prefix-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .prefix-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; min-height: 40px; }
@@ -238,6 +240,7 @@
         .btn-outline:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.1); }
         .btn-success { background: linear-gradient(135deg, #00e676, #00bfa5); }
         .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); }
+        .btn-warning { background: linear-gradient(135deg, #ffab00, #ff8f00); }
         .btn-small { padding: 8px 16px; font-size: 12px; }
         .form-group { margin-bottom: 20px; }
         .form-label { display: block; color: var(--text-muted); font-size: 13px; margin-bottom: 8px; font-weight: 600; }
@@ -308,7 +311,7 @@
             <div class="card" id="apiKeyCard" style="display:none;"><div class="card-content">
                 <h3 class="section-title">🔑 API Ключ (Лицензия)</h3>
                 <p class="section-desc">Используйте этот ключ для входа в клиент. Никому его не передавайте.</p>
-                <div class="api-wrapper"><input type="text" class="api-key-text" value="CHERRY-ND3C-DPFV-IQX9" readonly id="apiKeyInput"><button class="btn" onclick="copyKey()"><i class="fas fa-copy"></i> Копировать</button></div>
+                <div class="api-wrapper"><input type="text" class="api-key-text" value="" readonly id="apiKeyInput"><button class="btn" onclick="copyKey()"><i class="fas fa-copy"></i> Копировать</button></div>
             </div></div>
             <div class="card" id="premiumDownloadCard" style="display:none;"><div class="card-content">
                 <h3 class="section-title">📦 Premium загрузка</h3>
@@ -317,7 +320,7 @@
                     <i class="fas fa-file-archive"></i>
                     <div class="premium-download-text">
                         <h4>CherryClient-Premium.zip</h4>
-                        <p>Последняя версия • 45 MB • Обновлено: сегодня</p>
+                        <p>Последняя версия • 45 MB</p>
                     </div>
                     <button class="btn btn-success" onclick="downloadPremium()"><i class="fas fa-download"></i> Скачать</button>
                 </div>
@@ -356,7 +359,7 @@
                 <div class="hwid-warning"><i class="fas fa-exclamation-triangle"></i><div><strong>Внимание!</strong> После сброса HWID вам потребуется войти в клиент заново. У вас осталось <strong id="hwidResetsWarning">2</strong> бесплатных сброса. После исчерпания лимита сброс будет платным (150 ₽).</div></div>
                 <button class="btn btn-danger" onclick="resetHwid()"><i class="fas fa-redo"></i> Сбросить HWID</button>
             </div>
-            <div class="card"><div class="card-content"><h3 class="section-title">🏷️ Префиксы</h3><p class="section-desc">Купите эксклюзивный анимированный префикс</p><div class="prefixes-grid" id="prefixesGrid"></div></div></div>
+            <div class="card"><div class="card-content"><h3 class="section-title">🏷️ Префиксы и подписки</h3><p class="section-desc">Купите эксклюзивный анимированный префикс или Premium подписку</p><div class="prefixes-grid" id="prefixesGrid"></div></div></div>
         </div>
 
         <div class="page" id="page-reviews">
@@ -414,13 +417,14 @@
     <script>
         const defaultData = {
             username: 'Nick_Name', email: 'example@mail.com', avatar: null, banner: 'default', background: 'default',
-            balance: 0, activePrefix: null, ownedPrefixes: [], isPremium: false,
+            balance: 0, activePrefix: null, ownedPrefixes: [], isPremium: false, apiKey: null,
             hwid: 'A7F3-B9D2-E4C1-8F5A', hwidResetsLeft: 2, hwidLastReset: null, regDate: new Date().toLocaleDateString('ru-RU'),
             transactions: [], purchases: [],
             sessions: [{ id: 1, device: 'Windows PC - Chrome', location: 'Москва, Россия', time: Date.now(), current: true }],
             notifications: [], myReviews: [], selectedRating: 0
         };
         const prefixes = [
+            { id: 'premium', name: 'Premium подписка', price: 299, class: 'prefix-elite', icon: '⭐', desc: 'API ключ + Premium ZIP + все функции на 30 дней', isSubscription: true },
             { id: 'vip', name: 'VIP', price: 299, class: 'prefix-vip', icon: '👑', desc: 'Золотой префикс с сиянием' },
             { id: 'pro', name: 'PRO', price: 499, class: 'prefix-pro', icon: '⚡', desc: 'Пульсирующий префикс профи' },
             { id: 'elite', name: 'ELITE', price: 799, class: 'prefix-elite', icon: '💎', desc: 'Элитный статус с свечением' },
@@ -444,12 +448,12 @@
                 freshData.username = currentUser;
                 freshData.email = currentUser.includes('@') ? currentUser : '';
                 freshData.regDate = new Date().toLocaleDateString('ru-RU');
-                // Проверяем роль в cherry_all_users
                 const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
                 const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
                 if (userObj) {
                     if (userObj.sub === 'premium' || userObj.role === 'admin') freshData.isPremium = true;
                     if (userObj.avatar) freshData.avatar = userObj.avatar;
+                    if (userObj.apiKey) freshData.apiKey = userObj.apiKey;
                 }
             }
             return freshData;
@@ -487,6 +491,7 @@
             }
             if (userObj && userObj.avatar && userObj.avatar !== data.avatar) { data.avatar = userObj.avatar; saveData(); }
             if (userObj && (userObj.sub === 'premium' || userObj.role === 'admin') && !data.isPremium) { data.isPremium = true; saveData(); }
+            if (userObj && userObj.apiKey && !data.apiKey) { data.apiKey = userObj.apiKey; saveData(); }
             applyBackground(data.background); applyBanner(data.banner); applyAvatar(data.avatar); applyPrefix(data.activePrefix);
             updateProfileDisplay(); updateBalance(); renderTransactions(); renderPrefixes(); renderPurchases();
             renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
@@ -587,96 +592,102 @@
             const prefix = prefixes.find(p => p.id === prefixId);
             if (prefix) { prefixEl.style.display = 'inline-flex'; prefixEl.className = 'prefix ' + prefix.class; prefixEl.innerHTML = `${prefix.icon} ${prefix.name}`; miniPrefix.textContent = prefix.name; miniPrefix.style.color = '#fff'; }
         }
-        function function buyPrefix(prefixId) {
-    const prefix = prefixes.find(p => p.id === prefixId);
-    if (!prefix) return;
-    
-    // Если это Premium подписка — выдаём премиум
-    if (prefix.name === 'Premium подписка') {
-        if (data.balance < prefix.price) { 
-            showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
-            return; 
+
+        function generateApiKey() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+            return `CHERRY-${gen()}-${gen()}-${gen()}`;
         }
-        if (!confirm(`Купить Premium подписку за ${prefix.price} ₽?\n\nВы получите:\n• API ключ для входа в клиент\n• Возможность скачать Premium ZIP\n• Все премиум-функции на 30 дней`)) return;
-        
-        data.balance -= prefix.price;
-        data.isPremium = true; // ⭐ ГЛАВНОЕ: включаем премиум
-        
-        // Генерируем уникальный API ключ
-        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
-        const newApiKey = `CHERRY-${gen()}-${gen()}-${gen()}`;
-        
-        // Сохраняем ключ в профиль
-        document.getElementById('apiKeyInput').value = newApiKey;
-        
-        data.transactions.unshift({ type: 'expense', title: 'Покупка Premium подписки', amount: prefix.price, date: new Date().toISOString() });
-        data.purchases.unshift({ id: Date.now(), name: 'Premium подписка', date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-crown' });
-        
-        // Синхронизируем с cherry_all_users (чтобы админ видел)
-        const currentUser = localStorage.getItem('cherry_user');
-        if (currentUser) {
-            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-            let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
-            if (idx !== -1) { 
-                allUsers[idx].sub = 'premium'; 
-                allUsers[idx].role = 'premium';
-                allUsers[idx].apiKey = newApiKey;
-                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); 
+
+        function buyPrefix(prefixId) {
+            const prefix = prefixes.find(p => p.id === prefixId);
+            if (!prefix) return;
+            
+            // Если это Premium подписка
+            if (prefix.isSubscription) {
+                if (data.isPremium) {
+                    showToast('Уже активно', 'У вас уже есть Premium подписка', 'error');
+                    return;
+                }
+                if (data.balance < prefix.price) { 
+                    showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
+                    return; 
+                }
+                if (!confirm(`Купить Premium подписку за ${prefix.price} ₽?\n\nВы получите:\n• Уникальный API ключ\n• Возможность скачать Premium ZIP\n• Все премиум-функции на 30 дней`)) return;
+                
+                data.balance -= prefix.price;
+                data.isPremium = true;
+                
+                // Генерируем уникальный API ключ
+                const newApiKey = generateApiKey();
+                data.apiKey = newApiKey;
+                document.getElementById('apiKeyInput').value = newApiKey;
+                
+                data.transactions.unshift({ type: 'expense', title: 'Покупка Premium подписки', amount: prefix.price, date: new Date().toISOString() });
+                data.purchases.unshift({ id: Date.now(), name: 'Premium подписка', date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-crown' });
+                
+                // Синхронизируем с cherry_all_users
+                const currentUser = localStorage.getItem('cherry_user');
+                if (currentUser) {
+                    let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+                    let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+                    if (idx !== -1) { 
+                        allUsers[idx].sub = 'premium'; 
+                        allUsers[idx].role = 'premium';
+                        allUsers[idx].apiKey = newApiKey;
+                        localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); 
+                    }
+                }
+                
+                updateProfileDisplay();
+                updateBalance(); 
+                renderTransactions(); 
+                renderPurchases(); 
+                saveData();
+                
+                showToast('🎉 Premium активирован!', `Ваш API ключ: ${newApiKey}`);
+                return;
+            }
+            
+            // Обычная логика для префиксов
+            if (data.ownedPrefixes.includes(prefixId)) { 
+                data.activePrefix = prefixId; 
+                applyPrefix(prefixId); 
+                saveData(); 
+                renderPrefixes(); 
+                showToast('Префикс активирован', `${prefix.name} теперь отображается`); 
+                return; 
+            }
+            if (data.balance < prefix.price) { 
+                showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
+                return; 
+            }
+            if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
+                data.balance -= prefix.price; 
+                data.ownedPrefixes.push(prefixId); 
+                data.activePrefix = prefixId;
+                data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
+                data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
+                applyPrefix(prefixId); 
+                updateBalance(); 
+                renderTransactions(); 
+                renderPrefixes(); 
+                renderPurchases(); 
+                saveData();
+                showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
             }
         }
-        
-        updateProfileDisplay();
-        updateBalance(); 
-        renderTransactions(); 
-        renderPurchases(); 
-        saveData();
-        
-        showToast('🎉 Premium активирован!', `Ваш API ключ: ${newApiKey}`);
-        return;
-    }
-    
-    // Обычная логика для префиксов
-    if (data.ownedPrefixes.includes(prefixId)) { 
-        data.activePrefix = prefixId; 
-        applyPrefix(prefixId); 
-        saveData(); 
-        renderPrefixes(); 
-        showToast('Префикс активирован', `${prefix.name} теперь отображается`); 
-        return; 
-    }
-    if (data.balance < prefix.price) { 
-        showToast('Недостаточно средств', `Нужно ещё ${(prefix.price - data.balance).toFixed(2)} ₽`, 'error'); 
-        return; 
-    }
-    if (confirm(`Купить префикс "${prefix.name}" за ${prefix.price} ₽?`)) {
-        data.balance -= prefix.price; 
-        data.ownedPrefixes.push(prefixId); 
-        data.activePrefix = prefixId;
-        data.transactions.unshift({ type: 'expense', title: `Покупка префикса ${prefix.name}`, amount: prefix.price, date: new Date().toISOString() });
-        data.purchases.unshift({ id: Date.now(), name: `Префикс ${prefix.name}`, date: new Date().toISOString().split('T')[0], amount: prefix.price, status: 'active', icon: 'fa-tag' });
-        applyPrefix(prefixId); 
-        updateBalance(); 
-        renderTransactions(); 
-        renderPrefixes(); 
-        renderPurchases(); 
-        saveData();
-        showToast('Покупка успешна!', `Префикс ${prefix.name} активирован`);
-     }
-   }
+
         function renderPrefixes() {
-            const prefixes = [
-    { id: 'premium', name: 'Premium подписка', price: 299, class: 'prefix-elite', icon: '⭐', desc: 'API ключ + Premium ZIP + все функции на 30 дней' },
-    { id: 'vip', name: 'VIP', price: 299, class: 'prefix-vip', icon: '👑', desc: 'Золотой префикс с сиянием' },
-    { id: 'pro', name: 'PRO', price: 499, class: 'prefix-pro', icon: '⚡', desc: 'Пульсирующий префикс профи' },
-    { id: 'elite', name: 'ELITE', price: 799, class: 'prefix-elite', icon: '💎', desc: 'Элитный статус с свечением' },
-    { id: 'legend', name: 'LEGEND', price: 999, class: 'prefix-legend', icon: '🔥', desc: 'Легендарный с градиентом' },
-    { id: 'crystal', name: 'CRYSTAL', price: 1799, class: 'prefix-crystal', icon: '💠', desc: 'Кристальный с прозрачностью' }
-];
             const grid = document.getElementById('prefixesGrid');
             grid.innerHTML = prefixes.map(p => {
-                const owned = data.ownedPrefixes.includes(p.id); const active = data.activePrefix === p.id;
-                return `<div class="prefix-card ${owned ? 'owned' : ''}"><div class="prefix-preview ${p.class}">${p.icon} ${p.name}</div><div class="prefix-name">${p.name}</div><div class="prefix-desc">${p.desc}</div><div class="prefix-price">${owned ? (active ? 'АКТИВЕН' : 'КУПЛЕНО') : p.price + ' ₽'}</div><button class="btn ${owned ? (active ? 'btn-outline' : 'btn-success') : ''} btn-small" onclick="buyPrefix('${p.id}')" style="width: 100%; justify-content: center;">${owned ? (active ? '<i class="fas fa-check"></i> Активен' : '<i class="fas fa-play"></i> Активировать') : '<i class="fas fa-shopping-cart"></i> Купить'}</button></div>`;
+                const owned = p.isSubscription ? data.isPremium : data.ownedPrefixes.includes(p.id);
+                const active = data.activePrefix === p.id;
+                const cardClass = p.isSubscription ? 'prefix-card premium-card' : 'prefix-card';
+                const priceText = p.isSubscription ? (owned ? 'АКТИВНА' : p.price + ' ₽ / мес') : (owned ? (active ? 'АКТИВЕН' : 'КУПЛЕНО') : p.price + ' ₽');
+                const btnClass = p.isSubscription ? (owned ? 'btn-outline' : 'btn-warning') : (owned ? (active ? 'btn-outline' : 'btn-success') : '');
+                const btnText = p.isSubscription ? (owned ? '<i class="fas fa-check"></i> Активна' : '<i class="fas fa-crown"></i> Оформить') : (owned ? (active ? '<i class="fas fa-check"></i> Активен' : '<i class="fas fa-play"></i> Активировать') : '<i class="fas fa-shopping-cart"></i> Купить');
+                return `<div class="${cardClass} ${owned ? 'owned' : ''}"><div class="prefix-preview ${p.class}">${p.icon} ${p.name}</div><div class="prefix-name">${p.name}</div><div class="prefix-desc">${p.desc}</div><div class="prefix-price">${priceText}</div><button class="btn ${btnClass} btn-small" onclick="buyPrefix('${p.id}')" style="width: 100%; justify-content: center;">${btnText}</button></div>`;
             }).join('');
         }
 
@@ -691,12 +702,14 @@
             const licenseText = document.getElementById('licenseText');
             const apiKeyCard = document.getElementById('apiKeyCard');
             const premiumDownloadCard = document.getElementById('premiumDownloadCard');
+            const apiKeyInput = document.getElementById('apiKeyInput');
             if (data.isPremium) {
                 badge.style.display = 'inline-flex';
                 licenseText.textContent = 'Premium до 26.11.2026';
                 licenseText.style.color = 'var(--success)';
                 apiKeyCard.style.display = 'block';
                 premiumDownloadCard.style.display = 'block';
+                if (data.apiKey) apiKeyInput.value = data.apiKey;
             } else {
                 badge.style.display = 'none';
                 licenseText.textContent = 'Basic';
@@ -712,7 +725,12 @@
             data.username = username; data.email = email; updateProfileDisplay(); saveData();
             showToast('Успешно!', 'Данные профиля обновлены');
         }
-        function copyKey() { const copyText = document.getElementById("apiKeyInput"); copyText.select(); navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); }
+        function copyKey() { 
+            const copyText = document.getElementById("apiKeyInput"); 
+            if (!copyText.value) { showToast('Ошибка', 'API ключ не найден. Купите Premium подписку.', 'error'); return; }
+            copyText.select(); 
+            navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); 
+        }
         function downloadPremium() {
             const adminData = JSON.parse(localStorage.getItem('cherryAdminData') || '{}');
             const files = adminData.files || [];
@@ -818,7 +836,7 @@
             else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         }
-
+        
         function logout() {
             if (confirm('Вы уверены, что хотите выйти?')) {
                 if (data.avatar) {
@@ -836,7 +854,7 @@
                 setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             }
         }
-
+        
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
 </body>
