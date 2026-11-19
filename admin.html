@@ -45,24 +45,24 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .card { background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
-        .card-header { padding: 20px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card-header { padding: 20px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .card-header h3 { font-size: 18px; font-weight: 700; }
         .card-header p { color: var(--text-muted); font-size: 13px; margin-top: 3px; }
         .card-body { padding: 25px; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; transition: all 0.3s; }
         .stat-card:hover { transform: translateY(-3px); border-color: rgba(255, 0, 110, 0.3); box-shadow: 0 10px 30px rgba(255, 0, 110, 0.15); }
-        .stat-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255, 0, 110, 0.15), transparent 70%); border-radius: 50%; transform: translate(30%, -30%); }
         .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
         .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .stat-icon.pink { background: rgba(255, 0, 110, 0.15); color: var(--primary); }
         .stat-icon.green { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .stat-icon.blue { background: rgba(33, 150, 243, 0.15); color: var(--info); }
         .stat-icon.orange { background: rgba(255, 171, 0, 0.15); color: var(--warning); }
+        .stat-icon.red { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
         .stat-trend { font-size: 12px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
         .stat-trend.up { background: rgba(0, 230, 118, 0.15); color: var(--success); }
         .stat-trend.down { background: rgba(255, 23, 68, 0.15); color: var(--danger); }
-        .stat-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+        .stat-value { font-size: 32px; font-weight: 800; margin-bottom: 5px; transition: all 0.5s; }
         .stat-label { font-size: 13px; color: var(--text-muted); }
         .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px; }
         .chart-container { position: relative; height: 300px; }
@@ -98,14 +98,14 @@
         .key-display { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255, 0, 110, 0.3); border-radius: 10px; padding: 18px; font-family: 'Courier New', monospace; font-size: 20px; color: var(--primary); text-align: center; letter-spacing: 2px; margin: 15px 0; }
         .review-item { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 12px; transition: all 0.3s; }
         .review-item:hover { border-color: rgba(255, 0, 110, 0.3); }
-        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .review-author { display: flex; align-items: center; gap: 12px; }
         .review-stars { color: #ffd700; font-size: 13px; }
         .review-text { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
-        .review-footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); }
+        .review-footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; gap: 10px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; animation: modalPop 0.3s ease; }
+        .modal-content { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; animation: modalPop 0.3s ease; max-height: 85vh; overflow-y: auto; }
         @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal h3 { font-size: 20px; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
@@ -130,9 +130,9 @@
         .user-stat-card { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px; text-align: center; }
         .user-stat-value { font-size: 24px; font-weight: 800; color: var(--primary); }
         .user-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
-        .bulk-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .bulk-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .notification-list { max-height: 400px; overflow-y: auto; }
-        .notification-item-admin { display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid var(--border); transition: all 0.3s; }
+        .notification-item-admin { display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid var(--border); transition: all 0.3s; align-items: flex-start; }
         .notification-item-admin:hover { background: rgba(255, 0, 110, 0.05); }
         .notification-item-admin.unread { border-left: 3px solid var(--primary); background: rgba(255, 0, 110, 0.05); }
         .download-manager { background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 14px; padding: 25px; margin-bottom: 20px; }
@@ -141,6 +141,16 @@
         .role-badge.user { background: rgba(33, 150, 243, 0.2); color: var(--info); }
         .role-badge.vip { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
         .role-badge.premium { background: rgba(156, 39, 176, 0.2); color: #e040fb; }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .file-upload-area { border: 2px dashed var(--border); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .file-upload-area:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.05); }
+        .file-upload-area i { font-size: 48px; color: var(--primary); margin-bottom: 15px; }
+        .file-upload-area p { color: var(--text-muted); margin: 5px 0; }
+        .file-info { background: rgba(0, 230, 118, 0.1); border: 1px solid var(--success); border-radius: 10px; padding: 15px; margin-top: 15px; display: flex; align-items: center; gap: 12px; }
+        .file-info i { color: var(--success); font-size: 24px; }
+        .log-item { padding: 12px; border-left: 3px solid var(--primary); background: rgba(255, 0, 110, 0.05); margin-bottom: 10px; border-radius: 6px; }
+        .log-time { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }
+        .log-text { font-size: 13px; }
         @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .sidebar { width: 70px; } .brand-text, .brand-sub, .menu-link span, .admin-info, .admin-badge span, .menu-section { display: none; } .brand { justify-content: center; padding: 20px 0; } .menu-link { justify-content: center; padding: 15px 0; } .menu-link i { margin: 0; } .main { margin-left: 70px; padding: 20px; } .search-box { width: 200px; } }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-dark); } ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
@@ -161,10 +171,12 @@
             <li class="menu-item"><button class="menu-link" data-page="reviews"><i class="fas fa-star"></i><span>Отзывы</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="products"><i class="fas fa-store"></i><span>Товары</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="downloads"><i class="fas fa-download"></i><span>Загрузки</span></button></li>
+            <li class="menu-item"><button class="menu-link" data-page="files"><i class="fas fa-file-archive"></i><span>Файлы</span></button></li>
         </ul>
         <div class="menu-section">Система</div>
         <ul class="menu">
             <li class="menu-item"><button class="menu-link" data-page="notifications"><i class="fas fa-bell"></i><span>Уведомления</span><span id="notifBadgeAdmin" style="margin-left:auto;background:var(--danger);color:white;font-size:10px;padding:2px 6px;border-radius:10px;display:none;">0</span></button></li>
+            <li class="menu-item"><button class="menu-link" data-page="logs"><i class="fas fa-history"></i><span>Логи</span></button></li>
             <li class="menu-item"><button class="menu-link" data-page="settings"><i class="fas fa-cog"></i><span>Настройки</span></button></li>
             <li class="menu-item"><a href="index.html" class="menu-link"><i class="fas fa-external-link-alt"></i><span>На сайт</span></a></li>
         </ul>
@@ -178,7 +190,6 @@
                 <div class="live-indicator"><div class="live-dot"></div><span>Онлайн</span></div>
                 <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Поиск..." id="globalSearch"></div>
                 <button class="icon-btn" onclick="showNotifications()"><i class="fas fa-bell"></i><span class="badge" id="notifBadgeTop" style="display:none;">0</span></button>
-                <button class="icon-btn"><i class="fas fa-cog"></i></button>
             </div>
         </div>
 
@@ -190,7 +201,7 @@
                 <div class="stat-card"><div class="stat-header"><div class="stat-icon orange"><i class="fas fa-star"></i></div><div class="stat-trend down"><i class="fas fa-arrow-down"></i> -2%</div></div><div class="stat-value" id="statReviews">0</div><div class="stat-label">Всего отзывов</div></div>
             </div>
             <div class="charts-grid">
-                <div class="card"><div class="card-header"><div><h3>Доход за месяц</h3><p>Динамика продаж за последние 30 дней</p></div></div><div class="card-body"><div class="chart-container"><canvas id="revenueChart"></canvas></div></div></div>
+                <div class="card"><div class="card-header"><div><h3>Доход в реальном времени</h3><p>Динамика продаж за последние 30 дней</p></div></div><div class="card-body"><div class="chart-container"><canvas id="revenueChart"></canvas></div></div></div>
                 <div class="card"><div class="card-header"><div><h3>Распределение</h3><p>Типы покупок</p></div></div><div class="card-body"><div class="chart-container"><canvas id="distributionChart"></canvas></div></div></div>
             </div>
             <div class="charts-grid">
@@ -257,9 +268,9 @@
             <div class="download-manager">
                 <h3><i class="fas fa-download" style="color: var(--success);"></i> Управление загрузками</h3>
                 <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Настройте ссылку для скачивания клиента</p>
-                <div class="form-group"><label class="form-label">URL загрузки</label><input type="text" class="form-input" id="downloadUrl" value="https://github.com/probati670-tech/cherry-client/releases/latest/download/CherryClient.exe" placeholder="https://..."></div>
-                <div class="form-group"><label class="form-label">Версия клиента</label><input type="text" class="form-input" id="clientVersion" value="2.5.0" placeholder="x.x.x"></div>
-                <div class="form-group"><label class="form-label">Размер файла (MB)</label><input type="number" class="form-input" id="fileSize" value="45" placeholder="45"></div>
+                <div class="form-group"><label class="form-label">URL загрузки</label><input type="text" class="form-input" id="downloadUrl" placeholder="https://..."></div>
+                <div class="form-group"><label class="form-label">Версия клиента</label><input type="text" class="form-input" id="clientVersion" placeholder="x.x.x"></div>
+                <div class="form-group"><label class="form-label">Размер файла (MB)</label><input type="number" class="form-input" id="fileSize" placeholder="45"></div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button class="btn" onclick="saveDownloadSettings()"><i class="fas fa-save"></i> Сохранить</button>
                     <button class="btn btn-outline" onclick="testDownloadLink()"><i class="fas fa-external-link-alt"></i> Проверить ссылку</button>
@@ -267,15 +278,38 @@
             </div>
             <div class="card"><div class="card-header"><div><h3>Статистика загрузок</h3><p>За последние 30 дней</p></div></div><div class="card-body">
                 <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="stat-card"><div class="stat-value" id="totalDownloads">1,247</div><div class="stat-label">Всего загрузок</div></div>
-                    <div class="stat-card"><div class="stat-value" id="todayDownloads">42</div><div class="stat-label">Сегодня</div></div>
-                    <div class="stat-card"><div class="stat-value" id="avgDaily">41.5</div><div class="stat-label">Среднее в день</div></div>
+                    <div class="stat-card"><div class="stat-value">1,247</div><div class="stat-label">Всего загрузок</div></div>
+                    <div class="stat-card"><div class="stat-value">42</div><div class="stat-label">Сегодня</div></div>
+                    <div class="stat-card"><div class="stat-value">41.5</div><div class="stat-label">Среднее в день</div></div>
                 </div>
             </div></div>
         </div>
 
+        <div class="page" id="page-files">
+            <div class="card">
+                <div class="card-header"><div><h3>Файлы для скачивания</h3><p>Управление файлами премиум-версии</p></div></div>
+                <div class="card-body">
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p style="font-size: 16px; font-weight: 600; color: white;">Загрузить ZIP-файл</p>
+                        <p>Нажмите или перетащите файл сюда</p>
+                        <input type="file" id="fileInput" accept=".zip" style="display: none;" onchange="handleFileUpload(event)">
+                    </div>
+                    <div id="fileInfo"></div>
+                    <div style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 15px; color: var(--primary);">Текущие файлы:</h4>
+                        <div id="filesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="page" id="page-notifications">
             <div class="card"><div class="card-header"><div><h3>Системные уведомления</h3><p>Важные события</p></div><button class="btn btn-small btn-outline" onclick="markAllNotifsRead()"><i class="fas fa-check-double"></i> Прочитать все</button></div><div class="card-body notification-list" id="adminNotifications"></div></div>
+        </div>
+
+        <div class="page" id="page-logs">
+            <div class="card"><div class="card-header"><div><h3>Логи действий</h3><p>История изменений в системе</p></div><button class="btn btn-small btn-danger" onclick="clearLogs()"><i class="fas fa-trash"></i> Очистить</button></div><div class="card-body" id="logsList"></div></div>
         </div>
 
         <div class="page" id="page-settings">
@@ -349,78 +383,72 @@
                 { id: 2, type: 'warning', title: 'Новый отзыв на модерации', text: 'Отзыв от НовыйЮзер ожидает проверки', time: Date.now() - 3600000, read: false },
                 { id: 3, type: 'info', title: 'Системное обновление', text: 'Версия 2.5.0 успешно развернута', time: Date.now() - 86400000, read: true }
             ],
-            downloadSettings: { url: 'https://github.com/probati670-tech/cherry-client/releases/latest/download/CherryClient.exe', version: '2.5.0', size: 45 }
+            downloadSettings: { url: 'https://github.com/probati670-tech/cherry-client/releases/latest/download/CherryClient.exe', version: '2.5.0', size: 45 },
+            files: [],
+            logs: []
         };
 
         let data = loadData();
         let currentKey = null;
         let editingUserId = null;
         let revenueChart, distributionChart;
+        let revenueUpdateInterval;
 
-        // ===== ЗАГРУЗКА ДАННЫХ С СИНХРОНИЗАЦИЕЙ =====
         function loadData() {
             const saved = localStorage.getItem('cherryAdminData');
             const registeredUsers = JSON.parse(localStorage.getItem('cherry_all_users') || '[]');
-            
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
                     const mergedUsers = [...parsed.users];
-                    
-                    // Добавляем пользователей из регистрации, которых нет в админке
                     registeredUsers.forEach(regUser => {
-                        if (!mergedUsers.find(u => u.id === regUser.id || u.name === regUser.name)) {
+                        const existing = mergedUsers.find(u => u.id === regUser.id || u.name === regUser.name);
+                        if (existing) {
+                            existing.pass = regUser.pass || existing.pass;
+                            existing.email = regUser.email || existing.email;
+                            existing.avatar = regUser.avatar !== undefined ? regUser.avatar : existing.avatar;
+                            existing.status = regUser.status || existing.status;
+                            existing.role = regUser.role || existing.role;
+                            existing.sub = regUser.sub || existing.sub;
+                        } else {
                             mergedUsers.push({
-                                id: regUser.id,
-                                name: regUser.name,
-                                email: regUser.email || regUser.name,
-                                role: regUser.role || 'user',
-                                sub: regUser.sub || 'free',
-                                pass: regUser.pass || 'default123',
-                                prefix: regUser.prefix || null,
-                                balance: 0,
-                                status: regUser.status || 'active',
-                                date: new Date().toLocaleDateString('ru-RU'),
-                                avatar: regUser.avatar || null,
-                                ownedPrefixes: regUser.ownedPrefixes || []
+                                id: regUser.id, name: regUser.name, email: regUser.email || regUser.name,
+                                role: regUser.role || 'user', sub: regUser.sub || 'free', pass: regUser.pass || 'default123',
+                                prefix: regUser.prefix || null, balance: 0, status: regUser.status || 'active',
+                                date: new Date().toLocaleDateString('ru-RU'), avatar: regUser.avatar || null, ownedPrefixes: regUser.ownedPrefixes || []
                             });
                         }
                     });
-                    
                     parsed.users = mergedUsers;
                     return { ...defaultData, ...parsed };
-                } catch(e) {
-                    return { ...defaultData, users: registeredUsers.length > 0 ? registeredUsers.map(u => ({...u, balance: 0, date: new Date().toLocaleDateString('ru-RU')})) : defaultData.users };
-                }
+                } catch(e) {}
             }
-            
-            return { 
-                ...defaultData, 
-                users: registeredUsers.length > 0 
-                    ? registeredUsers.map(u => ({...u, balance: 0, date: new Date().toLocaleDateString('ru-RU')})) 
-                    : defaultData.users 
-            };
+            return { ...defaultData, users: registeredUsers.length > 0 ? registeredUsers.map(u => ({...u, balance: u.balance || 0, date: u.date || new Date().toLocaleDateString('ru-RU')})) : defaultData.users };
         }
 
-        // ===== СОХРАНЕНИЕ С СИНХРОНИЗАЦИЕЙ =====
         function saveData() {
             localStorage.setItem('cherryAdminData', JSON.stringify(data));
-            // Синхронизируем обратно в cherry_all_users
             localStorage.setItem('cherry_all_users', JSON.stringify(data.users.map(u => ({
-                id: u.id,
-                name: u.name,
-                email: u.email,
-                role: u.role,
-                sub: u.sub || 'free',
-                pass: u.pass || 'default123',
-                status: u.status,
-                prefix: u.prefix,
-                ownedPrefixes: u.ownedPrefixes || [],
-                avatar: u.avatar
+                id: u.id, name: u.name, email: u.email, role: u.role, sub: u.sub || 'free',
+                pass: u.pass || 'default123', status: u.status, prefix: u.prefix,
+                ownedPrefixes: u.ownedPrefixes || [], avatar: u.avatar || null
             }))));
         }
 
-        const pageTitles = { dashboard: { title: 'Дашборд', subtitle: 'Обзор системы Cherry Client' }, users: { title: 'Управление пользователями', subtitle: 'Редактирование, бан, роли' }, licenses: { title: 'Лицензии', subtitle: 'Ключи и активации' }, reviews: { title: 'Отзывы', subtitle: 'Модерация отзывов' }, products: { title: 'Товары', subtitle: 'Магазин префиксов и услуг' }, downloads: { title: 'Загрузки', subtitle: 'Управление ссылками' }, notifications: { title: 'Уведомления', subtitle: 'Системные события' }, settings: { title: 'Настройки', subtitle: 'Конфигурация системы' } };
+        function addLog(action, details) {
+            const log = {
+                id: Date.now(),
+                time: new Date().toLocaleString('ru-RU'),
+                action: action,
+                details: details
+            };
+            if (!data.logs) data.logs = [];
+            data.logs.unshift(log);
+            if (data.logs.length > 100) data.logs = data.logs.slice(0, 100);
+            saveData();
+        }
+
+        const pageTitles = { dashboard: { title: 'Дашборд', subtitle: 'Обзор системы Cherry Client' }, users: { title: 'Управление пользователями', subtitle: 'Редактирование, бан, роли' }, licenses: { title: 'Лицензии', subtitle: 'Ключи и активации' }, reviews: { title: 'Отзывы', subtitle: 'Модерация отзывов' }, products: { title: 'Товары', subtitle: 'Магазин префиксов и услуг' }, downloads: { title: 'Загрузки', subtitle: 'Управление ссылками' }, files: { title: 'Файлы', subtitle: 'Управление файлами для скачивания' }, notifications: { title: 'Уведомления', subtitle: 'Системные события' }, logs: { title: 'Логи', subtitle: 'История действий' }, settings: { title: 'Настройки', subtitle: 'Конфигурация системы' } };
 
         document.querySelectorAll('.menu-link[data-page]').forEach(link => {
             link.addEventListener('click', (e) => {
@@ -437,12 +465,24 @@
                 if (page === 'reviews') renderReviews();
                 if (page === 'products') renderProducts();
                 if (page === 'downloads') loadDownloadSettings();
+                if (page === 'files') renderFiles();
                 if (page === 'notifications') renderAdminNotifications();
-                if (page === 'dashboard') { initCharts(); updateStats(); }
+                if (page === 'logs') renderLogs();
+                if (page === 'dashboard') { initCharts(); updateStats(); startRevenueUpdates(); }
             });
         });
 
-        window.addEventListener('load', () => { renderActivity(); renderTopPrefixes(); updateStats(); initCharts(); updateNotifBadges(); });
+        window.addEventListener('load', () => {
+            const currentUser = localStorage.getItem('cherry_user');
+            const allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            const userObj = allUsers.find(u => u.name === currentUser || u.email === currentUser);
+            if (!userObj || userObj.role !== 'admin') {
+                alert('Доступ запрещён. Требуется роль администратора.');
+                window.location.href = 'index.html';
+                return;
+            }
+            renderActivity(); renderTopPrefixes(); updateStats(); initCharts(); updateNotifBadges();
+        });
 
         function updateStats() {
             document.getElementById('statUsers').textContent = data.users.length.toLocaleString();
@@ -476,7 +516,20 @@
             distributionChart = new Chart(distributionCtx, { type: 'doughnut', data: { labels: ['Префиксы', 'Подписки', 'Услуги'], datasets: [{ data: [data.products.filter(p => p.type === 'prefix').reduce((s, p) => s + p.sold, 0), data.products.filter(p => p.type === 'subscription').reduce((s, p) => s + p.sold, 0), data.products.filter(p => p.type === 'service').reduce((s, p) => s + p.sold, 0)], backgroundColor: ['#ff006e', '#00e676', '#2196f3'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#888', padding: 15 } } } } });
         }
 
-        // ===== ПОЛЬЗОВАТЕЛИ =====
+        function startRevenueUpdates() {
+            if (revenueUpdateInterval) clearInterval(revenueUpdateInterval);
+            revenueUpdateInterval = setInterval(() => {
+                if (revenueChart) {
+                    const newData = Math.floor(Math.random() * 5000) + 1000;
+                    revenueChart.data.datasets[0].data.shift();
+                    revenueChart.data.datasets[0].data.push(newData);
+                    revenueChart.update('none');
+                    const currentRevenue = parseInt(document.getElementById('statRevenue').textContent.replace(/\D/g, ''));
+                    document.getElementById('statRevenue').textContent = (currentRevenue + newData).toLocaleString() + ' ₽';
+                }
+            }, 5000);
+        }
+
         function renderUsers(filter = '') {
             const tbody = document.getElementById('usersTable');
             const filtered = data.users.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()) || u.email.toLowerCase().includes(filter.toLowerCase()));
@@ -485,7 +538,7 @@
                 <td><div class="user-cell"><div class="user-avatar">${u.avatar ? `<img src="${u.avatar}" alt="${u.name}">` : u.name.charAt(0).toUpperCase()}</div><div><div class="user-name">${u.name}</div><div class="user-email">${u.email}</div></div></div></td>
                 <td><span class="role-badge ${u.role}">${u.role === 'admin' ? 'Админ' : u.role === 'vip' ? 'VIP' : u.role === 'premium' ? 'Premium' : 'User'}</span></td>
                 <td>${u.prefix ? `<span style="color: var(--primary); font-weight: 600;">${u.prefix}</span>` : '—'}</td>
-                <td>${u.balance.toLocaleString()} ₽</td>
+                <td>${(u.balance || 0).toLocaleString()} ₽</td>
                 <td><span class="status-badge ${u.status}">${u.status === 'active' ? '● Активен' : '● Забанен'}</span></td>
                 <td style="color: var(--text-muted); font-size: 13px;">${u.date}</td>
                 <td><div class="action-btns"><button class="action-btn" onclick="editUser(${u.id})" title="Редактировать"><i class="fas fa-edit"></i></button><button class="action-btn ${u.status === 'banned' ? 'success' : 'danger'}" onclick="toggleBan(${u.id})" title="${u.status === 'banned' ? 'Разбанить' : 'Забанить'}"><i class="fas fa-${u.status === 'banned' ? 'unlock' : 'ban'}"></i></button><button class="action-btn danger" onclick="deleteUser(${u.id})" title="Удалить"><i class="fas fa-trash"></i></button></div></td>
@@ -501,9 +554,11 @@
             const role = document.getElementById('newUserRole').value;
             if (!name || !email || !pass) { showToast('Ошибка', 'Заполните все поля', 'error'); return; }
             if (pass.length < 4) { showToast('Ошибка', 'Пароль минимум 4 символа', 'error'); return; }
-            data.users.push({ id: Date.now(), name, email, role, sub: role === 'vip' ? 'vip' : role === 'premium' ? 'premium' : 'free', pass, prefix: role === 'vip' ? 'VIP' : role === 'premium' ? 'PRO' : null, balance: 0, status: 'active', date: new Date().toLocaleDateString('ru-RU'), avatar: null, ownedPrefixes: [] });
+            if (data.users.find(u => u.name === name || u.email === email)) { showToast('Ошибка', 'Пользователь уже существует', 'error'); return; }
+            data.users.push({ id: Date.now(), name, email, role, sub: role === 'vip' ? 'vip' : role === 'premium' ? 'premium' : role === 'admin' ? 'premium' : 'free', pass, prefix: role === 'vip' ? 'VIP' : role === 'premium' ? 'PRO' : null, balance: 0, status: 'active', date: new Date().toLocaleDateString('ru-RU'), avatar: null, ownedPrefixes: [] });
             saveData(); renderUsers(); updateStats(); closeModal('addUserModal');
             addAdminNotification('success', 'Новый пользователь', `${name} успешно создан`);
+            addLog('Создан пользователь', `${name} (${email})`);
             showToast('Пользователь добавлен', `${name} успешно создан`);
             document.getElementById('newUserName').value = ''; document.getElementById('newUserEmail').value = ''; document.getElementById('newUserPass').value = '';
         }
@@ -515,7 +570,7 @@
             const content = document.getElementById('editUserContent');
             content.innerHTML = `
                 <div class="user-stats-grid">
-                    <div class="user-stat-card"><div class="user-stat-value">${user.balance.toLocaleString()} ₽</div><div class="user-stat-label">Баланс</div></div>
+                    <div class="user-stat-card"><div class="user-stat-value">${(user.balance || 0).toLocaleString()} ₽</div><div class="user-stat-label">Баланс</div></div>
                     <div class="user-stat-card"><div class="user-stat-value">${user.prefix || 'Нет'}</div><div class="user-stat-label">Префикс</div></div>
                     <div class="user-stat-card"><div class="user-stat-value">${user.role}</div><div class="user-stat-label">Роль</div></div>
                     <div class="user-stat-card"><div class="user-stat-value">${user.status}</div><div class="user-stat-label">Статус</div></div>
@@ -523,7 +578,7 @@
                 <div class="form-group"><label class="form-label">Ник</label><input type="text" class="form-input" id="editUserName" value="${user.name}"></div>
                 <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="editUserEmail" value="${user.email}"></div>
                 <div class="form-group"><label class="form-label">Пароль</label><input type="text" class="form-input" id="editUserPass" value="${user.pass || ''}"></div>
-                <div class="form-group"><label class="form-label">Баланс (₽)</label><input type="number" class="form-input" id="editUserBalance" value="${user.balance}"></div>
+                <div class="form-group"><label class="form-label">Баланс (₽)</label><input type="number" class="form-input" id="editUserBalance" value="${user.balance || 0}"></div>
                 <div class="form-group"><label class="form-label">Роль</label><select class="form-select" id="editUserRole"><option value="user" ${user.role==='user'?'selected':''}>Пользователь</option><option value="vip" ${user.role==='vip'?'selected':''}>VIP</option><option value="premium" ${user.role==='premium'?'selected':''}>Premium</option><option value="admin" ${user.role==='admin'?'selected':''}>Администратор</option></select></div>
                 <div class="form-group"><label class="form-label">Префикс</label><select class="form-select" id="editUserPrefix"><option value="">Нет</option><option value="VIP" ${user.prefix==='VIP'?'selected':''}>VIP</option><option value="PRO" ${user.prefix==='PRO'?'selected':''}>PRO</option><option value="ELITE" ${user.prefix==='ELITE'?'selected':''}>ELITE</option><option value="LEGEND" ${user.prefix==='LEGEND'?'selected':''}>LEGEND</option></select></div>
             `;
@@ -539,10 +594,11 @@
             if (newPass) user.pass = newPass;
             user.balance = parseFloat(document.getElementById('editUserBalance').value) || 0;
             user.role = document.getElementById('editUserRole').value;
-            user.sub = user.role === 'vip' ? 'vip' : user.role === 'premium' ? 'premium' : 'free';
+            user.sub = user.role === 'vip' ? 'vip' : user.role === 'premium' ? 'premium' : user.role === 'admin' ? 'premium' : 'free';
             user.prefix = document.getElementById('editUserPrefix').value || null;
             saveData(); renderUsers(); updateStats(); closeModal('editUserModal');
             addAdminNotification('info', 'Пользователь обновлён', `${user.name} данные изменены`);
+            addLog('Обновлён пользователь', `${user.name}: баланс ${user.balance} ₽, роль ${user.role}`);
             showToast('Сохранено', `Данные ${user.name} обновлены`);
         }
 
@@ -552,6 +608,7 @@
             user.status = user.status === 'banned' ? 'active' : 'banned';
             saveData(); renderUsers();
             addAdminNotification(user.status === 'banned' ? 'danger' : 'success', user.status === 'banned' ? 'Пользователь забанен' : 'Пользователь разбанен', user.name);
+            addLog(user.status === 'banned' ? 'Бан пользователя' : 'Разбан пользователя', user.name);
             showToast(user.status === 'banned' ? 'Пользователь забанен' : 'Пользователь разбанен', user.name);
         }
 
@@ -561,6 +618,7 @@
                 data.users = data.users.filter(u => u.id !== id);
                 saveData(); renderUsers(); updateStats();
                 addAdminNotification('danger', 'Пользователь удалён', user.name);
+                addLog('Удалён пользователь', user.name);
                 showToast('Пользователь удалён', user.name);
             }
         }
@@ -572,6 +630,7 @@
             selected.forEach(cb => { const user = data.users.find(u => u.id === parseInt(cb.dataset.id)); if (user) user.status = 'banned'; });
             saveData(); renderUsers();
             addAdminNotification('danger', 'Массовый бан', `${selected.length} пользователей забанены`);
+            addLog('Массовый бан', `${selected.length} пользователей`);
             showToast('Готово', `${selected.length} пользователей забанены`);
         }
 
@@ -581,21 +640,20 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = 'cherry_users.csv'; a.click();
             URL.revokeObjectURL(url);
+            addLog('Экспорт пользователей', 'CSV файл скачан');
             showToast('Экспорт', 'Файл CSV скачан');
         }
 
-        // ===== ЛИЦЕНЗИИ =====
         function renderLicenses() {
             const tbody = document.getElementById('licensesTable');
             tbody.innerHTML = data.licenses.map(l => `<tr><td><code style="color: var(--primary); font-family: monospace;">${l.key}</code></td><td>${l.owner}</td><td>${l.type}</td><td><span class="status-badge ${l.status}">${l.status === 'active' ? '● Активна' : '● Истекла'}</span></td><td style="color: var(--text-muted); font-size: 13px;">${l.date}</td><td><div class="action-btns"><button class="action-btn" onclick="copyLicenseKey('${l.key}')" title="Копировать"><i class="fas fa-copy"></i></button><button class="action-btn danger" onclick="revokeLicense(${l.id})" title="Отозвать"><i class="fas fa-times"></i></button></div></td></tr>`).join('');
         }
         function generateKey() { const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join(''); currentKey = `CHERRY-${gen()}-${gen()}-${gen()}`; document.getElementById('generatedKey').textContent = currentKey; showToast('Ключ сгенерирован', currentKey); }
         function copyKey() { const key = currentKey || document.getElementById('generatedKey').textContent; navigator.clipboard.writeText(key).then(() => showToast('Скопировано', key)); }
-        function activateKey() { const key = currentKey || document.getElementById('generatedKey').textContent; if (key === 'CHERRY-XXXX-XXXX-XXXX') { showToast('Ошибка', 'Сначала сгенерируйте ключ', 'error'); return; } data.licenses.unshift({ id: Date.now(), key: key, owner: 'Не назначен', type: 'Premium', status: 'active', date: new Date().toISOString().split('T')[0] }); saveData(); renderLicenses(); updateStats(); addAdminNotification('success', 'Ключ активирован', key); showToast('Ключ активирован', key); }
+        function activateKey() { const key = currentKey || document.getElementById('generatedKey').textContent; if (key === 'CHERRY-XXXX-XXXX-XXXX') { showToast('Ошибка', 'Сначала сгенерируйте ключ', 'error'); return; } data.licenses.unshift({ id: Date.now(), key: key, owner: 'Не назначен', type: 'Premium', status: 'active', date: new Date().toISOString().split('T')[0] }); saveData(); renderLicenses(); updateStats(); addAdminNotification('success', 'Ключ активирован', key); addLog('Активирован ключ', key); showToast('Ключ активирован', key); }
         function copyLicenseKey(key) { navigator.clipboard.writeText(key).then(() => showToast('Скопировано', key)); }
-        function revokeLicense(id) { const lic = data.licenses.find(l => l.id === id); if (lic && confirm(`Отозвать лицензию ${lic.key}?`)) { lic.status = 'expired'; saveData(); renderLicenses(); updateStats(); addAdminNotification('warning', 'Лицензия отозвана', lic.key); showToast('Лицензия отозвана', lic.key); } }
+        function revokeLicense(id) { const lic = data.licenses.find(l => l.id === id); if (lic && confirm(`Отозвать лицензию ${lic.key}?`)) { lic.status = 'expired'; saveData(); renderLicenses(); updateStats(); addAdminNotification('warning', 'Лицензия отозвана', lic.key); addLog('Отозвана лицензия', lic.key); showToast('Лицензия отозвана', lic.key); } }
 
-        // ===== ОТЗЫВЫ =====
         function getAllReviews() { return JSON.parse(localStorage.getItem('cherryReviews') || '[]'); }
         function saveAllReviews(reviews) { localStorage.setItem('cherryReviews', JSON.stringify(reviews)); }
         function renderReviews() {
@@ -603,15 +661,13 @@
             const list = document.getElementById('reviewsList');
             const pendingCount = reviews.filter(r => r.status === 'pending').length;
             document.getElementById('pendingReviews').textContent = pendingCount;
-            updateNotifBadges();
             if (reviews.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>Нет отзывов</h3></div>'; return; }
-            list.innerHTML = reviews.map(r => `<div class="review-item"><div class="review-header"><div class="review-author"><div class="user-avatar" style="width: 36px; height: 36px; font-size: 13px;">${r.avatar && r.avatar.startsWith('data:') ? `<img src="${r.avatar}" alt="${r.user}">` : (r.avatar || r.user.charAt(0))}</div><div><div style="font-weight: 600;">${r.user}</div><div class="review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div></div></div><span class="status-badge ${r.status}">${r.status === 'approved' ? '✓ Одобрено' : '⏳ На модерации'}</span></div><div class="review-text">${r.text}</div><div class="review-footer"><span><i class="fas fa-shopping-bag"></i> ${r.product || 'Cherry Client'} • ${r.date}</span><div class="action-btns">${r.status === 'pending' ? `<button class="action-btn success" onclick="approveReview(${r.id})" title="Одобрить"><i class="fas fa-check"></i></button><button class="action-btn danger" onclick="rejectReview(${r.id})" title="Отклонить"><i class="fas fa-times"></i></button>` : `<button class="action-btn danger" onclick="deleteReview(${r.id})" title="Удалить"><i class="fas fa-trash"></i></button>`}</div></div></div>`).join('');
+            list.innerHTML = reviews.map(r => `<div class="review-item"><div class="review-header"><div class="review-author"><div class="user-avatar" style="width: 36px; height: 36px; font-size: 13px;">${r.avatar && String(r.avatar).startsWith('data:') ? `<img src="${r.avatar}" alt="${r.user}">` : (r.avatar || r.user.charAt(0))}</div><div><div style="font-weight: 600;">${r.user}</div><div class="review-stars">${Array(5).fill(0).map((_, i) => `<i class="fas fa-star${i < r.rating ? '' : ' far'}"></i>`).join('')}</div></div></div><span class="status-badge ${r.status}">${r.status === 'approved' ? '✓ Одобрено' : '⏳ На модерации'}</span></div><div class="review-text">${r.text}</div><div class="review-footer"><span><i class="fas fa-shopping-bag"></i> ${r.product || 'Cherry Client'} • ${r.date}</span><div class="action-btns">${r.status === 'pending' ? `<button class="action-btn success" onclick="approveReview(${r.id})" title="Одобрить"><i class="fas fa-check"></i></button><button class="action-btn danger" onclick="rejectReview(${r.id})" title="Отклонить"><i class="fas fa-times"></i></button>` : `<button class="action-btn danger" onclick="deleteReview(${r.id})" title="Удалить"><i class="fas fa-trash"></i></button>`}</div></div></div>`).join('');
         }
-        function approveReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r) { r.status = 'approved'; saveAllReviews(reviews); renderReviews(); updateStats(); addAdminNotification('success', 'Отзыв одобрен', r.user); showToast('Отзыв одобрен', r.user + ' — теперь виден на сайте'); } }
-        function rejectReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r && confirm('Отклонить отзыв?')) { const updated = reviews.filter(x => x.id !== id); saveAllReviews(updated); renderReviews(); updateStats(); addAdminNotification('danger', 'Отзыв отклонён', r.user); showToast('Отзыв отклонён', r.user); } }
-        function deleteReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r && confirm('Удалить отзыв?')) { const updated = reviews.filter(x => x.id !== id); saveAllReviews(updated); renderReviews(); updateStats(); addAdminNotification('danger', 'Отзыв удалён', r.user); showToast('Отзыв удалён', r.user); } }
+        function approveReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r) { r.status = 'approved'; saveAllReviews(reviews); renderReviews(); updateStats(); addAdminNotification('success', 'Отзыв одобрен', r.user); addLog('Одобрен отзыв', r.user); showToast('Отзыв одобрен', r.user + ' — теперь виден на сайте'); } }
+        function rejectReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r && confirm('Отклонить отзыв?')) { const updated = reviews.filter(x => x.id !== id); saveAllReviews(updated); renderReviews(); updateStats(); addAdminNotification('danger', 'Отзыв отклонён', r.user); addLog('Отклонён отзыв', r.user); showToast('Отзыв отклонён', r.user); } }
+        function deleteReview(id) { const reviews = getAllReviews(); const r = reviews.find(x => x.id === id); if (r && confirm('Удалить отзыв?')) { const updated = reviews.filter(x => x.id !== id); saveAllReviews(updated); renderReviews(); updateStats(); addAdminNotification('danger', 'Отзыв удалён', r.user); addLog('Удалён отзыв', r.user); showToast('Отзыв удалён', r.user); } }
 
-        // ===== ТОВАРЫ =====
         function renderProducts() {
             const tbody = document.getElementById('productsTable');
             tbody.innerHTML = data.products.map(p => `<tr><td><div class="user-cell"><div style="font-size: 24px;">${p.icon}</div><div class="user-name">${p.name}</div></div></td><td><span style="color: var(--text-muted); text-transform: capitalize;">${p.type === 'prefix' ? 'Префикс' : p.type === 'subscription' ? 'Подписка' : 'Услуга'}</span></td><td style="font-weight: 600;">${p.price} ₽</td><td>${p.sold} шт.</td><td><span class="status-badge active">● Активен</span></td><td><div class="action-btns"><button class="action-btn" onclick="editProduct(${p.id})" title="Редактировать"><i class="fas fa-edit"></i></button><button class="action-btn danger" onclick="deleteProduct(${p.id})" title="Удалить"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
@@ -625,13 +681,13 @@
             data.products.push({ id: Date.now(), name, type, price, sold: 0, status: 'active', icon: icons[type] });
             saveData(); renderProducts(); closeModal('addProductModal');
             addAdminNotification('success', 'Новый товар', `${name} добавлен в магазин`);
+            addLog('Добавлен товар', `${name} - ${price} ₽`);
             showToast('Товар добавлен', name);
             document.getElementById('newProductName').value = ''; document.getElementById('newProductPrice').value = '';
         }
-        function editProduct(id) { const p = data.products.find(x => x.id === id); if (!p) return; const newPrice = prompt(`Новая цена для "${p.name}":`, p.price); if (newPrice !== null && !isNaN(newPrice)) { p.price = parseFloat(newPrice); saveData(); renderProducts(); showToast('Цена обновлена', `${p.name}: ${p.price} ₽`); } }
-        function deleteProduct(id) { const p = data.products.find(x => x.id === id); if (p && confirm(`Удалить товар "${p.name}"?`)) { data.products = data.products.filter(x => x.id !== id); saveData(); renderProducts(); addAdminNotification('danger', 'Товар удалён', p.name); showToast('Товар удалён', p.name); } }
+        function editProduct(id) { const p = data.products.find(x => x.id === id); if (!p) return; const newPrice = prompt(`Новая цена для "${p.name}":`, p.price); if (newPrice !== null && !isNaN(newPrice)) { p.price = parseFloat(newPrice); saveData(); renderProducts(); addLog('Изменена цена товара', `${p.name}: ${p.price} ₽`); showToast('Цена обновлена', `${p.name}: ${p.price} ₽`); } }
+        function deleteProduct(id) { const p = data.products.find(x => x.id === id); if (p && confirm(`Удалить товар "${p.name}"?`)) { data.products = data.products.filter(x => x.id !== id); saveData(); renderProducts(); addAdminNotification('danger', 'Товар удалён', p.name); addLog('Удалён товар', p.name); showToast('Товар удалён', p.name); } }
 
-        // ===== ЗАГРУЗКИ =====
         function loadDownloadSettings() {
             document.getElementById('downloadUrl').value = data.downloadSettings.url;
             document.getElementById('clientVersion').value = data.downloadSettings.version;
@@ -641,11 +697,78 @@
             data.downloadSettings = { url: document.getElementById('downloadUrl').value, version: document.getElementById('clientVersion').value, size: parseFloat(document.getElementById('fileSize').value) };
             saveData();
             addAdminNotification('success', 'Настройки загрузки', 'Ссылка обновлена');
+            addLog('Обновлены настройки загрузки', data.downloadSettings.url);
             showToast('Сохранено', 'Настройки загрузки обновлены');
         }
         function testDownloadLink() { window.open(data.downloadSettings.url, '_blank'); }
 
-        // ===== УВЕДОМЛЕНИЯ =====
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.name.endsWith('.zip')) { showToast('Ошибка', 'Допустим только ZIP формат', 'error'); return; }
+            if (file.size > 50 * 1024 * 1024) { showToast('Ошибка', 'Файл слишком большой (макс. 50MB)', 'error'); return; }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const fileData = {
+                    id: Date.now(),
+                    name: file.name,
+                    size: (file.size / 1024 / 1024).toFixed(2),
+                    uploadDate: new Date().toLocaleString('ru-RU'),
+                    data: e.target.result
+                };
+                if (!data.files) data.files = [];
+                data.files.push(fileData);
+                saveData();
+                renderFiles();
+                addLog('Загружен файл', `${file.name} (${fileData.size} MB)`);
+                showToast('Файл загружен', `${file.name} готов к скачиванию`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderFiles() {
+            const info = document.getElementById('fileInfo');
+            const list = document.getElementById('filesList');
+            
+            if (!data.files || data.files.length === 0) {
+                info.innerHTML = '';
+                list.innerHTML = '<p style="color: var(--text-muted);">Нет загруженных файлов</p>';
+                return;
+            }
+            
+            const latestFile = data.files[data.files.length - 1];
+            info.innerHTML = `
+                <div class="file-info">
+                    <i class="fas fa-file-archive"></i>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${latestFile.name}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">${latestFile.size} MB • Загружен: ${latestFile.uploadDate}</div>
+                    </div>
+                    <button class="btn btn-small btn-danger" onclick="deleteFile(${latestFile.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            
+            list.innerHTML = data.files.map(f => `
+                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 600;">${f.name}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">${f.size} MB • ${f.uploadDate}</div>
+                    </div>
+                    <button class="btn btn-small btn-danger" onclick="deleteFile(${f.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function deleteFile(id) {
+            if (!confirm('Удалить файл?')) return;
+            data.files = data.files.filter(f => f.id !== id);
+            saveData();
+            renderFiles();
+            addLog('Удалён файл', `ID: ${id}`);
+            showToast('Файл удалён', 'Файл удалён из системы');
+        }
+
         function renderAdminNotifications() {
             const list = document.getElementById('adminNotifications');
             if (data.adminNotifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
@@ -674,7 +797,20 @@
             badge2.style.display = unread > 0 ? 'block' : 'none';
         }
 
-        // ===== УТИЛИТЫ =====
+        function renderLogs() {
+            const list = document.getElementById('logsList');
+            if (!data.logs || data.logs.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h3>Нет записей в логах</h3></div>'; return; }
+            list.innerHTML = data.logs.map(l => `<div class="log-item"><div class="log-time">${l.time}</div><div class="log-text"><strong>${l.action}:</strong> ${l.details}</div></div>`).join('');
+        }
+
+        function clearLogs() {
+            if (!confirm('Очистить все логи?')) return;
+            data.logs = [];
+            saveData();
+            renderLogs();
+            showToast('Логи очищены', 'История действий удалена');
+        }
+
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function showToast(title, message, type = 'success') { const toast = document.getElementById('toast'); document.getElementById('toastTitle').textContent = title; document.getElementById('toastMessage').textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
