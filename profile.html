@@ -418,7 +418,24 @@
         const banners = [{ id: 'default', name: 'Cherry', class: 'banner-default' }, { id: 'neon', name: 'Неон', class: 'banner-neon' }, { id: 'fire', name: 'Огонь', class: 'banner-fire' }, { id: 'ice', name: 'Лёд', class: 'banner-ice' }, { id: 'gold', name: 'Золото', class: 'banner-gold' }, { id: 'cyber', name: 'Кибер', class: 'banner-cyber' }, { id: 'galaxy', name: 'Галактика', class: 'banner-galaxy' }, { id: 'rainbow', name: 'Радуга', class: 'banner-rainbow' }];
 
         let data = loadData();
-        function loadData() { const saved = localStorage.getItem('cherryData'); if (saved) { try { return { ...defaultData, ...JSON.parse(saved) }; } catch(e) { return { ...defaultData }; } } return { ...defaultData }; }
+        function loadData() {
+            const saved = localStorage.getItem('cherryData');
+            const currentUser = localStorage.getItem('cherry_user');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.username === currentUser || !currentUser) {
+                        return { ...defaultData, ...parsed };
+                    }
+                } catch(e) {}
+            }
+            const freshData = { ...defaultData };
+            if (currentUser) {
+                freshData.username = currentUser;
+                freshData.email = currentUser.includes('@') ? currentUser : '';
+            }
+            return freshData;
+        }
         function saveData() { localStorage.setItem('cherryData', JSON.stringify(data)); }
 
         document.querySelectorAll('.menu-link[data-page]').forEach(link => {
@@ -440,7 +457,6 @@
         });
 
         window.addEventListener('load', () => {
-            // === СИНХРОНИЗАЦИЯ АВАТАРКИ С ГЛАВНОЙ ===
             let sharedAvatar = localStorage.getItem('cherry_avatar');
             if (sharedAvatar && sharedAvatar !== data.avatar) { data.avatar = sharedAvatar; saveData(); }
 
@@ -449,7 +465,6 @@
             renderMyReviews(); renderSessions(); renderNotifications(); renderBannerSelectors(); updateNotifCount(); initStarRating();
         });
 
-        // ===== ОТЗЫВЫ (общее хранилище) =====
         function getAllReviews() { return JSON.parse(localStorage.getItem('cherryReviews') || '[]'); }
         function saveAllReviews(reviews) { localStorage.setItem('cherryReviews', JSON.stringify(reviews)); }
 
@@ -490,13 +505,11 @@
             });
         }
 
-        // ===== ФОН =====
         function changeBackground(bg) { data.background = bg; applyBackground(bg); updateBgSelector(); saveData(); showToast('Фон изменён', `Тема "${getBgName(bg)}" применена`); }
         function applyBackground(bg) { document.body.className = document.body.className.replace(/bg-\w+/g, '').trim(); document.body.classList.add('bg-' + bg); }
         function updateBgSelector() { document.querySelectorAll('.bg-option').forEach(opt => { opt.classList.toggle('active', opt.dataset.bg === data.background); }); }
         function getBgName(bg) { const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' }; return names[bg] || bg; }
 
-        // ===== БАННЕР =====
         function changeBanner(banner) { data.banner = banner; applyBanner(banner); saveData(); showToast('Баннер изменён', 'Новый баннер применён'); }
         function applyBanner(banner) {
             const cover = document.getElementById('profileCover');
@@ -516,7 +529,6 @@
             document.getElementById('bannerModalGrid').innerHTML = html;
         }
 
-        // ===== АВАТАР (С СИНХРОНИЗАЦИЕЙ) =====
         document.getElementById('avatarInput').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -526,7 +538,6 @@
                     data.avatar = event.target.result;
                     applyAvatar(data.avatar);
                     saveData();
-                    // === СИНХРОНИЗАЦИЯ С ГЛАВНОЙ ===
                     localStorage.setItem('cherry_avatar', data.avatar);
                     let cu = localStorage.getItem('cherry_user');
                     if (cu) {
@@ -542,7 +553,6 @@
 
         function applyAvatar(imgData) { const imgHTML = imgData ? `<img src="${imgData}" alt="Avatar">` : '👤'; document.getElementById('bigAvatar').innerHTML = imgHTML; document.getElementById('miniAvatar').innerHTML = imgHTML; }
 
-        // ===== ПРЕФИКСЫ =====
         function applyPrefix(prefixId) {
             const prefixEl = document.getElementById('activePrefix');
             const miniPrefix = document.getElementById('miniPrefix');
@@ -571,7 +581,6 @@
             }).join('');
         }
 
-        // ===== ПРОФИЛЬ =====
         function updateProfileDisplay() {
             document.getElementById('profileName').textContent = data.username;
             document.getElementById('profileEmail').textContent = data.email;
@@ -588,7 +597,6 @@
         }
         function copyKey() { const copyText = document.getElementById("apiKeyInput"); copyText.select(); navigator.clipboard.writeText(copyText.value).then(() => showToast('Скопировано!', 'API ключ скопирован')).catch(() => { document.execCommand('copy'); showToast('Скопировано!', 'API ключ скопирован'); }); }
 
-        // ===== КОШЕЛЕК =====
         function updateBalance() { const formatted = data.balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); document.getElementById('balanceAmount').innerHTML = formatted + ' <span>₽</span>'; }
         function openTopUp() {
             const amount = prompt('Введите сумму пополнения (₽):', '100');
@@ -612,7 +620,6 @@
             }).join('');
         }
 
-        // ===== HWID =====
         function updateHwidDisplay() {
             document.getElementById('currentHwid').textContent = data.hwid;
             document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
@@ -634,20 +641,17 @@
             showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
         }
 
-        // ===== ПОКУПКИ =====
         function renderPurchases() {
             const list = document.getElementById('purchasesList');
             if (data.purchases.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>Нет покупок</h3></div>'; return; }
             list.innerHTML = data.purchases.map(p => { const date = new Date(p.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); return `<div class="purchase-item"><div class="purchase-icon"><i class="fas ${p.icon}"></i></div><div class="purchase-info"><h4>${p.name}</h4><p>${date} • ${p.amount} ₽</p></div><span class="purchase-status active">Активна</span></div>`; }).join('');
         }
 
-        // ===== БЕЗОПАСНОСТЬ =====
         function renderSessions() {
             const list = document.getElementById('sessionsList');
             list.innerHTML = data.sessions.map(s => { const icon = s.device.includes('PC') || s.device.includes('Mac') ? 'fa-desktop' : 'fa-mobile-alt'; return `<div class="session-item ${s.current ? 'current' : ''}"><div class="session-icon"><i class="fas ${icon}"></i></div><div class="session-info"><h4>${s.device}</h4><p>${s.location}</p></div>${s.current ? '<span class="session-status current">Текущая</span>' : ''}</div>`; }).join('');
         }
 
-        // ===== УВЕДОМЛЕНИЯ =====
         function renderNotifications() {
             const list = document.getElementById('notificationsList');
             if (data.notifications.length === 0) { list.innerHTML = '<div class="empty-state"><i class="fas fa-bell-slash"></i><h3>Нет уведомлений</h3></div>'; return; }
@@ -670,19 +674,18 @@
             else { icon.className = 'fas fa-check'; iconBox.style.background = 'rgba(255, 0, 110, 0.2)'; iconBox.style.color = 'var(--primary)'; toast.style.borderLeftColor = 'var(--primary)'; }
             toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
         }
+        
         function logout() {
-    if (confirm('Вы уверены, что хотите выйти?')) {
-        // Очищаем все данные сессии
-        localStorage.removeItem('cherry_user');
-        localStorage.removeItem('cherry_premium');
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('cherry_user');
+                localStorage.removeItem('cherry_premium');
+                showToast('До свидания!', 'Вы вышли из аккаунта');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        }
         
-        showToast('До свидания!', 'Вы вышли из аккаунта');
-        
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1500);
-    }
-}
         document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); }); });
     </script>
 </body>
