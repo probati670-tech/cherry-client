@@ -96,6 +96,8 @@
         .auth-footer a { color: var(--primary); text-decoration: none; font-weight: 700; cursor: pointer; }
         .auth-footer a:hover { text-decoration: underline; }
         .error-msg { color: #ff4d4d; font-size: 12px; margin-bottom: 15px; display: none; text-align: left; }
+        .reset-link { display: block; margin-top: 15px; text-align: center; color: #ff4d4d; font-size: 11px; cursor: pointer; text-decoration: underline; }
+        .reset-link:hover { color: #ff7eb3; }
         footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; z-index: 10; position: relative; display: flex; flex-direction: column; gap: 30px; width: 100%; box-sizing: border-box;}
         .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
         .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
@@ -228,6 +230,7 @@
                 <div class="error-msg" id="err-auth">Неверный логин или пароль!</div>
                 <button class="btn-submit" onclick="doLogin()">Войти</button>
                 <div class="auth-footer">Демо-режим: подойдет любой email и пароль от 4 символов.<br><a onclick="switchAuthForm('reg')">Создать аккаунт</a></div>
+                <a class="reset-link" onclick="resetAllData()">🗑️ Сбросить все данные</a>
             </div>
             <div id="form-reg" style="display: none;">
                 <h2 class="auth-title">Создать аккаунт</h2>
@@ -308,47 +311,66 @@
         function markHelpful(el){ if(el.dataset.voted) return; el.dataset.voted='true'; el.innerHTML='👍 Спасибо!'; el.style.color='var(--primary)'; el.style.borderColor='rgba(255,42,117,0.4)'; el.style.background='rgba(255,42,117,0.08)'; }
         document.querySelectorAll('a[href^="#"]').forEach(anchor=>{ anchor.addEventListener('click', function(e){ const href=this.getAttribute('href'); if(href==='#') return; const target=document.querySelector(href); if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); } }); });
 
-        function initDB(){ let defaultUsers=[{id:1,name:"Test_Admin",email:"admin@cherry.io",role:"admin",sub:"premium",pass:"Test123456",status:"active",prefix:"cherry",ownedPrefixes:["cherry"],avatar:null},{id:5,name:"Test_Manager",email:"manager@cherry.io",role:"user",sub:"free",pass:"Test12345",status:"active",prefix:"",ownedPrefixes:[],avatar:null}]; if(!localStorage.getItem('cherry_all_users')) localStorage.setItem('cherry_all_users', JSON.stringify(defaultUsers)); }
+        function initDB(){ 
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            const hasAdmin = allUsers.find(u => u.name === 'Test_Admin');
+            if (!hasAdmin) {
+                allUsers.push({id:1,name:"Test_Admin",email:"admin@cherry.io",role:"admin",sub:"premium",pass:"Test123456",status:"active",prefix:"cherry",ownedPrefixes:["cherry"],avatar:null});
+            }
+            const hasManager = allUsers.find(u => u.name === 'Test_Manager');
+            if (!hasManager) {
+                allUsers.push({id:5,name:"Test_Manager",email:"manager@cherry.io",role:"user",sub:"free",pass:"Test12345",status:"active",prefix:"",ownedPrefixes:[],avatar:null});
+            }
+            localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+        }
         initDB();
+        
         function openModal(){ document.getElementById('auth-modal').classList.add('active'); switchAuthForm('login'); }
         function closeModal(){ document.getElementById('auth-modal').classList.remove('active'); document.getElementById('err-auth').style.display='none'; document.getElementById('err-reg').style.display='none'; }
         function switchAuthForm(form){ if(form==='login'){document.getElementById('form-login').style.display='block';document.getElementById('form-reg').style.display='none';} else {document.getElementById('form-login').style.display='none';document.getElementById('form-reg').style.display='block';} }
         
         function doLogin(){ 
-            let user=document.getElementById('login-user').value.trim(); 
-            let pass=document.getElementById('login-pass').value; 
-            let error=document.getElementById('err-auth'); 
-            let allUsers=JSON.parse(localStorage.getItem('cherry_all_users'))||[]; 
-            // Ищем по нику ИЛИ по email
-            let userObj=allUsers.find(u=>(u.name===user||u.email===user)&&u.pass===pass); 
+            let user = document.getElementById('login-user').value.trim(); 
+            let pass = document.getElementById('login-pass').value; 
+            let error = document.getElementById('err-auth'); 
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || []; 
+            let userObj = allUsers.find(u => (u.name === user || u.email === user) && u.pass === pass); 
             if(userObj){ 
-                if(userObj.status==='banned'){error.innerText="Ваш аккаунт заблокирован.";error.style.display='block';return;} 
-                localStorage.setItem('cherry_user',userObj.name); 
-                if(userObj.sub==='premium')localStorage.setItem('cherry_premium','true'); else localStorage.removeItem('cherry_premium'); 
+                if(userObj.status === 'banned'){ error.innerText = "Ваш аккаунт заблокирован."; error.style.display = 'block'; return; } 
+                localStorage.setItem('cherry_user', userObj.name); 
+                if(userObj.sub === 'premium') localStorage.setItem('cherry_premium', 'true'); 
+                else localStorage.removeItem('cherry_premium'); 
                 window.location.reload(); 
             } else { 
-                error.innerText="Неверный логин или пароль!"; 
-                error.style.display='block'; 
+                error.innerText = "Неверный логин или пароль!"; 
+                error.style.display = 'block'; 
             } 
         }
         
         function doRegister(){ 
-            let name=document.getElementById('reg-name').value.trim();
-            let email=document.getElementById('reg-email').value.trim(); 
-            let pass=document.getElementById('reg-pass').value; 
-            let error=document.getElementById('err-reg'); 
-            if(!name||!email||!pass||pass.length<4){error.innerText="Заполните все поля! Пароль минимум 4 символа.";error.style.display='block';return;} 
-            let allUsers=JSON.parse(localStorage.getItem('cherry_all_users'))||[]; 
-            if(allUsers.find(u=>u.name===name||u.email===email)){error.innerText="Пользователь уже существует!";error.style.display='block';return;} 
-            let newUser={id:Date.now(),name:name,email:email,role:"user",sub:"free",pass:pass,status:"active",prefix:"",ownedPrefixes:[],avatar:null}; 
+            let name = document.getElementById('reg-name').value.trim();
+            let email = document.getElementById('reg-email').value.trim(); 
+            let pass = document.getElementById('reg-pass').value; 
+            let error = document.getElementById('err-reg'); 
+            if(!name || !email || !pass || pass.length < 4){ error.innerText = "Заполните все поля! Пароль минимум 4 символа."; error.style.display = 'block'; return; } 
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || []; 
+            if(allUsers.find(u => u.name === name || u.email === email)){ error.innerText = "Пользователь уже существует!"; error.style.display = 'block'; return; } 
+            let newUser = { id: Date.now(), name: name, email: email, role: "user", sub: "free", pass: pass, status: "active", prefix: "", ownedPrefixes: [], avatar: null }; 
             allUsers.push(newUser); 
-            localStorage.setItem('cherry_all_users',JSON.stringify(allUsers)); 
-            localStorage.setItem('cherry_user',newUser.name); 
+            localStorage.setItem('cherry_all_users', JSON.stringify(allUsers)); 
+            localStorage.setItem('cherry_user', newUser.name); 
             window.location.reload(); 
         }
         
         function handleDownload(e){ e.preventDefault(); const adminData = JSON.parse(localStorage.getItem('cherryAdminData') || '{}'); const downloadUrl = (adminData.downloadSettings && adminData.downloadSettings.url) || 'https://github.com/probati670-tech/cherry-client/releases/latest/download/CherryClient.exe'; if(localStorage.getItem('cherry_user')){ window.location.href = downloadUrl; showToast('Скачивание', 'Загрузка началась...'); } else { openModal(); showToast('Требуется вход', 'Войдите, чтобы скачать клиент'); } }
         function showToast(title, message){ const toast = document.createElement('div'); toast.style.cssText = `position: fixed; bottom: 30px; right: 30px; background: rgba(17,10,15,0.95); backdrop-filter: blur(20px); border-left: 4px solid var(--primary); padding: 18px 25px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; z-index: 10000; border: 1px solid rgba(255,255,255,0.1);`; toast.innerHTML = `<div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 42, 117, 0.2); display: flex; align-items: center; justify-content: center; color: var(--primary);"><i>ℹ️</i></div><div><div style="font-size: 14px; font-weight: 700;">${title}</div><div style="font-size: 12px; color: #888;">${message}</div></div>`; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+
+        function resetAllData() {
+            if (confirm('⚠️ Удалить ВСЕ данные (пользователей, отзывы, настройки)? Это действие нельзя отменить!')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
 
         function refreshNavbar() {
             let savedUser = localStorage.getItem('cherry_user');
