@@ -2,328 +2,140 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Скачать Cherry Client</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа - Cherry Client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0a0508; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Навигация (Исправленная) */
-        .navbar-container { display: flex; justify-content: center; padding: 20px; z-index: 10; position: relative; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 35px; background: rgba(15, 5, 10, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255, 42, 117, 0.2); border-radius: 50px; width: 100%; max-width: 1150px; }
-        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: white; } .logo span { color: #ff2a75; }
-        .menu { display: flex; gap: 20px; align-items: center; flex-wrap: nowrap; }
-        .menu a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; white-space: nowrap; }
-        .menu a:hover, .menu a.active { color: #ff7eb3; }
-        .menu a.login-btn { border: 1px solid #ff2a75; padding: 8px 20px; border-radius: 5px; color: #ff2a75; }
-        .menu a.login-btn:hover { background-color: #ff2a75; color: white; }
-        .menu a.admin-btn { display: none; background: linear-gradient(45deg, #ff9800, #ff5722); padding: 8px 20px; border-radius: 5px; color: white; border: none; }
-
-        .download-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .page-title { font-size: 36px; font-weight: 900; margin-bottom: 10px; text-align: center; }
-        .page-subtitle { color: #888; margin-bottom: 60px; text-align: center; }
-        .cards-container { display: flex; gap: 30px; justify-content: center; max-width: 900px; width: 100%; }
-        .card { background-color: #110a0d; border: 1px solid #2a1a22; border-radius: 15px; padding: 40px; flex: 1; display: flex; flex-direction: column; position: relative; }
-        .card.premium { border-color: #ff2a75; box-shadow: 0 0 30px rgba(255,42,117,0.15); }
-        .premium-badge { position: absolute; top: -15px; right: 20px; background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,42,117,0.5); }
-        .card h3 { font-size: 24px; font-weight: 900; margin-top: 0; margin-bottom: 10px; }
-        .card p { color: #888; font-size: 14px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; }
-        .features-list { list-style: none; padding: 0; margin: 0 0 40px 0; flex: 1; }
-        .features-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 14px; color: #ccc; }
-        .features-list li::before { content: "✓"; color: #fff; font-weight: bold; } .card.premium .features-list li::before { color: #ff2a75; }
-        .btn-download-free { background-color: #1a1014; color: white; border: 1px solid #331a22; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; display: block; box-sizing: border-box; font-family: 'Montserrat'; font-size: 15px;}
-        .btn-download-free:hover { background-color: #2a1a22; }
-        .btn-download-premium { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; width: 100%; box-shadow: 0 0 20px rgba(255,42,117,0.4); font-family: 'Montserrat'; font-size: 15px;}
-        .btn-download-premium:hover { box-shadow: 0 0 30px rgba(255,42,117,0.7); }
-        .version-info { text-align: center; font-size: 12px; color: #555; margin-top: 15px; }
-
-        /* --- СТИЛИ ДЛЯ МОДАЛЬНЫХ ОКОН (ИСПРАВЛЕНО) --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 2, 3, 0.9); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box; }
-        .modal-overlay.active { display: flex; }
-        
-        .pricing-modal, .checkout-modal { 
-            background: #110a0d; border: 1px solid #ff2a75; border-radius: 20px; 
-            padding: 30px; /* Уменьшили отступы */
-            width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 42, 117, 0.15); 
-            position: relative; 
-            max-height: 90vh; /* Ограничение по высоте экрана */
-            overflow-y: auto; /* Добавили скролл, если не влезает */
-        }
-        
-        /* Красивый скроллбар для модалок */
-        .pricing-modal::-webkit-scrollbar, .checkout-modal::-webkit-scrollbar { width: 6px; }
-        .pricing-modal::-webkit-scrollbar-thumb, .checkout-modal::-webkit-scrollbar-thumb { background: #ff2a75; border-radius: 10px; }
-
-        .pricing-modal { max-width: 900px; }
-        .checkout-modal { max-width: 500px; }
-        
-        .close-modal { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; transition: 0.3s; z-index: 10; } 
-        .close-modal:hover { color: #ff2a75; }
-        .pricing-modal h2, .checkout-modal h2 { text-align: center; font-size: 24px; margin-top: 0; margin-bottom: 20px; color: #ff7eb3; }
-        
-        .plans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        @media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr 1fr; } }
-
-        .plan-card { background: #0a0508; border: 1px solid #331a22; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-        .plan-card:hover { border-color: #ff7eb3; transform: translateY(-3px); }
-        .plan-card.active { border-color: #ff2a75; box-shadow: 0 0 20px rgba(255, 42, 117, 0.3); background: rgba(255, 42, 117, 0.05); }
-        .plan-card h4 { margin: 0 0 10px 0; font-size: 16px; color: #ccc; }
-        .plan-card .price { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .plan-card .discount { font-size: 12px; color: #4CAF50; font-weight: 700; }
-        
-        /* Стили для чекаута */
-        .checkout-section { margin-bottom: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; }
-        .checkout-section h4 { margin: 0 0 10px 0; color: #fff; font-size: 15px; }
-        .checkout-list { list-style: none; padding: 0; margin: 0; }
-        .checkout-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 13px; color: #aaa; }
-        .checkout-list li::before { content: "✔"; color: #ff2a75; font-weight: bold; }
-        .duration-info { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
-        .duration-info span:last-child { color: #ff7eb3; font-weight: 700; }
-        
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; }
-        .input-group input { width: 100%; padding: 14px; background: #0a0508; border: 1px solid #331a22; color: white; border-radius: 10px; font-family: 'Montserrat'; outline: none; box-sizing: border-box; font-size: 14px; transition: 0.3s; }
-        .input-group input:focus { border-color: #ff2a75; box-shadow: 0 0 10px rgba(255,42,117,0.2); }
-
-        .modal-footer { border-top: 1px solid #22151a; padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .total-price { text-align: center; font-size: 15px; }
-        .total-price span { color: #ff7eb3; font-weight: 900; font-size: 22px; }
-        .btn-pay { background: linear-gradient(45deg, #ff2a75, #ff7eb3); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Montserrat'; box-shadow: 0 4px 15px rgba(255,42,117,0.3); width: 100%; }
-        .btn-pay:hover { box-shadow: 0 6px 20px rgba(255,42,117,0.6); transform: translateY(-2px); }
-        .btn-back { background: none; border: none; color: #888; cursor: pointer; font-family: 'Montserrat'; font-size: 13px; transition: 0.3s; }
-        .btn-back:hover { color: #fff; }
-
-        /* Футер */
-        footer { background-color: #0a0508; border-top: 1px solid #22151a; padding: 40px 60px 20px; margin-top: auto; display: flex; flex-direction: column; gap: 30px; }
-        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .footer-brand h3 { margin: 0 0 10px 0; font-size: 20px; color: #fff; } .footer-brand p { margin: 0; color: #888; font-size: 14px; }
-        .footer-contacts h3 { margin: 0 0 15px 0; font-size: 16px; color: #fff; }
-        .tg-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
-        .tg-btn { background: #110a0d; border: 1px solid #2a1a22; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .tg-btn:hover { border-color: #ff2a75; color: #ff2a75; }
-        .footer-bottom { border-top: 1px solid #22151a; padding-top: 20px; text-align: center; font-size: 12px; color: #555; display: flex; flex-direction: column; gap: 10px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .footer-bottom a { color: #888; text-decoration: none; transition: 0.3s; } .footer-bottom a:hover { color: #ff2a75; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #ff2a75; --primary-light: #ff7eb3; --bg-color: #0a0508; --card-bg: rgba(20, 10, 15, 0.7); }
+        body { background-color: var(--bg-color); color: #ffffff; font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background-image: radial-gradient(circle at 80% 20%, rgba(255, 42, 117, 0.15) 0%, transparent 40%), radial-gradient(circle at 20% 80%, rgba(255, 126, 179, 0.1) 0%, transparent 40%); }
+        .order-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid rgba(255, 42, 117, 0.3); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+        .order-card h2 { font-size: 28px; font-weight: 900; margin-bottom: 25px; background: linear-gradient(to right, #fff, var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+        .features-list { list-style: none; margin-bottom: 25px; }
+        .features-list li { padding: 10px 0; color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .features-list li i { color: var(--primary); }
+        .tariff-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
+        .tariff-card { background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .tariff-card:hover { border-color: var(--primary); }
+        .tariff-card.active { border-color: var(--primary); background: rgba(255, 42, 117, 0.1); }
+        .tariff-card .period { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+        .tariff-card .price { font-size: 20px; font-weight: 900; color: var(--primary-light); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; color: #aaa; margin-bottom: 8px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 14px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 14px; outline: none; transition: all 0.3s; }
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 42, 117, 0.2); }
+        .total-price { text-align: center; margin: 25px 0; font-size: 18px; color: #aaa; }
+        .total-price span { font-size: 32px; font-weight: 900; color: var(--primary-light); margin-left: 10px; }
+        .btn-pay { width: 100%; padding: 16px; background: linear-gradient(45deg, var(--primary), var(--primary-light)); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s; font-family: 'Montserrat', sans-serif; }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 42, 117, 0.4); }
+        .btn-back { display: block; text-align: center; margin-top: 15px; color: #888; text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .btn-back:hover { color: var(--primary); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 14px; }
+        .back-link:hover { color: var(--primary); }
     </style>
 </head>
 <body>
-    <div class="navbar-container">
-        <div class="navbar">
-            <a href="index.html" class="logo">CHERRY <span>CLIENT</span></a>
-            <div class="menu">
-                <a href="index.html">Главная</a>
-                <a href="download.html" class="active">Скачать</a>
-                <a href="chat.html">💬 Чат</a>
-                <a href="overview.html">Обзор функций</a>
-                <a href="features.html">Документация</a>
-                <a href="compare.html">Сравнение</a>
-                
-                <a href="admin.html" id="nav-admin" class="admin-btn">👑 Админ-панель</a>
-                <a href="index.html" class="login-btn" id="nav-auth">Вход / Регистрация</a>
+    <div class="order-card">
+        <h2>Оформление заказа</h2>
+        
+        <h3 style="margin-bottom: 15px; font-size: 16px; color: var(--primary-light);">Что вы получите:</h3>
+        <ul class="features-list">
+            <li><i class="fas fa-check"></i> Доступ к Premium-функциям клиента</li>
+            <li><i class="fas fa-check"></i> Уникальный API ключ для входа</li>
+            <li><i class="fas fa-check"></i> Приоритетная поддержка</li>
+            <li><i class="fas fa-check"></i> Отключение рекламы</li>
+            <li><i class="fas fa-check"></i> Ранний доступ к обновлениям</li>
+        </ul>
+
+        <h3 style="margin-bottom: 15px; font-size: 16px; color: var(--primary-light);">Выберите тариф:</h3>
+        <div class="tariff-selector">
+            <div class="tariff-card active" data-tariff="1month" data-price="399" onclick="selectTariff(this)">
+                <div class="period">1 месяц</div>
+                <div class="price">399 ₽</div>
+            </div>
+            <div class="tariff-card" data-tariff="3month" data-price="999" onclick="selectTariff(this)">
+                <div class="period">3 месяца</div>
+                <div class="price">999 ₽</div>
+            </div>
+            <div class="tariff-card" data-tariff="6month" data-price="1799" onclick="selectTariff(this)">
+                <div class="period">6 месяцев</div>
+                <div class="price">1799 ₽</div>
+            </div>
+            <div class="tariff-card" data-tariff="12month" data-price="2999" onclick="selectTariff(this)">
+                <div class="period">12 месяцев</div>
+                <div class="price">2999 ₽</div>
             </div>
         </div>
-    </div>
 
-    <div class="download-section">
-        <h1 class="page-title">Выберите версию</h1>
-        <p class="page-subtitle">Скачайте бесплатную версию или приобретите Premium для доступа ко всем функциям</p>
-        <div class="cards-container">
-            <div class="card">
-                <h3>Бесплатная версия</h3>
-                <p>Получите доступ к основному функционалу Cherry Client совершенно бесплатно.</p>
-                <ul class="features-list">
-                    <li>Базовые функции (Aimbot, TAS)</li>
-                    <li>Стандартные настройки</li>
-                    <li>Обычная поддержка</li>
-                    <li>Периодические обновления</li>
-                </ul>
-                <a href="#" class="btn-download-free" onclick="alert('Скачивание начнется... (ссылка добавится позже)')">⬇ Скачать бесплатно</a>
-                <div class="version-info">Версия 1.0.0 • Windows 64-bit</div>
-            </div>
-            <div class="card premium">
-                <div class="premium-badge">Premium</div>
-                <h3>Премиум версия</h3>
-                <p>Все функции, приоритетная поддержка и эксклюзивные возможности.</p>
-                <ul class="features-list">
-                    <li>Все функции Free версии</li>
-                    <li>Все премиум функции (Fly, Misc)</li>
-                    <li>Приоритетная поддержка</li>
-                    <li>Без рекламы</li>
-                    <li>Ранний доступ к Beta версиям</li>
-                </ul>
-                <a href="#" class="btn-download-premium" onclick="event.preventDefault(); openPricingModal();">👑 Купить Premium</a>
-                <div class="version-info">Подписка от 399 ₽ / месяц</div>
-            </div>
+        <div class="form-group">
+            <label>Email для чека</label>
+            <input type="email" id="paymentEmail" placeholder="your@email.com">
         </div>
-    </div>
 
-    <footer>
-        <div class="footer-top">
-            <div class="footer-brand">
-                <h3>CHERRY CLIENT</h3>
-                <p>Продвинутый клиент для DDNet</p>
-            </div>
-            <div class="footer-contacts">
-                <h3>Контакты</h3>
-                <div class="tg-buttons">
-                    <a href="https://t.me/cherryclient" target="_blank" class="tg-btn">✈️ Telegram канал</a>
-                    <a href="https://t.me/nexnayyy" target="_blank" class="tg-btn">🛠️ Поддержка (ТГ)</a>
-                    <a href="mailto:support@cherry-client.com" class="tg-btn">📧 Email</a>
-                </div>
-            </div>
+        <div class="total-price">
+            Сумма к оплате: <span id="totalPrice">399</span> ₽
         </div>
-        <div class="footer-bottom">
-            <div>
-                <a href="privacy.html">Политика конфиденциальности</a> • 
-                <a href="terms.html">Пользовательское соглашение</a> • 
-                <a href="support.html">Поддержка</a>
-            </div>
-            <div>© 2026 Cherry Client. Все права защищены.</div>
-            <div style="font-size: 11px; color: #444; margin-top: 10px;">Кодовое слово для верификации: Agetalp</div>
-        </div>
-    </footer>
 
-    <!-- ШАГ 1: МОДАЛЬНОЕ ОКНО ВЫБОРА ТАРИФА -->
-    <div class="modal-overlay" id="pricing-modal">
-        <div class="pricing-modal">
-            <span class="close-modal" onclick="closeModals()">&times;</span>
-            <h2>Выберите тариф Premium</h2>
-            
-            <div class="plans-grid" id="plans-grid">
-                <div class="plan-card" onclick="selectPlan(this, '1 месяц', 399, 1)">
-                    <h4>1 месяц</h4>
-                    <div class="price">399 ₽</div>
-                    <div class="discount">399 ₽ / мес</div>
-                </div>
-                <div class="plan-card" onclick="selectPlan(this, '3 месяца', 1099, 3)">
-                    <h4>3 месяца</h4>
-                    <div class="price">1 099 ₽</div>
-                    <div class="discount">-8% (366 ₽/мес)</div>
-                </div>
-                <div class="plan-card" onclick="selectPlan(this, '6 месяцев', 1999, 6)">
-                    <h4>6 месяцев</h4>
-                    <div class="price">1 999 ₽</div>
-                    <div class="discount">-16% (333 ₽/мес)</div>
-                </div>
-                <div class="plan-card" onclick="selectPlan(this, '12 месяцев', 3499, 12)">
-                    <h4>12 месяцев</h4>
-                    <div class="price">3 499 ₽</div>
-                    <div class="discount">-27% (291 ₽/мес)</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ШАГ 2: МОДАЛЬНОЕ ОКНО ОФОРМЛЕНИЯ (ЧЕКАУТ) -->
-    <div class="modal-overlay" id="checkout-modal">
-        <div class="checkout-modal">
-            <span class="close-modal" onclick="closeModals()">&times;</span>
-            <h2>Оформление заказа</h2>
-            
-            <div class="checkout-section">
-                <h4>Что вы получите:</h4>
-                <ul class="checkout-list">
-                    <li>Доступ к Premium-функциям клиента (Aimbot, TAS, Fly, Misc)</li>
-                    <li>Приоритетная поддержка</li>
-                    <li>Отсутствие рекламы</li>
-                    <li>Ранний доступ к Beta версиям</li>
-                </ul>
-            </div>
-
-            <div class="checkout-section">
-                <h4>Детали подписки:</h4>
-                <div class="duration-info"><span>Тариф:</span> <span id="checkout-plan-name">1 месяц</span></div>
-                <div class="duration-info"><span>Доступ предоставляется:</span> <span id="checkout-duration">30 дней</span></div>
-                <div class="duration-info"><span>Активация до:</span> <span id="checkout-end-date">...</span></div>
-            </div>
-
-            <div class="input-group">
-                <label>Email для получения чека и данных о заказе</label>
-                <input type="email" id="checkout-email" placeholder="example@mail.com">
-            </div>
-
-            <div class="modal-footer">
-                <div class="total-price">Сумма к оплате: <span id="checkout-price">399</span> ₽</div>
-                <button class="btn-pay" onclick="processPayment()">Оплатить</button>
-                <button class="btn-back" onclick="backToPlans()">← Выбрать другой тариф</button>
-            </div>
-        </div>
+        <button class="btn-pay" onclick="processPayment()">Оплатить</button>
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
     </div>
 
     <script>
-        window.onload = function() {
-            let savedUser = localStorage.getItem('cherry_user');
-            let navAuth = document.getElementById('nav-auth');
-            let navAdmin = document.getElementById('nav-admin');
-            
-            if(savedUser) { 
-                navAuth.innerText = "Личный кабинет"; 
-                navAuth.classList.remove('login-btn'); 
-                navAuth.style.background = "linear-gradient(45deg, #ff2a75, #ff7eb3)"; 
-                navAuth.style.color = "white"; 
-                navAuth.style.boxShadow = "0 4px 15px rgba(255, 42, 117, 0.4)"; 
-                navAuth.style.border = "none";
-                navAuth.style.padding = "8px 20px";
-                navAuth.style.borderRadius = "30px";
-                navAuth.href = "profile.html";
+        let selectedTariff = '1month';
+        let selectedPrice = 399;
 
-                let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
-                let userObj = allUsers.find(u => u.name === savedUser);
-                if(userObj && userObj.role === 'admin') {
-                    navAdmin.style.display = 'block';
-                }
-            }
-        };
-
-        let selectedPlanName = "";
-        let selectedPlanPrice = 0;
-        let selectedPlanMonths = 0;
-
-        function openPricingModal() {
-            if (!localStorage.getItem('cherry_user')) {
-                alert("Пожалуйста, войдите в аккаунт или зарегистрируйтесь, чтобы приобрести Premium.");
-                window.location.href = "index.html";
-                return;
-            }
-            document.getElementById('pricing-modal').classList.add('active');
-        }
-
-        function closeModals() {
-            document.getElementById('pricing-modal').classList.remove('active');
-            document.getElementById('checkout-modal').classList.remove('active');
-        }
-
-        function selectPlan(element, planName, price, months) {
-            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active'));
-            element.classList.add('active');
-            
-            selectedPlanName = planName;
-            selectedPlanPrice = price;
-            selectedPlanMonths = months;
-
-            document.getElementById('checkout-plan-name').innerText = planName;
-            document.getElementById('checkout-price').innerText = price.toLocaleString('ru-RU');
-            
-            const endDate = new Date();
-            endDate.setMonth(endDate.getMonth() + months);
-            document.getElementById('checkout-duration').innerText = months + (months === 1 ? " месяц" : (months > 1 && months < 5 ? " месяца" : " месяцев"));
-            document.getElementById('checkout-end-date').innerText = endDate.toLocaleDateString('ru-RU');
-
-            document.getElementById('pricing-modal').classList.remove('active');
-            document.getElementById('checkout-modal').classList.add('active');
-        }
-
-        function backToPlans() {
-            document.getElementById('checkout-modal').classList.remove('active');
-            document.getElementById('pricing-modal').classList.add('active');
+        function selectTariff(el) {
+            document.querySelectorAll('.tariff-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            selectedTariff = el.dataset.tariff;
+            selectedPrice = parseInt(el.dataset.price);
+            document.getElementById('totalPrice').textContent = selectedPrice;
         }
 
         function processPayment() {
-            const email = document.getElementById('checkout-email').value;
-            if (!email || !email.includes('@')) {
-                alert("Пожалуйста, введите корректный Email для получения чека.");
+            const email = document.getElementById('paymentEmail').value.trim();
+            const currentUser = localStorage.getItem('cherry_user');
+            
+            if (!currentUser) {
+                alert('Сначала войдите в аккаунт на главной странице!');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            if (!email) {
+                alert('Введите email для получения чека!');
                 return;
             }
 
-            alert(`Заказ сформирован!\n\nТариф: ${selectedPlanName}\nСумма: ${selectedPlanPrice} ₽\nЧек будет отправлен на: ${email}\n\nОплата временно недоступна.\nПлатёжная система (Platega) находится на этапе финального подключения банком. Пожалуйста, свяжитесь с поддержкой: support@cherry-client.com или @nexnayyy`);
+            if (!confirm(`Подтвердить оплату ${selectedPrice} ₽?\n\nТариф: ${selectedTariff}\nEmail: ${email}\n\nВ демо-режиме Premium будет выдан сразу.`)) return;
+
+            // Генерируем API ключ
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+            const newApiKey = `CHERRY-${gen()}-${gen()}-${gen()}`;
+
+            // Обновляем cherry_all_users
+            let allUsers = JSON.parse(localStorage.getItem('cherry_all_users')) || [];
+            let idx = allUsers.findIndex(u => u.name === currentUser || u.email === currentUser);
+            if (idx !== -1) {
+                allUsers[idx].sub = 'premium';
+                allUsers[idx].isPremium = true;
+                allUsers[idx].apiKey = newApiKey;
+                allUsers[idx].premiumUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+                localStorage.setItem('cherry_all_users', JSON.stringify(allUsers));
+            }
+
+            // Обновляем cherryData
+            let cherryData = JSON.parse(localStorage.getItem('cherryData')) || {};
+            if (cherryData.username === currentUser) {
+                cherryData.isPremium = true;
+                cherryData.apiKey = newApiKey;
+                localStorage.setItem('cherryData', JSON.stringify(cherryData));
+            }
+
+            alert(`✅ Оплата успешна!\n\nТариф: ${selectedTariff}\nСумма: ${selectedPrice} ₽\nEmail для чека: ${email}\n\n⭐ Premium активирован!\nAPI ключ: ${newApiKey}\n\nПеренаправляем в личный кабинет...`);
+
+            window.location.href = 'profile.html';
         }
     </script>
 </body>
