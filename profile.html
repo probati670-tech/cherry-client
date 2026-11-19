@@ -19,7 +19,6 @@
             --success: #00e676;
             --warning: #ffab00;
             --danger: #ff1744;
-            --ddnet-blue: #51a2da;
         }
 
         body {
@@ -235,17 +234,6 @@
         .status-item span { color: var(--text-muted); }
         .status-item strong { color: var(--text-main); }
 
-        .ddnet-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
-        .ddnet-stat { background: rgba(81, 162, 218, 0.1); border: 1px solid rgba(81, 162, 218, 0.3); border-radius: 10px; padding: 15px; text-align: center; }
-        .ddnet-stat-value { font-size: 24px; font-weight: 800; color: var(--ddnet-blue); margin-bottom: 5px; }
-        .ddnet-stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .ddnet-badge { background: linear-gradient(135deg, var(--ddnet-blue), #2d7cb8); color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; }
-
-        .ddnet-error { background: rgba(255, 23, 68, 0.1); border: 1px solid var(--danger); border-radius: 10px; padding: 20px; margin-top: 20px; text-align: center; }
-        .ddnet-error i { font-size: 32px; color: var(--danger); margin-bottom: 10px; }
-        .ddnet-error h4 { color: var(--danger); margin-bottom: 8px; }
-        .ddnet-error p { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; }
-
         .purchase-item { display: flex; align-items: center; padding: 20px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; transition: all 0.3s; }
         .purchase-item:hover { border-color: rgba(255, 0, 110, 0.3); transform: translateX(5px); }
         .purchase-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(255, 0, 110, 0.15); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); margin-right: 15px; flex-shrink: 0; }
@@ -287,6 +275,106 @@
         .prefix-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .prefix-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; min-height: 40px; }
         .prefix-price { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
+
+        /* ===== СБРОС HWID ===== */
+        .hwid-card {
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.1), rgba(255, 77, 0, 0.1));
+            border: 1px solid rgba(255, 23, 68, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .hwid-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hwid-card h3 i { color: var(--danger); }
+
+        .hwid-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .hwid-value {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--text-muted);
+            word-break: break-all;
+            flex: 1;
+        }
+
+        .hwid-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .hwid-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .hwid-status.active .dot { background: var(--success); }
+        .hwid-status.expired .dot { background: var(--danger); }
+
+        .hwid-reset-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .hwid-reset-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .hwid-reset-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .hwid-reset-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .hwid-warning {
+            background: rgba(255, 171, 0, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--warning);
+        }
+
+        .hwid-warning i {
+            font-size: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
 
         .review-form { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
         .review-form textarea { width: 100%; background: rgba(0,0,0,0.3); border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; color: white; font-size: 14px; outline: none; resize: vertical; min-height: 100px; font-family: inherit; margin-bottom: 15px; }
@@ -365,6 +453,9 @@
         .btn:active { transform: translateY(0); }
         .btn-outline { background: transparent; border: 2px solid var(--border); }
         .btn-outline:hover { border-color: var(--primary); background: rgba(255, 0, 110, 0.1); }
+        .btn-success { background: linear-gradient(135deg, #00e676, #00bfa5); }
+        .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); }
+        .btn-warning { background: linear-gradient(135deg, #ffab00, #ff8f00); }
         .btn-small { padding: 8px 16px; font-size: 12px; }
 
         .form-group { margin-bottom: 20px; }
@@ -470,25 +561,6 @@
                 </div>
             </div>
 
-            <!-- DDNet статистика -->
-            <div class="card">
-                <div class="card-content">
-                    <h3 class="section-title">🎮 Статистика DDNet</h3>
-                    <p class="section-desc">Данные из публичного API DDNet для ника: <span class="ddnet-badge"><i class="fas fa-gamepad"></i> <span id="ddnetNick">Nick_Name</span></span></p>
-                    <div id="ddnetContent">
-                        <div class="ddnet-stats">
-                            <div class="ddnet-stat"><div class="ddnet-stat-value" id="ddnetPoints">—</div><div class="ddnet-stat-label">Очков</div></div>
-                            <div class="ddnet-stat"><div class="ddnet-stat-value" id="ddnetRanks">—</div><div class="ddnet-stat-label">Рангов</div></div>
-                            <div class="ddnet-stat"><div class="ddnet-stat-value" id="ddnetFinishes">—</div><div class="ddnet-stat-label">Финишей</div></div>
-                            <div class="ddnet-stat"><div class="ddnet-stat-value" id="ddnetLastSeen">—</div><div class="ddnet-stat-label">Последний вход</div></div>
-                        </div>
-                    </div>
-                    <button class="btn btn-small" onclick="loadDDNetStats()" style="margin-top: 20px;">
-                        <i class="fas fa-sync-alt"></i> Обновить из DDNet
-                    </button>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-content">
                     <h3 class="section-title">🔑 API Ключ (Лицензия)</h3>
@@ -510,10 +582,6 @@
                     <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-input" value="example@mail.com" id="email">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Ник в DDNet (для статистики)</label>
-                        <input type="text" class="form-input" value="Nick_Name" id="ddnetUsername" placeholder="Твой ник в DDNet">
                     </div>
                     <button class="btn" onclick="saveProfile()"><i class="fas fa-save"></i> Сохранить изменения</button>
                 </div>
@@ -544,8 +612,61 @@
 
         <!-- МАГАЗИН -->
         <div class="page" id="page-shop">
-            <div class="header"><h1>Магазин префиксов</h1><p>Купите эксклюзивный анимированный префикс</p></div>
-            <div class="card"><div class="card-content"><h3 class="section-title">Доступные префиксы</h3><div class="prefixes-grid" id="prefixesGrid"></div></div></div>
+            <div class="header"><h1>Магазин</h1><p>Префиксы и услуги для вашего аккаунта</p></div>
+
+            <!-- СБРОС HWID -->
+            <div class="hwid-card">
+                <h3><i class="fas fa-microchip"></i> Сброс HWID</h3>
+                <p class="section-desc" style="margin-bottom: 0;">Сбросьте привязку оборудования, если вы сменили ПК или компоненты</p>
+
+                <div class="hwid-info">
+                    <div style="flex: 1;">
+                        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Текущий HWID:</div>
+                        <div class="hwid-value" id="currentHwid">A7F3-B9D2-E4C1-8F5A</div>
+                    </div>
+                    <div class="hwid-status active">
+                        <div class="dot"></div>
+                        <span>Активен</span>
+                    </div>
+                </div>
+
+                <div class="hwid-reset-info">
+                    <div class="hwid-reset-stat">
+                        <div class="hwid-reset-stat-value" id="hwidResetsLeft">2</div>
+                        <div class="hwid-reset-stat-label">Сбросов осталось</div>
+                    </div>
+                    <div class="hwid-reset-stat">
+                        <div class="hwid-reset-stat-value" id="hwidLastReset">—</div>
+                        <div class="hwid-reset-stat-label">Последний сброс</div>
+                    </div>
+                    <div class="hwid-reset-stat">
+                        <div class="hwid-reset-stat-value">150 ₽</div>
+                        <div class="hwid-reset-stat-label">Стоимость сброса</div>
+                    </div>
+                </div>
+
+                <div class="hwid-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Внимание!</strong> После сброса HWID вам потребуется войти в клиент заново. 
+                        У вас осталось <strong id="hwidResetsWarning">2</strong> бесплатных сброса. 
+                        После исчерпания лимита сброс будет платным (150 ₽).
+                    </div>
+                </div>
+
+                <button class="btn btn-danger" onclick="resetHwid()">
+                    <i class="fas fa-redo"></i> Сбросить HWID
+                </button>
+            </div>
+
+            <!-- Префиксы -->
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="section-title">🏷️ Префиксы</h3>
+                    <p class="section-desc">Купите эксклюзивный анимированный префикс</p>
+                    <div class="prefixes-grid" id="prefixesGrid"></div>
+                </div>
+            </div>
         </div>
 
         <!-- ОТЗЫВЫ -->
@@ -630,18 +751,18 @@
     </div>
 
     <script>
-        const DDNET_API = 'https://ddnet.org/api';
-
         const defaultData = {
             username: 'Nick_Name',
             email: 'example@mail.com',
-            ddnetUsername: 'Nick_Name',
             avatar: null,
             banner: 'default',
             background: 'default',
             balance: 1250.00,
             activePrefix: null,
             ownedPrefixes: [],
+            hwid: 'A7F3-B9D2-E4C1-8F5A',
+            hwidResetsLeft: 2,
+            hwidLastReset: null,
             transactions: [
                 { type: 'income', title: 'Пополнение баланса', amount: 500, date: '2026-11-19T14:32:00' },
                 { type: 'expense', title: 'Покупка Premium', amount: 299, date: '2026-11-15T09:15:00' }
@@ -700,7 +821,7 @@
                 document.getElementById('page-' + page).classList.add('active');
                 
                 if (page === 'wallet') { updateBalance(); renderTransactions(); }
-                if (page === 'shop') renderPrefixes();
+                if (page === 'shop') { renderPrefixes(); updateHwidDisplay(); }
                 if (page === 'purchases') renderPurchases();
                 if (page === 'reviews') renderMyReviews();
                 if (page === 'security') renderSessions();
@@ -724,9 +845,66 @@
             renderNotifications();
             renderBannerSelectors();
             updateNotifCount();
-            loadDDNetStats();
             initStarRating();
         });
+
+        // ===== СБРОС HWID =====
+        function updateHwidDisplay() {
+            document.getElementById('currentHwid').textContent = data.hwid;
+            document.getElementById('hwidResetsLeft').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidResetsWarning').textContent = data.hwidResetsLeft;
+            document.getElementById('hwidLastReset').textContent = data.hwidLastReset ? formatLastReset(data.hwidLastReset) : '—';
+        }
+
+        function formatLastReset(timestamp) {
+            if (!timestamp) return '—';
+            const diff = Date.now() - timestamp;
+            const hours = Math.floor(diff / 3600000);
+            if (hours < 1) return 'Только что';
+            if (hours < 24) return hours + 'ч назад';
+            return Math.floor(hours/24) + 'д назад';
+        }
+
+        function generateNewHwid() {
+            const chars = 'ABCDEF0123456789';
+            const gen = () => Array(4).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+            return `${gen()}-${gen()}-${gen()}-${gen()}`;
+        }
+
+        function resetHwid() {
+            if (data.hwidResetsLeft <= 0) {
+                if (data.balance < 150) {
+                    showToast('Недостаточно средств', 'Нужно 150 ₽ для платного сброса HWID', 'error');
+                    return;
+                }
+                if (!confirm('Платный сброс HWID стоит 150 ₽. Списать с баланса?')) return;
+                data.balance -= 150;
+                data.transactions.unshift({ type: 'expense', title: 'Платный сброс HWID', amount: 150, date: new Date().toISOString() });
+            } else {
+                if (!confirm('Сбросить HWID? Бесплатных сбросов осталось: ' + data.hwidResetsLeft)) return;
+                data.hwidResetsLeft--;
+            }
+
+            const oldHwid = data.hwid;
+            data.hwid = generateNewHwid();
+            data.hwidLastReset = Date.now();
+            data.purchases.unshift({
+                id: Date.now(),
+                name: 'Сброс HWID',
+                date: new Date().toISOString().split('T')[0],
+                amount: data.hwidResetsLeft >= 0 ? 0 : 150,
+                status: 'active',
+                icon: 'fa-microchip'
+            });
+
+            saveData();
+            updateHwidDisplay();
+            updateBalance();
+            renderTransactions();
+            renderPurchases();
+            showToast('HWID сброшен', `Старый: ${oldHwid} → Новый: ${data.hwid}`);
+            addNotification('success', 'HWID сброшен', `Ваш HWID успешно изменён. Войдите в клиент заново.`);
+        }
 
         // ===== ФОН =====
         function changeBackground(bg) {
@@ -751,52 +929,6 @@
         function getBgName(bg) {
             const names = { default: 'По умолчанию', neon: 'Неон', cyber: 'Кибер', sunset: 'Закат', forest: 'Лес', ocean: 'Океан', galaxy: 'Галактика', fire: 'Огонь', matrix: 'Матрица', aurora: 'Сияние', blood: 'Кровь' };
             return names[bg] || bg;
-        }
-
-        // ===== DDNet =====
-        async function loadDDNetStats() {
-            const nick = document.getElementById('ddnetUsername').value.trim() || data.ddnetUsername;
-            document.getElementById('ddnetNick').textContent = nick;
-            const content = document.getElementById('ddnetContent');
-            
-            try {
-                const response = await fetch(`${DDNET_API}/players/${encodeURIComponent(nick)}.json`);
-                if (!response.ok) {
-                    if (response.status === 404) showDDNetError(`Игрок "${nick}" не найден в DDNet`, 'Этот ник не имеет завершённых карт в базе DDNet.');
-                    else showDDNetError('Ошибка API DDNet', `Сервер вернул код ${response.status}.`);
-                    return;
-                }
-                const playerData = await response.json();
-                content.innerHTML = `
-                    <div class="ddnet-stats">
-                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.points || 0).toLocaleString()}</div><div class="ddnet-stat-label">Очков</div></div>
-                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.ranks || []).length}</div><div class="ddnet-stat-label">Рангов</div></div>
-                        <div class="ddnet-stat"><div class="ddnet-stat-value">${(playerData.finishes || []).length}</div><div class="ddnet-stat-label">Финишей</div></div>
-                        <div class="ddnet-stat"><div class="ddnet-stat-value">${formatLastSeen(playerData.last_seen)}</div><div class="ddnet-stat-label">Последний вход</div></div>
-                    </div>`;
-                showToast('DDNet загружен', `Статистика ${nick} обновлена`);
-            } catch(e) {
-                showDDNetError('Не удалось подключиться к DDNet', 'Возможно проблема с CORS на GitHub Pages или нет интернета.');
-            }
-        }
-
-        function showDDNetError(title, text) {
-            document.getElementById('ddnetContent').innerHTML = `
-                <div class="ddnet-error">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h4>${title}</h4>
-                    <p>${text}</p>
-                    <button class="btn btn-small" onclick="loadDDNetStats()"><i class="fas fa-redo"></i> Попробовать снова</button>
-                </div>`;
-        }
-
-        function formatLastSeen(timestamp) {
-            if (!timestamp) return '—';
-            const diff = Date.now() - new Date(timestamp).getTime();
-            const hours = Math.floor(diff / 3600000);
-            if (hours < 1) return 'Сейчас';
-            if (hours < 24) return hours + 'ч назад';
-            return Math.floor(hours/24) + 'д назад';
         }
 
         // ===== ОТЗЫВЫ =====
@@ -925,20 +1057,16 @@
             document.getElementById('miniName').textContent = data.username;
             document.getElementById('username').value = data.username;
             document.getElementById('email').value = data.email;
-            document.getElementById('ddnetUsername').value = data.ddnetUsername;
         }
 
         function saveProfile() {
             const username = document.getElementById('username').value.trim();
             const email = document.getElementById('email').value.trim();
-            const ddnetUsername = document.getElementById('ddnetUsername').value.trim();
             if (!username || !email) { showToast('Ошибка', 'Заполните все поля', 'error'); return; }
             data.username = username;
             data.email = email;
-            data.ddnetUsername = ddnetUsername;
             updateProfileDisplay();
             saveData();
-            loadDDNetStats();
             showToast('Успешно!', 'Данные профиля обновлены');
         }
 
